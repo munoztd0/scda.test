@@ -57,7 +57,7 @@ Remotes:
     pharmaverse/pharmaverseadam@main,
     johnsonandjohnson/pharmaverseadamjnj@main,
     johnsonandjohnson/pharmaversesdtmjnj@main,
-    johnsonandjohnson/junco@dev
+    johnsonandjohnson/junco@117-ancova-combined-column-revised
 biocViews:
 Config/Needs/website: insightsengineering/nesttemplate
 Config/testthat/edition: 3
