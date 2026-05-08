@@ -54,7 +54,7 @@ VignetteBuilder:
 Remotes:
     insightsengineering/formatters@main,
     insightsengineering/rlistings@main,
-    insightsengineering/rtables@main,
+    iaugusty/rtables@feature_alt_counts_df,
     insightsengineering/tern@main,
     johnsonandjohnson/junco@patch-release-updated-rtf-snapshots,
     johnsonandjohnson/pharmaverseadamjnj@main,
