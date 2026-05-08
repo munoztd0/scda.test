@@ -26,7 +26,7 @@ Depends:
     rlistings (>= 0.2.13),
     rtables (>= 0.6.15),
     tern (>= 0.9.10),
-    junco (>= 0.1.5)
+    junco (>= 0.1.4)
 Imports:
     pharmaverseadamjnj (>= 0.0.2),
     pharmaversesdtmjnj (>= 0.0.1),
@@ -57,7 +57,7 @@ Remotes:
     pharmaverse/pharmaverseadam@main,
     johnsonandjohnson/pharmaverseadamjnj@main,
     johnsonandjohnson/pharmaversesdtmjnj@main,
-    johnsonandjohnson/junco@dev
+    johnsonandjohnson/junco@v0.1.4
 biocViews:
 Config/Needs/website: insightsengineering/nesttemplate
 Config/testthat/edition: 3
