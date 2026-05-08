@@ -52,7 +52,7 @@ VignetteBuilder:
 Remotes:
     insightsengineering/formatters@main,
     insightsengineering/rlistings@main,
-    insightsengineering/rtables@main,
+    iaugusty/rtables@feature_alt_counts_df,
     insightsengineering/tern@main,
     pharmaverse/pharmaverseadam@main,
     johnsonandjohnson/pharmaverseadamjnj@main,
