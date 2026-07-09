@@ -432,6 +432,7 @@ colwidth <- c(56, 29, 60, 57, 29, 60, 59, 29, 60, 55, 59, 59)
 
 tt_to_tlgrtf( 
   colwidths = colwidth, 
+  result,
   file = fileid,
   nosplitin = list(cols = c(trtvar, "rrisk_header")),
   orientation = "landscape"
