@@ -280,4 +280,4 @@ result <- set_titles(result, titles)
 
 colwidth <- c(64, 27, 27, 29, 27)
 
-tt_to_tlgrtf(rescolwidths = colwidth, resultult, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
