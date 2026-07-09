@@ -1,24 +1,23 @@
-################################################################################
+###############################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae19b.r
+## Program Name:              tsfae11c.r
 ## R version:                 4.5.2
 ## junco Version:             0.1.3
-## Short Description:         Program to create tsfae19b: Subjects With Treatment
-##                            -emergent Adverse Events by Male-specific OCMQ
-##                            (Broad) and Preferred Term
+## Short Description:         Program to create tsfae11c: Subjects With Treatment-emergent
+##                            Adverse Events by System Organ Class, Preferred Term, and Severity
 ## Author:                    C&SP Methodology
 ## Date:                      2026-09-30
-## Input:                     adsl, adaeocmq
-## Output:                    tsfae19b.rtf
+## Input:                     adsl, adae
+## Output:                    tsfae11c.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
+## Rev #:
+## Modified By:
+## Reporting effort:
+## Date:
+## Description:
+###############################################################################################
 
 ################################################################################
 # Prep Environment
@@ -38,18 +37,12 @@ library(junco)
 # - Define output ID and file location
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
-# - Define sex to filter on (default=M)
-# - Define the OCMQ class to filter on (default=Broad)
-# - Define the OCMQ gender flag to filter on (default=GENSPMFL)
-# - Define the list of OCMQNAMs that must appear in the table
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
-# - Choose whether or not you want to present the risk difference columns (default=TRUE)
-# - Choose which risk difference method you would like (default=Wald)
-# - Define what the control treatment group is for your study (e.g Placebo)
 # - Define how to create combined treatment columns (if required)
+# - Define column widths to help with desired page splitting
 ################################################################################
 
-tblid <- "TSFAE19b"
+tblid <- "TSFAE11c"
 fileid <- write_path(opath, tblid)
 tab_titles <- list(title = "Dummy Title",
                      subtitles = NULL,
@@ -57,14 +50,7 @@ tab_titles <- list(title = "Dummy Title",
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
-sex <- "M"
-ocmqclass <- "Broad"
-ocmqflag <- "GENSPMFL"
-ocmqnam_list <- c("Erectile dysfunction", "Gynecomastia")
-combined_colspan_trt <- FALSE
-risk_diff <- TRUE
-rr_method <- "wald"
-ctrl_grp <- "Placebo"
+combined_colspan_trt <- TRUE
 
 if (combined_colspan_trt == TRUE) {
   # Set up levels and label for the required combined columns
@@ -90,8 +76,7 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 
 adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y" & SEX == sex) %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  filter(!!rlang::sym(popfl) == "Y") %>%
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -101,59 +86,73 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  )
+  ) %>%
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adaeocmq_jnj %>%
+adae <- adae_jnj %>%
   mutate(
-    AEDECOD = factor(case_when(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
-    ))
+    )
   ) %>%
-  filter(
-    TRTEMFL == "Y" & OCMQCLSS == ocmqclass & (!!rlang::sym(ocmqflag) == "Y")
-  ) %>%
-  select(USUBJID, TRTEMFL, OCMQNAM, AEDECOD, !!rlang::sym(ocmqflag)) %>%
+  filter(TRTEMFL == "Y") %>%
+  select(USUBJID, AEBODSYS, AEDECOD, TRTEMFL, AESEV)
+
+# Take maximum severity
+adaemax <- adae %>%
   mutate(
-    OCMQNAM = factor(OCMQNAM, levels = union(levels(OCMQNAM), ocmqnam_list)),
-  )
+    AESEVN = case_when(
+      toupper(AESEV) == "MILD" ~ 3,
+      toupper(AESEV) == "MODERATE" ~ 2,
+      toupper(AESEV) == "SEVERE" ~ 1,
+      .default = 99
+    )
+  ) %>%
+  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) %>%
+  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
+  slice(1) %>%
+  ungroup()
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
   levels = c("Active Study Agent", " ")
 )
 
-if (risk_diff == TRUE) {
-  adsl$rrisk_header <- "Risk Difference (%) (95% CI)"
-  ### to avoid problems with level of trtvar not observed in main domain
-  adsl$rrisk_label <- factor(
-    paste(adsl[[trtvar]], paste("vs", ctrl_grp)),
-    levels = paste(levels(adsl[[trtvar]]), paste("vs", ctrl_grp))
-  )
-}
-
-# join data together
-adae <- adae %>% inner_join(., adsl, by = intersect(names(adae), names(adsl)))
-
 colspan_trt_map <- create_colspan_map(
   adsl,
-  non_active_grp = ctrl_grp,
+  non_active_grp = "Placebo",
   non_active_grp_span_lbl = " ",
   active_grp_span_lbl = "Active Study Agent",
   colspan_var = "colspan_trt",
   trt_var = trtvar
 )
 
+# join data together
+ae <- inner_join(adaemax, adsl, by = c("USUBJID"))
+
+ae <- ae %>%
+  mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
+
+if (length(adae$TRTEMFL) == 0) {
+  ae <- right_join(adaemax, adsl, by = c("USUBJID"))
+
+  ae <- ae %>%
+    mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
+}
+
+levels(ae$AESEV2) <- c(levels(ae$AESEV), "Missing")
+
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
-# new approach to prevent label problems when treatment group not available in domain dataset
-ctrl_grp2 <- paste(ctrl_grp, "vs", ctrl_grp)
-ref_path <- c("colspan_trt", " ", "rrisk_label", ctrl_grp2)
-extra_args_rr <- list(
-  method = rr_method,
-  ref_path = ref_path,
+extra_args_1 <- list(
+  denom = "n_altdf",
   .stats = c("count_unique_fraction")
 )
 
@@ -175,43 +174,44 @@ if (combined_colspan_trt == TRUE) {
     split_cols_by(trtvar)
 }
 
-if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
-    # split_cols_by(trtvar, labels_var = "rrisk_label", split_fun = remove_split_levels("Placebo"))
-    ### do not use labels_var, but rrisk_label as variable
-    ### note updated level in remove_split_levels
-    split_cols_by("rrisk_label", split_fun = remove_split_levels(ctrl_grp2))
-}
-
 lyt <- lyt %>%
+  analyze(
+    "TRTEMFL",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_1,
+      list(label = "Subjects with >=1 AE", val = "Y")
+    )
+  ) %>%
   split_rows_by(
-    "OCMQNAM",
-    split_label = paste0("OCMQ (", ocmqclass, ")"),
-    split_fun = keep_split_levels(ocmqnam_list),
+    "AEBODSYS",
+    split_label = "System Organ Class",
+    split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
     section_div = c(" "),
-    child_labels = "hidden",
     nested = FALSE
   ) %>%
   summarize_row_groups(
-    "OCMQNAM",
+    "AEBODSYS",
     cfun = a_freq_j,
-    extra_args = extra_args_rr
+    extra_args = extra_args_1
   ) %>%
-  analyze(
+  split_rows_by(
     "AEDECOD",
-    afun = a_freq_j,
-    extra_args = c(extra_args_rr, list(drop_levels = TRUE))
+    split_label = "Preferred Term, n (%)",
+    section_div = c(" "),
+    nested = TRUE
   ) %>%
+  summarize_row_groups(
+    "AEDECOD",
+    cfun = a_freq_j,
+    extra_args = extra_args_1
+  ) %>%
+  analyze("AESEV2", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
-
-# If there is no data display "No data to display" text
-if (nrow(adae) == 0) {
-  result <- safe_prune_table(result)
-}
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
@@ -220,34 +220,24 @@ if (nrow(adae) == 0) {
 # jj_complex_scorefun should your require a different sorting behavior.
 #########################################################################################
 
-if (nrow(adae) != 0) {
-  # result <- sort_at_path(result, c("OCMQNAM"), scorefun = jj_complex_scorefun())
+if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
-    c("OCMQNAM", "*", "AEDECOD"),
+    c("root", "AEBODSYS"),
     scorefun = jj_complex_scorefun()
   )
+  result <- sort_at_path(
+    result,
+    c("root", "AEBODSYS", "*", "AEDECOD"),
+    scorefun = jj_complex_scorefun()
+  )
+
+  #########################################################################################
+  # Post-Processing step to remove all rows where counts are 0
+  #########################################################################################
+
+  result <- safe_prune_table(result, prune_func = prune_empty_level)
 }
-
-## note : perform this step after sorting, otherwise can result in errors (unable to find children AEDECOD)
-## extra step : to remove lines with No data to report: note usage of trim_rows rather than prune_table
-## this to ensure the content rows with empty levels are kept
-
-prune_empty_level_tablerow <- function(tt) {
-  if (is(tt, "ContentRow")) {
-    return(FALSE)
-  }
-  if (is(tt, "TableRow")) {
-    return(all_zero_or_na(tt))
-  }
-  kids <- tree_children(tt)
-  length(kids) == 0
-}
-
-result <- result %>% trim_rows(prune_empty_level_tablerow)
-
-## Remove the N=xx column headers for the risk difference columns
-result <- remove_col_count(result)
 
 ################################################################################
 # Add titles and footnotes:
@@ -259,6 +249,9 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(50, 5, 5, 17, 31, 31)
-
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf( 
+  result,
+  file = fileid,
+  orientation = "portrait",
+  label_width_ins = 1.5
+)

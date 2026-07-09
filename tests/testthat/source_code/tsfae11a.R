@@ -1,16 +1,15 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae17b.r
+## Program Name:              tsfae11a.r
 ## R version:                 4.5.2
 ## junco Version:             0.1.3
-## Short Description:         Program to create tsfae17b: Subjects With Treatment
-##                            -emergent Adverse Events Leading to Discontinuation
-##                            of Study Treatment by Organ System, OCMQ (Narrow)
-##                            and Preferred Term
+## Short Description:         Program to create tsfae11a: Subjects With Treatment-
+##                            emergent Adverse Events by System Organ Class,
+##                            Preferred Term, and Severity
 ## Author:                    C&SP Methodology
 ## Date:                      2026-09-30
-## Input:                     adsl, adaeocmq
-## Output:                    tsfae17b.rtf
+## Input:                     adsl, adae
+## Output:                    tsfae11a.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
@@ -39,15 +38,11 @@ library(junco)
 # - Define output ID and file location
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
-# - Define OCMQ Class used (default=Narrow)
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
-# - Choose whether or not you want to present the risk difference columns (default=TRUE)
-# - Choose which risk difference method you would like (default=Wald)
-# - Define what the control treatment group is for your study (e.g Placebo)
 # - Define how to create combined treatment columns (if required)
 ################################################################################
 
-tblid <- "TSFAE17b"
+tblid <- "TSFAE11a"
 fileid <- write_path(opath, tblid)
 tab_titles <- list(title = "Dummy Title",
                      subtitles = NULL,
@@ -55,11 +50,7 @@ tab_titles <- list(title = "Dummy Title",
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
-ocmqclass <- "Narrow"
 combined_colspan_trt <- TRUE
-risk_diff <- TRUE
-rr_method <- "wald"
-ctrl_grp <- "Placebo"
 
 if (combined_colspan_trt == TRUE) {
   # Set up levels and label for the required combined columns
@@ -86,7 +77,6 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -96,54 +86,136 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  )
+  ) %>%
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adaeocmq_jnj %>%
+adae <- adae_jnj %>%
   mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
     AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
   ) %>%
-  filter(TRTEMFL == "Y" & TRDISCFL == "Y" & OCMQCLSS == ocmqclass) %>%
-  select(USUBJID, TRTEMFL, OCMQSOC, OCMQNAM, AEDECOD)
+  filter(TRTEMFL == "Y")
+
+# Take maximum severity - per PT
+adaemaxpt <- adae %>%
+  filter(AESEV %in% c("Mild", "Moderate", "Severe")) %>%
+  mutate(
+    AESEVN = case_when(
+      toupper(AESEV) == "MILD" ~ 3,
+      toupper(AESEV) == "MODERATE" ~ 2,
+      toupper(AESEV) == "SEVERE" ~ 1
+    )
+  ) %>%
+  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) %>%
+  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
+  slice(1) %>%
+  ungroup()
+
+# Take maximum severity - per SOC
+adaemaxsoc <- adae %>%
+  filter(AESEV %in% c("Mild", "Moderate", "Severe")) %>%
+  mutate(
+    AESEVN = case_when(
+      toupper(AESEV) == "MILD" ~ 3,
+      toupper(AESEV) == "MODERATE" ~ 2,
+      toupper(AESEV) == "SEVERE" ~ 1
+    ),
+    AEBODSYSx = AEBODSYS
+  ) %>%
+  arrange(USUBJID, AEBODSYS, AESEVN) %>%
+  group_by(USUBJID, AEBODSYS) %>%
+  slice(1) %>%
+  ungroup() %>%
+  select(USUBJID, AEBODSYS, AESEV, AEBODSYSx)
+
+# Merge back in an create a new SOC variable that is only populated for max severity SOC rows
+adaemax <- left_join(
+  adaemaxpt,
+  adaemaxsoc,
+  by = c("USUBJID", "AEBODSYS", "AESEV")
+)
+
+# Add total
+adaetot <- adae %>%
+  mutate(
+    AESEV = "Total",
+    AEBODSYSx = AEBODSYS
+  ) %>%
+  arrange(USUBJID, AEBODSYS, AEDECOD) %>%
+  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
+  slice(1) %>%
+  ungroup()
+
+# Set data together
+adaeall <- bind_rows(adaemax, adaetot) %>%
+  mutate(
+    ASEV = factor(
+      as.character(AESEV),
+      levels = c("Total", "Mild", "Moderate", "Severe")
+    )
+  ) %>%
+  select(USUBJID, TRTEMFL, ASEV, AEBODSYS, AEBODSYSx, AEDECOD)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
   levels = c("Active Study Agent", " ")
 )
 
-if (risk_diff == TRUE) {
-  adsl$rrisk_header <- "Risk Difference (%) (95% CI)"
-  adsl$rrisk_label <- paste(adsl[[trtvar]], paste("vs", ctrl_grp))
-}
-
-# join data together
-ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
-
 colspan_trt_map <- create_colspan_map(
   adsl,
-  non_active_grp = ctrl_grp,
+  non_active_grp = "Placebo",
   non_active_grp_span_lbl = " ",
   active_grp_span_lbl = "Active Study Agent",
   colspan_var = "colspan_trt",
   trt_var = trtvar
 )
 
+# join data together
+ae <- adaeall %>% inner_join(., adsl, by = c("USUBJID"))
+
+if (length(adae$TRTEMFL) == 0) {
+  ae <- adaeall %>% right_join(., adsl, by = c("USUBJID"))
+}
+
+ae$spanheader <- factor(
+  ifelse(ae$ASEV == "Total", " ", "Severity"),
+  levels = c(" ", "Severity")
+)
+
+adsl1 <- adsl %>%
+  mutate(AESEV = "Total")
+
+adsl <- adsl1 %>%
+  mutate(
+    ASEV = factor(
+      as.character(AESEV),
+      levels = c("Total", "Mild", "Moderate", "Severe")
+    )
+  )
+adsl$spanheader <- factor(
+  ifelse(adsl$ASEV == "Total", " ", "Severity"),
+  levels = c(" ", "Severity")
+)
+
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
-ref_path <- c("colspan_trt", " ", "TRT01A", "Placebo")
-extra_args_rr <- list(
-  method = rr_method,
-  ref_path = ref_path,
-  .stats = c("count_unique_fraction")
+extra_args_1 <- list(
+  denom = "N_colgroup",
+  riskdiff = FALSE,
+  .stats = c("count_unique_fraction"),
+  colgroup = trtvar
 )
 
 lyt <- basic_table(
   top_level_section_div = " ",
-  show_colcounts = TRUE,
   colcount_format = "N=xx"
 ) %>%
   split_cols_by(
@@ -153,87 +225,89 @@ lyt <- basic_table(
 
 if (combined_colspan_trt == TRUE) {
   lyt <- lyt %>%
-    split_cols_by(trtvar, split_fun = mysplit)
+    split_cols_by(trtvar, split_fun = mysplit, show_colcounts = TRUE)
 } else {
   lyt <- lyt %>%
-    split_cols_by(trtvar)
-}
-
-if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
-    split_cols_by(
-      trtvar,
-      labels_var = "rrisk_label",
-      split_fun = remove_split_levels("Placebo")
-    )
+    split_cols_by(trtvar, show_colcounts = TRUE)
 }
 
 lyt <- lyt %>%
-  split_rows_by(
-    "OCMQSOC",
-    split_label = "Organ System~[super a]",
-    split_fun = trim_levels_in_group("OCMQNAM"),
-    label_pos = "topleft",
-    section_div = c(" "),
-    nested = FALSE
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("ASEV")) %>%
+  split_cols_by("ASEV", show_colcounts = FALSE) %>%
+  analyze(
+    "TRTEMFL",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_1,
+      list(
+        label = "Subjects with >=1 AE",
+        val = "Y",
+        restr_columns = "Total"
+      )
+    )
   ) %>%
-  summarize_row_groups(
-    "OCMQSOC",
-    cfun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
-  ) %>%
   split_rows_by(
-    "OCMQNAM",
-    split_label = paste0("OCMQ (", ocmqclass, ")"),
+    "AEBODSYS",
+    split_label = "System Organ Class",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
-    nested = TRUE
+    section_div = c(" ")
   ) %>%
   summarize_row_groups(
-    "OCMQNAM",
+    "AEBODSYSx",
     cfun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
+    extra_args = extra_args_1
   ) %>%
-  analyze(
-    "AEDECOD",
-    afun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
-  ) %>%
-  append_topleft("    Preferred Term, n (%)")
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
-
-## Remove the N=xx column headers for the risk difference columns
-result <- remove_col_count(result)
-
-# If there is no data display "No data to display" text
-if (nrow(adae) == 0) {
-  result <- safe_prune_table(result)
-}
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
 # Default is the last treatment (inc. Combined if applicable) under the active treatment
-# spanning header (defaulted to colspan_trt variable). See function documentation for
-# jj_complex_scorefun should your require a different sorting behavior.
+# spanning header (defaulted to colspan_trt variable).
+# For this table we can use a defined colpath so it takes the appropriate sub-column ("Total")
+# for the last active treatment group/combined and use this for its sort order.
+# If you only have 1 active treatment arm, consider using jj_complex_scorefun(spanningheadercolvar = NA, usefirstcol = TRUE)
+# See function documentation for jj_complex_scorefun should your require a different sorting behavior.
 #########################################################################################
 
-if (nrow(adae) != 0) {
+# col_paths_summary(result)
+
+if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
-    c("root", "OCMQSOC"),
-    scorefun = jj_complex_scorefun()
+    c("root", "AEBODSYS"),
+    scorefun = jj_complex_scorefun(
+      colpath = c(
+        "colspan_trt",
+        "Active Study Agent",
+        trtvar,
+        "Combined",
+        "spanheader",
+        " ",
+        "ASEV",
+        "Total"
+      )
+    )
   )
   result <- sort_at_path(
     result,
-    c("root", "OCMQSOC", "*", "OCMQNAM"),
-    scorefun = jj_complex_scorefun()
-  )
-  result <- sort_at_path(
-    result,
-    c("root", "OCMQSOC", "*", "OCMQNAM", "*", "AEDECOD"),
-    scorefun = jj_complex_scorefun()
+    c("root", "AEBODSYS", "*", "AEDECOD"),
+    scorefun = jj_complex_scorefun(
+      colpath = c(
+        "colspan_trt",
+        "Active Study Agent",
+        trtvar,
+        "Combined",
+        "spanheader",
+        " ",
+        "ASEV",
+        "Total"
+      )
+    )
   )
 }
 
@@ -247,6 +321,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 17, 21, 21, 17, 29, 29)
-
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf( 
+  colwidths = colwidth,
+  result,
+  file = fileid,
+  orientation = "landscape",
+  nosplitin = list(cols = c(trtvar))
+)

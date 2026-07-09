@@ -1,22 +1,23 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae19c.R
-## R version:                 4.4.1
-## junco Version:             1.0
-## Short Description:         Subjects With Treatment-emergent Adverse Events by
-##                            Female-specific OCMQ (Narrow) and Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      2025-07-21
-## Input:                     ADSL, ADAEOCMQ
-## Output:                    TSFAE19c.rtf
+## Program Name:              tsfae19c.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae19c: Subjects With Treatment
+##                            -emergent Adverse Events by Female-specific OCMQ
+##                            (Narrow) and Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adaeocmq
+## Output:                    tsfae19c.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
-##  Reporting Effort:         Code Refactoring
-##  Date:                     2025-08-13
-##  Description:              Refactored two_tier_cpct_relrisk to a_freq_j
+##  Reporting Effort:
+##  Date:
+##  Description:
 ################################################################################
 
 ################################################################################
@@ -50,11 +51,9 @@ library(junco)
 
 tblid <- "TSFAE19c"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -62,11 +61,11 @@ sex <- "F"
 ocmqclass <- "Narrow"
 ocmqflag <- "GENSPFFL"
 ocmqnam_list <- c(
-  "Abnormal Uterine Bleeding",
+  "Abnormal uterine bleeding",
   "Amenorrhea",
-  "Bacterial Vaginosis",
-  "Decreased Menstrual Bleeding",
-  "Excessive Menstrual Bleeding"
+  "Bacterial vaginosis",
+  "Decreased menstrual bleeding",
+  "Excessive menstrual bleeding"
 )
 combined_colspan_trt <- FALSE
 risk_diff <- TRUE
@@ -98,9 +97,25 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y" & SEX == sex) %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 adae <- adaeocmq_jnj %>%
+  mutate(
+    AEDECOD = factor(case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    ))
+  ) %>%
   filter(
     TRTEMFL == "Y" & OCMQCLSS == ocmqclass & (!!rlang::sym(ocmqflag) == "Y")
   ) %>%
@@ -197,7 +212,7 @@ lyt <- lyt %>%
   ) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, adae, alt_counts_df = adsl)
+result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
 
 # If there is no data display "No data to display" text
 if (nrow(adae) == 0) {
@@ -250,6 +265,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 17, 5, 5, 28, 24)
+colwidth <- c(49, 5, 17, 17, 29, 28)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

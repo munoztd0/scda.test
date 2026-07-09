@@ -1,14 +1,14 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae07a.r
+## Program Name:              tsfae07d.r
 ## R version:                 4.5.2
 ## junco Version:             0.1.3
-## Short Description:         Program to create tsfae07a: Subjects With Treatment-
-##                            emergent Adverse Events of Special Interest - [AE Grouping]
+## Short Description:         Program to create tsfae07d: Subjects With Treatment-
+##                            emergent Adverse Events of Interest - [AE Grouping]
 ## Author:                    C&SP Methodology
 ## Date:                      2026-09-30
 ## Input:                     adsl, adae, adlb (optional)
-## Output:                    tsfae07a.rtf
+## Output:                    tsfae07d.rtf
 ## Remarks:                   This variant includes summary of AEs by max severity version
 ##
 ## Modification History:
@@ -47,7 +47,7 @@ library(junco)
 # - Define lab parameters that are required for the optional section of the table
 ################################################################################
 
-tblid <- "TSFAE07a"
+tblid <- "TSFAE07d"
 fileid <- write_path(opath, tblid)
 tab_titles <- list(title = "Dummy Title",
                      subtitles = NULL,
@@ -57,8 +57,8 @@ tab_titles <- list(title = "Dummy Title",
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
 
-special_interest_var <- "CQ02NAM"
-special_interest_fl <- "AOCS02FL"
+interest_var <- "CQ02NAM" # Change to the variable needed for analysis
+interest_fl <- "AOCS02FL" # Change to the variable needed for analysis
 
 combined_colspan_trt <- TRUE
 risk_diff <- TRUE
@@ -179,7 +179,7 @@ adae <- adae_jnj %>%
       .default = AEDECOD
     )
   ) %>%
-  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(special_interest_var))) %>%
+  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(interest_var))) %>%
   select(
     USUBJID,
     TRTEMFL,
@@ -187,8 +187,8 @@ adae <- adae_jnj %>%
     AEDECOD,
     AESEV,
     ASEVN,
-    all_of(special_interest_var),
-    all_of(special_interest_fl),
+    all_of(interest_var),
+    all_of(interest_fl),
     AESER,
     AEOUT,
     all_of(comb_relvars),
@@ -218,10 +218,9 @@ if (risk_diff == TRUE) {
 ae <- adae %>% inner_join(., adsl, by = c("USUBJID"))
 
 # Keep only maximum severity for the particular AESI
-
 ae <- ae %>%
-  group_by(USUBJID, .data[[special_interest_var]]) %>%
-  mutate(ASEV = ASEVN[which(.data[[special_interest_fl]] == "Y")][1]) %>%
+  group_by(USUBJID, .data[[interest_var]]) %>%
+  mutate(ASEV = ASEVN[which(.data[[interest_fl]] == "Y")][1]) %>%
   ungroup() %>%
   mutate(ASEV = ifelse(is.na(ASEV), "Missing", as.character(ASEV))) %>%
   mutate(
@@ -243,10 +242,8 @@ ae <- ae %>%
     rowhead = "Worst severity"
   )
 
-
 # Remove Missing as a level since not required in table
 levels(ae$ASEV)[levels(ae$ASEV) == "Missing"] <- NA
-
 
 if (combination_trt) {
   comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related~[super b]")
@@ -304,7 +301,7 @@ if (risk_diff == TRUE) {
 
 lyt <- lyt %>%
   split_rows_by(
-    special_interest_var,
+    interest_var,
     split_label = "",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
@@ -312,7 +309,7 @@ lyt <- lyt %>%
     section_div = c(" ")
   ) %>%
   summarize_row_groups(
-    special_interest_var,
+    interest_var,
     cfun = a_freq_j,
     extra_args = append(extra_args_rr, NULL)
   ) %>%

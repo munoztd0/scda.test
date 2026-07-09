@@ -1,15 +1,15 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae07a.r
+## Program Name:              tsfae07e.r
 ## R version:                 4.5.2
 ## junco Version:             0.1.3
-## Short Description:         Program to create tsfae07a: Subjects With Treatment-
-##                            emergent Adverse Events of Special Interest - [AE Grouping]
+## Short Description:         Program to create tsfae07e: Subjects With Treatment-
+##                            emergent Adverse Events of Interest - [AE Grouping]
 ## Author:                    C&SP Methodology
 ## Date:                      2026-09-30
 ## Input:                     adsl, adae, adlb (optional)
-## Output:                    tsfae07a.rtf
-## Remarks:                   This variant includes summary of AEs by max severity version
+## Output:                    tsfae07e.rtf
+## Remarks:                   This variant includes summary of AEs by max toxicity version
 ##
 ## Modification History:
 ##  Rev #:
@@ -47,7 +47,7 @@ library(junco)
 # - Define lab parameters that are required for the optional section of the table
 ################################################################################
 
-tblid <- "TSFAE07a"
+tblid <- "TSFAE07e"
 fileid <- write_path(opath, tblid)
 tab_titles <- list(title = "Dummy Title",
                      subtitles = NULL,
@@ -57,8 +57,8 @@ tab_titles <- list(title = "Dummy Title",
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
 
-special_interest_var <- "CQ02NAM"
-special_interest_fl <- "AOCS02FL"
+interest_var <- "CQ02NAM" # Change to the variable needed for analysis
+interest_fl <- "AOCT02FL" # Change to the variable needed for analysis
 
 combined_colspan_trt <- TRUE
 risk_diff <- TRUE
@@ -121,6 +121,7 @@ adsl <- adsl_jnj %>%
     )
   )
 
+
 lbdata <- NULL
 
 # Optional lab section
@@ -179,16 +180,16 @@ adae <- adae_jnj %>%
       .default = AEDECOD
     )
   ) %>%
-  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(special_interest_var))) %>%
+  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(interest_var))) %>%
   select(
     USUBJID,
     TRTEMFL,
     all_of(comb_trtvars),
     AEDECOD,
-    AESEV,
-    ASEVN,
-    all_of(special_interest_var),
-    all_of(special_interest_fl),
+    AETOXGR,
+    AETOXGRN,
+    all_of(interest_var),
+    all_of(interest_fl),
     AESER,
     AEOUT,
     all_of(comb_relvars),
@@ -217,36 +218,29 @@ if (risk_diff == TRUE) {
 # join data together
 ae <- adae %>% inner_join(., adsl, by = c("USUBJID"))
 
-# Keep only maximum severity for the particular AESI
-
+# Keep only maximum toxicity for the particular AESI
 ae <- ae %>%
-  group_by(USUBJID, .data[[special_interest_var]]) %>%
-  mutate(ASEV = ASEVN[which(.data[[special_interest_fl]] == "Y")][1]) %>%
+  group_by(USUBJID, .data[[interest_var]]) %>%
+  mutate(ATOXGR = AETOXGRN[which(.data[[interest_fl]] == "Y")][1]) %>%
   ungroup() %>%
-  mutate(ASEV = ifelse(is.na(ASEV), "Missing", as.character(ASEV))) %>%
+  mutate(ATOXGR = ifelse(is.na(ATOXGR), "Missing", paste("Grade", ATOXGR))) %>%
   mutate(
-    ASEV = factor(
-      ASEV,
+    ATOXGR = factor(
+      ATOXGR,
       levels = c(
-        "3",
-        "2",
-        "1",
-        "Missing"
-      ),
-      labels = c(
-        "Severe",
-        "Moderate",
-        "Mild",
+        "Grade 5",
+        "Grade 4",
+        "Grade 3",
+        "Grade 2",
+        "Grade 1",
         "Missing"
       )
     ),
-    rowhead = "Worst severity"
+    rowhead = "Worst toxicity"
   )
 
-
 # Remove Missing as a level since not required in table
-levels(ae$ASEV)[levels(ae$ASEV) == "Missing"] <- NA
-
+levels(ae$ATOXGR)[levels(ae$ATOXGR) == "Missing"] <- NA
 
 if (combination_trt) {
   comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related~[super b]")
@@ -304,7 +298,7 @@ if (risk_diff == TRUE) {
 
 lyt <- lyt %>%
   split_rows_by(
-    special_interest_var,
+    interest_var,
     split_label = "",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
@@ -312,7 +306,7 @@ lyt <- lyt %>%
     section_div = c(" ")
   ) %>%
   summarize_row_groups(
-    special_interest_var,
+    interest_var,
     cfun = a_freq_j,
     extra_args = append(extra_args_rr, NULL)
   ) %>%
@@ -332,7 +326,7 @@ lyt <- lyt %>%
     section_div = c(" ")
   ) %>%
   analyze(
-    "ASEV",
+    "ATOXGR",
     afun = a_freq_j,
     indent_mod = 0,
     extra_args = append(extra_args_rr, NULL)
@@ -340,7 +334,7 @@ lyt <- lyt %>%
   split_rows_by(
     "AESER",
     split_fun = keep_split_levels("Y"),
-    section_div = c(" ")
+    section_div = " "
   ) %>%
   summarize_row_groups(
     "AESER",
@@ -400,10 +394,7 @@ lyt <- lyt %>%
     "AESMIE",
     afun = a_freq_j,
     show_labels = "hidden",
-    extra_args = append(
-      extra_args_rr,
-      list(label = "Other medically important event", val = "Y", NULL)
-    )
+    extra_args = append(extra_args_rr, list(label = "Other medically important event", val = "Y", NULL))
   ) %>%
   analyze(
     "TRDISCFL",
@@ -475,9 +466,11 @@ result <- suppressWarnings(safe_prune_table(
   result,
   prune_func = count_pruner(
     cat_exclude = c(
-      "Mild",
-      "Moderate",
-      "Severe"
+      "Grade 1",
+      "Grade 2",
+      "Grade 3",
+      "Grade 4",
+      "Grade 5"
     )
   )
 ))
@@ -492,6 +485,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 33, 30)
+colwidth <- c(64, 21, 21, 21, 21, 33, 33)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
