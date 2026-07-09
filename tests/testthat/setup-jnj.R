@@ -27,7 +27,11 @@ adttesaf_jnj <- pharmaverseadamjnj::adttesaf
 adaeocmq_jnj <- pharmaverseadamjnj::adaeocmq
 adagocmq_jnj <- pharmaverseadamjnj::adagocmq
 adpc_jnj <- pharmaverseadamjnj::adpc
+addili_jnj <- pharmaverseadamjnj::addili
+adishum_jnj <- pharmaverseadamjnj::adishum
 
 ## pharmaversesdtmjnj -------------------------------
 ds_jnj <- pharmaversesdtmjnj::ds
 mh_jnj <- pharmaversesdtmjnj::mh
+dv_jnj <- pharmaversesdtmjnj::dv
+ie_jnj <- pharmaversesdtmjnj::ie
