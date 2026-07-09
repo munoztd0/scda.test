@@ -1,22 +1,23 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae16.R
-## R version:                 4.4.1
-## junco Version:             1.0
-## Short Description:         Subjects With Treatment-emergent Adverse Events by System
-##                            Organ Class and FDA Medical Query (Broad and Narrow)
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      30 Apr 2025
-## Input:                     ADSL, ADAEFMQ
-## Output:                    TSFAE16.rtf
+## Program Name:              tsfae16.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae16: Subjects With Treatment
+##                            -emergent Adverse Events by Organ System and OCMQ
+##                            (Broad and Narrow)
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adaeocmq
+## Output:                    tsfae16.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
-##  Reporting Effort:         Code Refactoring
-##  Date:                     2025-08-13
-##  Description:              Refactored cpct_relrisk_fact to a_freq_j
+##  Reporting Effort:
+##  Date:
+##  Description:
 ################################################################################
 
 ################################################################################
@@ -46,11 +47,9 @@ library(junco)
 
 tblid <- "TSFAE16"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -89,7 +88,17 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 adsl0 <- adsl
 
@@ -198,7 +207,7 @@ lyt <- basic_table(
 lyt <- lyt %>%
   split_rows_by(
     QVAR_SOC,
-    split_label = "Organ System Class",
+    split_label = "Organ System~[super a]",
     split_fun = trim_levels_in_group(QVAR_NAM),
     label_pos = "topleft",
     section_div = c(" ")
@@ -215,7 +224,17 @@ lyt <- lyt %>%
   ) %>%
   append_topleft("  OCMQ, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
+
+## Remove the N=xx column headers for the risk difference columns
+modified_remove_col_count <- function(obj, span_label_var = "rrisk_header") {
+  unwanted_count <- function(pth) pth[4] == span_label_var
+  to_blank <- sapply(col_paths(obj), unwanted_count)
+  col_counts(obj)[to_blank] <- NA_integer_
+  return(obj)
+}
+
+result <- modified_remove_col_count(result, "RR_difference")
 
 
 # If there is no data display "No data to display" text
@@ -238,8 +257,8 @@ if (nrow(adae) != 0) {
   # ie sorting on decreasing frequency in Apa group in Broad category
   # you can be more specific (eg specific single column) if you further specify the colpath to trial needs
   cur_scorefun <- jj_complex_scorefun(
-    colpath = c(QVAR_CLASS, "Broad")
-  )
+    colpath = c(QVAR_CLASS, "Broad", "colspan_trt", "Active Study Agent", "TRT01A", "Xanomeline High Dose")
+  ) # We need to explicitly mention the colpath in order to properly sort on the columns we want.
 
   result <- sort_at_path(result, c(QVAR_SOC), scorefun = cur_scorefun)
   result <- sort_at_path(
@@ -263,6 +282,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 33, 31, 21, 21, 21, 33, 35)
+colwidth <- c(64, 21, 21, 21, 35, 31, 21, 21, 21, 33, 31)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape", nosplitin = list(cols = c(QVAR_CLASS)))

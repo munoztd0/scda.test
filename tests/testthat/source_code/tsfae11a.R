@@ -1,17 +1,19 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae21a.R
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae21a: TEAEs by severity (SOC / PT) - Variant 1
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      18 Dec 2023
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE21a.rtf
+## Program Name:              tsfae11a.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae11a: Subjects With Treatment-
+##                            emergent Adverse Events by System Organ Class,
+##                            Preferred Term, and Severity
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae11a.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
 ##  Reporting Effort:
 ##  Date:
@@ -40,13 +42,11 @@ library(junco)
 # - Define how to create combined treatment columns (if required)
 ################################################################################
 
-tblid <- "TSFAE21a"
+tblid <- "TSFAE11a"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -77,9 +77,29 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
 adae <- adae_jnj %>%
+  mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(TRTEMFL == "Y")
 
 # Take maximum severity - per PT
@@ -242,7 +262,7 @@ lyt <- lyt %>%
   analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
@@ -301,12 +321,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 21, 21, 17, 23, 21, 21, 17, 21, 21, 19, 17)
-
-tt_to_tlgrtf(
+tt_to_tlgrtf( 
   colwidths = colwidth,
   result,
   file = fileid,
-  orientation = "portrait",
+  orientation = "landscape",
   nosplitin = list(cols = c(trtvar))
 )

@@ -1,18 +1,19 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae22b.R
-## R version:                 4.2.1
-## Short Description:         TEAEs: SOC / PT by: Sex
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      22 Jan 2024
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE22b.rtf
+## Program Name:              tsfae03e.r
+## R version:                 4.5.2
+## junco version:             0.1.3
+## Short Description:         Program to create tsfae03e: Subjects With Treatment
+##                            -emergent Adverse Events ≥ Grade 3 by System Organ
+##                            Class and Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae03e.rtf
 ## Remarks:                   Template R script version using rtables framework
-## R-functions:
-## R-function Sample Call:
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
 ##  Reporting Effort:
 ##  Date:
@@ -38,22 +39,25 @@ library(junco)
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
+# - Choose whether or not you want to present the risk difference columns (default=TRUE)
+# - Choose which risk difference method you would like (default=Wald)
+# - Define what the control treatment group is for your study (e.g Placebo)
 # - Define how to create combined treatment columns (if required)
-# - Define column widths to help with desired page splitting
 ################################################################################
 
-tblid <- "TSFAE22b"
+tblid <- "TSFAE03e"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
 combined_colspan_trt <- TRUE
+risk_diff <- TRUE
+rr_method <- "wald"
+ctrl_grp <- "Placebo"
 
 if (combined_colspan_trt == TRUE) {
   # Set up levels and label for the required combined columns
@@ -79,91 +83,77 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 
 adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), SEX)
+  filter(.data[[popfl]] == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
 adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y") %>%
-  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, SEX)
+  mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
+  filter(TRTEMFL == "Y" & AETOXGRN >= 3) %>%
+  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AETOXGRN)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
   levels = c("Active Study Agent", " ")
 )
 
+if (risk_diff == TRUE) {
+  adsl$rrisk_header <- "Risk Difference (%) (95% CI)"
+  adsl$rrisk_label <- paste(adsl[[trtvar]], paste("vs", ctrl_grp))
+}
+
+# join data together
+ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+
 colspan_trt_map <- create_colspan_map(
   adsl,
-  non_active_grp = "Placebo",
+  non_active_grp = ctrl_grp,
   non_active_grp_span_lbl = " ",
   active_grp_span_lbl = "Active Study Agent",
   colspan_var = "colspan_trt",
   trt_var = trtvar
 )
 
-# Add total for Sex - adsl
-totalsex1 <- adsl %>%
-  mutate(SEX = "Total")
-
-adsl <- bind_rows(totalsex1, adsl)
-
-adsl <- adsl %>%
-  mutate(
-    SEXcat = case_when(
-      SEX == "Total" ~ "Total",
-      SEX == "M" ~ "Male",
-      SEX == "F" ~ "Female"
-    )
-  ) %>%
-  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
-  select(-SEX)
-
-adsl$spanheader <- factor(
-  ifelse(adsl$SEXcat == "Total", " ", "Sex"),
-  levels = c(" ", "Sex")
-)
-
-adsl$SEXcat <- factor(adsl$SEXcat, levels = c("Total", "Male", "Female"))
-
-# Add total for Sex - adae
-totalsex2 <- adae %>%
-  mutate(SEX = "Total")
-
-adae <- bind_rows(totalsex2, adae)
-
-adae <- adae %>%
-  mutate(
-    SEXcat = case_when(
-      SEX == "Total" ~ "Total",
-      SEX == "M" ~ "Male",
-      SEX == "F" ~ "Female"
-    )
-  ) %>%
-  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
-  select(-SEX)
-
-adae$SEXcat <- factor(adae$SEXcat, levels = c("Total", "Male", "Female"))
-
-# join data together
-ae <- left_join(adsl, adae, by = c("USUBJID", "SEXcat"))
+ref_path <- c("colspan_trt", " ", trtvar, ctrl_grp)
 
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
-extra_args_1 <- list(
+extra_args_rr2 <- list(
   denom = "n_altdf",
-  .stats = c("count_unique_fraction")
+  riskdiff = TRUE,
+  ref_path = ref_path,
+  method = "wald",
+  .stats = c("count_unique_fraction"),
+  .formats = c(
+    "rr_ci_3d" = jjcsformat_xx("xx.x (xx.x, xx.x)"),
+    "n_df" = "xx",
+    "aaa" = "xx"
+  )
 )
-
-
-extra_args_2 <- list(
-  denom = "n_altdf",
-  .stats = c("count_unique")
-)
-
 lyt <- basic_table(
   top_level_section_div = " ",
-  show_colcounts = FALSE
+  show_colcounts = TRUE,
+  colcount_format = "N=xx"
 ) %>%
   split_cols_by(
     "colspan_trt",
@@ -178,32 +168,23 @@ if (combined_colspan_trt == TRUE) {
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("SEXcat")) %>%
-  split_cols_by("SEXcat") %>%
-  analyze(
-    popfl,
-    afun = a_freq_j,
-    show_labels = "hidden",
-    section_div = c(" "),
-    extra_args = append(
-      extra_args_2,
-      list(
-        label = "Analysis set: Safety",
-        val = "Y"
-      )
+if (risk_diff == TRUE) {
+  lyt <- lyt %>%
+    split_cols_by("rrisk_header", nested = FALSE) %>%
+    split_cols_by(
+      trtvar,
+      labels_var = "rrisk_label",
+      split_fun = remove_split_levels("Placebo")
     )
-  ) %>%
+}
+
+lyt <- lyt %>%
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
-    show_labels = "hidden",
     extra_args = append(
-      extra_args_1,
-      list(
-        label = "Subjects with >=1 AE",
-        val = "Y"
-      )
+      extra_args_rr2,
+      list(val = "Y", label = "Subjects with >= 1 AEs >= Grade 3")
     )
   ) %>%
   split_rows_by(
@@ -217,55 +198,41 @@ lyt <- lyt %>%
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
-    extra_args = extra_args_1
+    extra_args = extra_args_rr2
   ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_rr2) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
+
+## Remove the N=xx column headers for the risk difference columns
+result <- remove_col_count(result)
+
+# If there is no data remove top row and display "No data to display" text
+if (length(adae$TRTEMFL) == 0) {
+  result <- safe_prune_table(
+    result,
+    prune_func = remove_rows(removerowtext = "Subjects with >= 1 AEs >= Grade 3")
+  )
+}
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
-# For this table we can use a defined colpath so it takes the appropriate sub-column ("Total")
-# for the last active treatment group/combined and use this for its sort order.
-# If you only have 1 active treatment arm, consider using jj_complex_scorefun(spanningheadercolvar = NA, usefirstcol = TRUE)
-# See function documentation for jj_complex_scorefun should your require a different sorting behavior.
+# Default is the last treatment (inc. Combined if applicable) under the active treatment
+# spanning header (defaulted to colspan_trt variable). See function documentation for
+# jj_complex_scorefun should your require a different sorting behavior.
 #########################################################################################
-
-# col_paths_summary(result)
 
 if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
     c("root", "AEBODSYS"),
-    scorefun = jj_complex_scorefun(
-      colpath = c(
-        "colspan_trt",
-        "Active Study Agent",
-        trtvar,
-        "Combined",
-        "spanheader",
-        " ",
-        "SEXcat",
-        "Total"
-      )
-    )
+    scorefun = jj_complex_scorefun()
   )
   result <- sort_at_path(
     result,
     c("root", "AEBODSYS", "*", "AEDECOD"),
-    scorefun = jj_complex_scorefun(
-      colpath = c(
-        "colspan_trt",
-        "Active Study Agent",
-        trtvar,
-        "Combined",
-        "spanheader",
-        " ",
-        "SEXcat",
-        "Total"
-      )
-    )
+    scorefun = jj_complex_scorefun()
   )
 }
 
@@ -279,13 +246,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 21, 21, 23, 21, 21, 21, 21, 21)
+colwidth <- c(64, 21, 21, 21, 21, 33, 31)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
-  result,
-  file = fileid,
-  orientation = "portrait",
-  label_width_ins = 1.5,
-  nosplitin = list(cols = c(trtvar))
-)
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

@@ -1,6 +1,6 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae13.R
+## Program Name:              tsfae13.r
 ## R version:                 4.2.1
 ## Short Description:         Program to create tsfae13: Exposure-adjusted Incidence
 ##                            Rate Analysis by Preferred Term
@@ -37,11 +37,9 @@ fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
 ctrl_grp <- "Placebo"
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 ################################################################################
@@ -156,6 +154,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
-colwidth <- c(64, 10, 12, 10, 35, 37)
+colwidth <- c(52, 12, 10, 10, 37, 35)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

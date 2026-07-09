@@ -1,23 +1,23 @@
-################################################################################
+###############################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae22c.R
-## R version:                 4.2.1
-## Short Description:         TEAEs: SOC / PT by: AGE
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      22 Jan 2024
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE22c.rtf
+## Program Name:              tsfae12a.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae12a: Subjects With Treatment-emergent Adverse Events
+##                            by System Organ Class, Preferred Term, and Race
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae12a.rtf
 ## Remarks:                   Template R script version using rtables framework
-## R-functions:
-## R-function Sample Call:
 ##
 ## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
+## Rev #:
+## Modified By:
+## Reporting effort:
+## Date:
+## Description:
+###############################################################################################
 
 ################################################################################
 # Prep Environment
@@ -37,26 +37,20 @@ library(junco)
 # - Define output ID and file location
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
-# - Define the variable used for age grouping in the table
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
 # - Define how to create combined treatment columns (if required)
 # - Define column widths to help with desired page splitting
 ################################################################################
 
-tblid <- "TSFAE22c"
+tblid <- "TSFAE12a"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
-
-agegrpvar <- "AGEGR1"
-
 combined_colspan_trt <- TRUE
 
 if (combined_colspan_trt == TRUE) {
@@ -81,18 +75,34 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 # Process Data:
 ################################################################################
+
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), all_of(agegrpvar))
-
-adsl_levels <- adsl %>%
-  filter(!is.na(!!rlang::sym(agegrpvar)))
-
-agelevels <- c("Total", levels(adsl_levels[[agegrpvar]]))
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), RACE)
 
 adae <- adae_jnj %>%
+  mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(TRTEMFL == "Y") %>%
-  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, all_of(agegrpvar))
+  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, RACE)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -108,35 +118,63 @@ colspan_trt_map <- create_colspan_map(
   trt_var = trtvar
 )
 
-# Add total for Age - adsl
-totalage1 <- adsl %>%
-  mutate(!!agegrpvar := "Total")
+# Add total for Race - adsl
+totalrace1 <- adsl %>%
+  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) %>%
+  mutate(RACE = "Total")
 
-adsl <- bind_rows(totalage1, adsl)
+adsl <- bind_rows(totalrace1, adsl)
 
 adsl <- adsl %>%
-  filter(!!rlang::sym(agegrpvar) %in% agelevels)
+  mutate(
+    RACEcat = case_when(
+      RACE == "Total" ~ "Total",
+      RACE == "WHITE" ~ "White",
+      RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black",
+      RACE == "ASIAN" ~ "Asian",
+      RACE == "OTHER" ~ "Other"
+    )
+  ) %>%
+  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
+  select(-RACE)
 
 adsl$spanheader <- factor(
-  ifelse(adsl[[agegrpvar]] == "Total", " ", "Age (years)"),
-  levels = c(" ", "Age (years)")
+  ifelse(adsl$RACEcat == "Total", " ", "Race"),
+  levels = c(" ", "Race")
 )
 
-adsl[[agegrpvar]] <- factor(adsl[[agegrpvar]], levels = agelevels)
+adsl$RACEcat <- factor(
+  adsl$RACEcat,
+  levels = c("Total", "White", "Black", "Asian", "Other")
+)
 
-# Add total for Age - adae
-totalage2 <- adae %>%
-  mutate(!!agegrpvar := "Total")
+# Add total for Race - adae
+totalrace2 <- adae %>%
+  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) %>%
+  mutate(RACE = "Total")
 
-adae <- bind_rows(totalage2, adae)
+adae <- bind_rows(totalrace2, adae)
 
 adae <- adae %>%
-  filter(!!rlang::sym(agegrpvar) %in% agelevels)
+  mutate(
+    RACEcat = case_when(
+      RACE == "Total" ~ "Total",
+      RACE == "WHITE" ~ "White",
+      RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black",
+      RACE == "ASIAN" ~ "Asian",
+      RACE == "OTHER" ~ "Other"
+    )
+  ) %>%
+  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
+  select(-RACE)
 
-adae[[agegrpvar]] <- factor(adae[[agegrpvar]], levels = agelevels)
+adae$RACEcat <- factor(
+  adae$RACEcat,
+  levels = c("Total", "White", "Black", "Asian", "Other")
+)
 
 # join data together
-ae <- left_join(adsl, adae, by = c("USUBJID", agegrpvar))
+ae <- left_join(adsl, adae, by = c("USUBJID", "RACEcat"))
 
 ################################################################################
 # Define layout and build table:
@@ -152,6 +190,7 @@ extra_args_2 <- list(
   denom = "n_altdf",
   .stats = c("count_unique")
 )
+
 
 lyt <- basic_table(
   top_level_section_div = " ",
@@ -171,8 +210,8 @@ if (combined_colspan_trt == TRUE) {
 }
 
 lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group(agegrpvar)) %>%
-  split_cols_by(agegrpvar) %>%
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("RACEcat")) %>%
+  split_cols_by("RACEcat") %>%
   analyze(
     popfl,
     afun = a_freq_j,
@@ -182,7 +221,8 @@ lyt <- lyt %>%
       extra_args_2,
       list(
         label = "Analysis set: Safety",
-        val = "Y"
+        val = "Y",
+        section_div = c(" ")
       )
     )
   ) %>%
@@ -194,7 +234,8 @@ lyt <- lyt %>%
       extra_args_1,
       list(
         label = "Subjects with >=1 AE",
-        val = "Y"
+        val = "Y",
+        section_div = c(" ")
       )
     )
   ) %>%
@@ -214,7 +255,7 @@ lyt <- lyt %>%
   analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
@@ -238,7 +279,7 @@ if (length(adae$TRTEMFL) != 0) {
         "Combined",
         "spanheader",
         " ",
-        "AGEGR1",
+        "RACEcat",
         "Total"
       )
     )
@@ -254,7 +295,7 @@ if (length(adae$TRTEMFL) != 0) {
         "Combined",
         "spanheader",
         " ",
-        "AGEGR1",
+        "RACEcat",
         "Total"
       )
     )
@@ -271,9 +312,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 23, 21, 21, 21, 21, 23, 23, 21, 21, 21, 19, 21, 21)
-
-tt_to_tlgrtf(
+tt_to_tlgrtf( 
   colwidths = colwidth,
   result,
   file = fileid,

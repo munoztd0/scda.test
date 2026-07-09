@@ -1,17 +1,18 @@
 ###############################################################################################
 ## Original Reporting Effort: Standards
-## Program Name: tsfae22a.R
-## R Version: 4.2.1
-## junco Version: 1.0
-## Short Description: Program to create tsfae22a: TEAEs: SOC / PT by: Race
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date: 18 Dec 2023
-## Input: ADSL, ADAE.
-## Output: TSFAE22a.rtf
-## Remarks: Template R script version using rtables framework
+## Program Name:              tsfae11d.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae11d: Subjects With Treatment-emergent Adverse Events
+##                            by System Organ Class, Preferred Term, and Toxicity Grade
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae11d.rtf
+## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-## Rev #: 1
+## Rev #:
 ## Modified By:
 ## Reporting effort:
 ## Date:
@@ -41,13 +42,11 @@ library(junco)
 # - Define column widths to help with desired page splitting
 ################################################################################
 
-tblid <- "TSFAE22a"
+tblid <- "TSFAE11d"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
@@ -79,11 +78,48 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), RACE)
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
 adae <- adae_jnj %>%
+  mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(TRTEMFL == "Y") %>%
-  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, RACE)
+  select(USUBJID, AEBODSYS, AEDECOD, TRTEMFL, AETOXGR)
+
+# Take maximum toxicity
+adaemax <- adae %>%
+  mutate(
+    AETOXGRN = case_when(
+      AETOXGR == "1" ~ 5,
+      AETOXGR == "2" ~ 4,
+      AETOXGR == "3" ~ 3,
+      AETOXGR == "4" ~ 2,
+      AETOXGR == "5" ~ 1,
+      .default = 99
+    )
+  ) %>%
+  arrange(USUBJID, AEBODSYS, AEDECOD, AETOXGRN) %>%
+  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
+  slice(1) %>%
+  ungroup()
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -99,63 +135,31 @@ colspan_trt_map <- create_colspan_map(
   trt_var = trtvar
 )
 
-# Add total for Race - adsl
-totalrace1 <- adsl %>%
-  filter(RACE != "UNKNOWN" & !is.na(RACE)) %>%
-  mutate(RACE = "Total")
-
-adsl <- bind_rows(totalrace1, adsl)
-
-adsl <- adsl %>%
+# join data together, and Grade for table display
+ae <- inner_join(adaemax, adsl, by = c("USUBJID")) %>%
   mutate(
-    RACEcat = case_when(
-      RACE == "Total" ~ "Total",
-      RACE == "WHITE" ~ "White",
-      RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black",
-      RACE == "ASIAN" ~ "Asian",
-      RACE != "UNKNOWN" & !is.na(RACE) ~ "Other"
+    AETOXGRx = factor(
+      as.character(paste0("Grade ", AETOXGR)),
+      levels = c("Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5")
     )
-  ) %>%
-  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
-  select(-RACE)
+  )
 
-adsl$spanheader <- factor(
-  ifelse(adsl$RACEcat == "Total", " ", "Race"),
-  levels = c(" ", "Race")
-)
+ae <- ae %>%
+  mutate(AETOXGR2 = as.factor(ifelse(is.na(AETOXGRx), "Missing", AETOXGRx)))
 
-adsl$RACEcat <- factor(
-  adsl$RACEcat,
-  levels = c("Total", "White", "Black", "Asian", "Other")
-)
-
-# Add total for Race - adae
-totalrace2 <- adae %>%
-  filter(RACE != "UNKNOWN" & !is.na(RACE)) %>%
-  mutate(RACE = "Total")
-
-adae <- bind_rows(totalrace2, adae)
-
-adae <- adae %>%
-  mutate(
-    RACEcat = case_when(
-      RACE == "Total" ~ "Total",
-      RACE == "WHITE" ~ "White",
-      RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black",
-      RACE == "ASIAN" ~ "Asian",
-      RACE != "UNKNOWN" & !is.na(RACE) ~ "Other"
+if (length(adae$TRTEMFL) == 0) {
+  ae <- right_join(adaemax, adsl, by = c("USUBJID")) %>%
+    mutate(
+      AETOXGRx = factor(
+        as.character(paste0("Grade ", AETOXGR)),
+        levels = c("Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5")
+      )
     )
-  ) %>%
-  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
-  select(-RACE)
+  ae <- ae %>%
+    mutate(AETOXGR2 = as.factor(ifelse(is.na(AETOXGRx), "Missing", AETOXGRx)))
+}
 
-adae$RACEcat <- factor(
-  adae$RACEcat,
-  levels = c("Total", "White", "Black", "Asian", "Other")
-)
-
-# join data together
-ae <- left_join(adsl, adae, by = c("USUBJID", "RACEcat"))
+levels(ae$AETOXGR2) <- c(levels(ae$AETOXGRx), "Missing")
 
 ################################################################################
 # Define layout and build table:
@@ -166,16 +170,10 @@ extra_args_1 <- list(
   .stats = c("count_unique_fraction")
 )
 
-
-extra_args_2 <- list(
-  denom = "n_altdf",
-  .stats = c("count_unique")
-)
-
-
 lyt <- basic_table(
   top_level_section_div = " ",
-  show_colcounts = FALSE
+  show_colcounts = TRUE,
+  colcount_format = "N=xx"
 ) %>%
   split_cols_by(
     "colspan_trt",
@@ -191,33 +189,13 @@ if (combined_colspan_trt == TRUE) {
 }
 
 lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("RACEcat")) %>%
-  split_cols_by("RACEcat") %>%
-  analyze(
-    popfl,
-    afun = a_freq_j,
-    show_labels = "hidden",
-    section_div = c(" "),
-    extra_args = append(
-      extra_args_2,
-      list(
-        label = "Analysis set: Safety",
-        val = "Y",
-        section_div = c(" ")
-      )
-    )
-  ) %>%
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
     show_labels = "hidden",
     extra_args = append(
       extra_args_1,
-      list(
-        label = "Subjects with >=1 AE",
-        val = "Y",
-        section_div = c(" ")
-      )
+      list(label = "Subjects with >=1 AE", val = "Y")
     )
   ) %>%
   split_rows_by(
@@ -233,54 +211,46 @@ lyt <- lyt %>%
     cfun = a_freq_j,
     extra_args = extra_args_1
   ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  split_rows_by(
+    "AEDECOD",
+    split_label = "Preferred Term, n (%)",
+    section_div = c(" "),
+    nested = TRUE
+  ) %>%
+  summarize_row_groups(
+    "AEDECOD",
+    cfun = a_freq_j,
+    extra_args = extra_args_1
+  ) %>%
+  analyze("AETOXGR2", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
-# For this table we can use a defined colpath so it takes the appropriate sub-column ("Total")
-# for the last active treatment group/combined and use this for its sort order.
-# If you only have 1 active treatment arm, consider using jj_complex_scorefun(spanningheadercolvar = NA, usefirstcol = TRUE)
-# See function documentation for jj_complex_scorefun should your require a different sorting behavior.
+# Default is the last treatment (inc. Combined if applicable) under the active treatment
+# spanning header (defaulted to colspan_trt variable). See function documentation for
+# jj_complex_scorefun should your require a different sorting behavior.
 #########################################################################################
-
-# col_paths_summary(result)
 
 if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
     c("root", "AEBODSYS"),
-    scorefun = jj_complex_scorefun(
-      colpath = c(
-        "colspan_trt",
-        "Active Study Agent",
-        trtvar,
-        "Combined",
-        "spanheader",
-        " ",
-        "RACEcat",
-        "Total"
-      )
-    )
+    scorefun = jj_complex_scorefun()
   )
   result <- sort_at_path(
     result,
     c("root", "AEBODSYS", "*", "AEDECOD"),
-    scorefun = jj_complex_scorefun(
-      colpath = c(
-        "colspan_trt",
-        "Active Study Agent",
-        trtvar,
-        "Combined",
-        "spanheader",
-        " ",
-        "RACEcat",
-        "Total"
-      )
-    )
+    scorefun = jj_complex_scorefun()
   )
+
+  #########################################################################################
+  # Post-Processing step to remove all rows where counts are 0
+  #########################################################################################
+
+  result <- safe_prune_table(result, prune_func = prune_empty_level)
 }
 
 ################################################################################
@@ -293,13 +263,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 23, 21, 21, 19, 19, 19, 21, 21, 21, 19, 21, 21, 21, 19, 19, 19, 21)
-
-tt_to_tlgrtf(
+tt_to_tlgrtf( 
   colwidths = colwidth,
   result,
   file = fileid,
   orientation = "portrait",
-  label_width_ins = 1.5,
-  nosplitin = list(cols = c(trtvar))
+  label_width_ins = 1.5
 )

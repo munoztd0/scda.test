@@ -1,17 +1,18 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae07b.R
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae07b: AE table of special interest - toxicity version
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      16 Feb 2024
-## Input:                     ADSL, ADAE, ADLB (optional)
-## Output:                    TSFAE07b.rtf
-## Remarks:                   Template R script version using rtables framework
+## Program Name:              tsfae07b.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae07a: Subjects With Treatment-
+##                            emergent Adverse Events of Special Interest - [AE Grouping]
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae, adlb (optional)
+## Output:                    tsfae07b.rtf
+## Remarks:                   This variant includes summary of AEs by max toxicity version
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
 ##  Reporting Effort:
 ##  Date:
@@ -48,24 +49,22 @@ library(junco)
 
 tblid <- "TSFAE07b"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
 
-special_interest_var <- "CQ01NAM"
-aerelvar <- "AEREL"
-aeactionvar <- "AEACN"
+special_interest_var <- "CQ02NAM"
+special_interest_fl <- "AOCT02FL"
 
 combined_colspan_trt <- TRUE
 risk_diff <- TRUE
 rr_method <- "wald"
 ctrl_grp <- "Placebo"
+combination_trt <- FALSE # Provide whether this is a combination treatments study
 
 if (combined_colspan_trt == TRUE) {
   # Set up levels and label for the required combined columns
@@ -86,6 +85,17 @@ if (combined_colspan_trt == TRUE) {
   mysplit <- make_split_fun(post = list(add_combo, rm_combo_from_placebo))
 }
 
+if (combination_trt) {
+  comb_trtvars <- c("AEDRGS1", "AEDRGS2") # Provide the variables containing combination treatment information in sequence
+
+  n_comb_trt <- length(comb_trtvars)
+
+  comb_relvars <- paste0("AERELS", seq_len(n_comb_trt)) # This will create a variable list like AERELS1, AERELS2 etc
+} else if (!combination_trt) {
+  comb_trtvars <- trtvar
+  comb_relvars <- "AEREL"
+}
+
 # Optional lab section parameters
 labsection <- TRUE
 lab_params <- c("AST", "ALT")
@@ -99,7 +109,18 @@ lab_vals <- c("2,3", "2,3") # Note both character or numeric values can be enclo
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
+
 
 lbdata <- NULL
 
@@ -153,18 +174,35 @@ if (labsection == TRUE) {
 }
 
 adae <- adae_jnj %>%
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(special_interest_var))) %>%
   select(
     USUBJID,
     TRTEMFL,
-    AEBODSYS,
+    all_of(comb_trtvars),
     AEDECOD,
     AETOXGR,
+    AETOXGRN,
     all_of(special_interest_var),
+    all_of(special_interest_fl),
     AESER,
     AEOUT,
-    all_of(aeactionvar),
-    all_of(aerelvar)
+    all_of(comb_relvars),
+    AESDTH,
+    AESLIFE,
+    AESHOSP,
+    AESDISAB,
+    AESCONG,
+    AESMIE,
+    TRDISCFL
+  ) %>%
+  select(
+    -any_of(trtvar)
   )
 
 adsl$colspan_trt <- factor(
@@ -178,17 +216,17 @@ if (risk_diff == TRUE) {
 }
 
 # join data together
-ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+ae <- adae %>% inner_join(., adsl, by = c("USUBJID"))
 
 # Keep only maximum toxicity for the particular AESI
 ae <- ae %>%
+  group_by(USUBJID, .data[[special_interest_var]]) %>%
+  mutate(ATOXGR = AETOXGRN[which(.data[[special_interest_fl]] == "Y")][1]) %>%
+  ungroup() %>%
+  mutate(ATOXGR = ifelse(is.na(ATOXGR), "Missing", paste("Grade", ATOXGR))) %>%
   mutate(
     ATOXGR = factor(
-      ifelse(
-        is.na(AETOXGR),
-        "Missing",
-        as.character(paste0("Grade ", AETOXGR))
-      ),
+      ATOXGR,
       levels = c(
         "Grade 5",
         "Grade 4",
@@ -198,15 +236,17 @@ ae <- ae %>%
         "Missing"
       )
     ),
-    rowhead = "Maximum toxicity"
-  ) %>%
-  arrange(USUBJID, special_interest_var, ATOXGR) %>%
-  group_by(USUBJID, .data[[special_interest_var]]) %>%
-  slice(1) %>%
-  ungroup()
+    rowhead = "Worst toxicity"
+  )
 
 # Remove Missing as a level since not required in table
 levels(ae$ATOXGR)[levels(ae$ATOXGR) == "Missing"] <- NA
+
+if (combination_trt) {
+  comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related~[super b]")
+} else if (!combination_trt) {
+  comb_rel_ae_labels <- "Related~[super b]"
+}
 
 colspan_trt_map <- create_colspan_map(
   adsl,
@@ -272,7 +312,7 @@ lyt <- lyt %>%
   ) %>%
   analyze(
     "AEDECOD",
-    var_labels = "Preferred Term",
+    var_labels = "Preferred term",
     afun = a_freq_j,
     indent_mod = 0,
     show_labels = "visible",
@@ -281,7 +321,6 @@ lyt <- lyt %>%
   split_rows_by(
     "rowhead",
     split_label = "",
-    # ,split_fun = trim_levels_in_group("ATOXGR")
     label_pos = "topleft",
     indent_mod = 0,
     section_div = c(" ")
@@ -300,41 +339,91 @@ lyt <- lyt %>%
   summarize_row_groups(
     "AESER",
     cfun = a_freq_j,
-    extra_args = append(extra_args_rr, list(label = "Serious", NULL))
+    extra_args = append(extra_args_rr, list(label = "SAE classification~[super a]", NULL))
   ) %>%
   analyze(
-    "AEOUT",
+    "AESDTH",
     afun = a_freq_j,
     show_labels = "hidden",
     extra_args = append(
       extra_args_rr,
-      list(label = "Deaths", val = "FATAL", NULL)
+      list(label = "Death", val = "Y", NULL)
     )
   ) %>%
   analyze(
-    aeactionvar,
+    "AESLIFE",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_rr,
+      list(label = "Life-threatening", val = "Y", NULL)
+    )
+  ) %>%
+  analyze(
+    "AESHOSP",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_rr,
+      list(label = "Requires or prolongs hospitalization", val = "Y", NULL)
+    )
+  ) %>%
+  analyze(
+    "AESDISAB",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_rr,
+      list(
+        label = "Persistent or significant disability/incapacity",
+        val = "Y",
+        NULL
+      )
+    )
+  ) %>%
+  analyze(
+    "AESCONG",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(
+      extra_args_rr,
+      list(label = "Congenital anomaly or birth defect", val = "Y", NULL)
+    )
+  ) %>%
+  analyze(
+    "AESMIE",
+    afun = a_freq_j,
+    show_labels = "hidden",
+    extra_args = append(extra_args_rr, list(label = "Other medically important event", val = "Y", NULL))
+  ) %>%
+  analyze(
+    "TRDISCFL",
     afun = a_freq_j,
     show_labels = "hidden",
     nested = FALSE,
     extra_args = append(
       extra_args_rr,
       list(
-        label = "Resulting in treatment discontinuation",
-        val = "DRUG WITHDRAWN",
+        label = "Leading to permanent discontinuation of study treatment",
+        val = "Y",
         NULL
       )
     )
-  ) %>%
-  analyze(
-    aerelvar,
-    afun = a_freq_j,
-    show_labels = "hidden",
-    nested = FALSE,
-    extra_args = append(
-      extra_args_rr,
-      list(label = "Related~[super a]", val = "RELATED", NULL)
-    )
   )
+
+for (i in seq_along(comb_relvars)) {
+  lyt <- lyt %>%
+    analyze(
+      comb_relvars[i],
+      afun = a_freq_j,
+      show_labels = "hidden",
+      nested = i > 1,
+      extra_args = append(
+        extra_args_rr,
+        list(label = comb_rel_ae_labels[i], val = toupper("Related"), NULL)
+      )
+    )
+}
 
 if (labsection == TRUE) {
   lyt <- lyt %>%
@@ -345,7 +434,7 @@ if (labsection == TRUE) {
       nested = FALSE,
       extra_args = append(
         extra_args_rr,
-        list(label = "Laboratory assessment~[super b]", NULL)
+        list(label = "Laboratory assessment~[super c]", NULL)
       )
     )
 
@@ -365,16 +454,26 @@ if (labsection == TRUE) {
 }
 
 lyt <- lyt %>%
-  append_topleft("AESI Assessment, n (%)")
+  append_topleft("AE of Interest Assessment, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 ## Remove the N=xx column headers for the risk difference columns
 result <- remove_col_count(result)
 
 ## Remove any rogue null rows
-result <- result %>%
-  safe_prune_table(prune_func = keep_rows(keep_non_null_rows))
+result <- suppressWarnings(safe_prune_table(
+  result,
+  prune_func = count_pruner(
+    cat_exclude = c(
+      "Grade 1",
+      "Grade 2",
+      "Grade 3",
+      "Grade 4",
+      "Grade 5"
+    )
+  )
+))
 
 ################################################################################
 # Add titles and footnotes:
@@ -386,6 +485,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 23, 21, 31, 35)
+colwidth <- c(64, 21, 21, 21, 21, 33, 33)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

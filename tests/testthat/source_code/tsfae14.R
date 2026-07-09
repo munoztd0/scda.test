@@ -1,22 +1,22 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae14.R
-## R version:                 4.4.1
-## junco Version:             1.0
-## Short Description:         Subjects With Treatment-emergent Serious Adverse Events
-##                            by Organ System and OCMQ (Narrow)
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      2025-07-21
-## Input:                     ADSL, ADAEOCMQ
-## Output:                    TSFAE14.rtf
+## Program Name:              tsfae14.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae14: Subjects With Treatment
+##                            -emergent Serious Adverse Events by Organ System and OCMQ (Narrow)
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adaeocmq
+## Output:                    tsfae14.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
-##  Reporting Effort:         Code Refactoring
-##  Date:                     2025-08-13
-##  Description:              Refactored cpct_relrisk_fact to a_freq_j
+##  Reporting Effort:
+##  Date:
+##  Description:
 ################################################################################
 
 ################################################################################
@@ -46,11 +46,9 @@ library(junco)
 
 tblid <- "TSFAE14"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -84,7 +82,17 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 adae <- adaeocmq_jnj %>%
   filter(TRTEMFL == "Y" & AESER == "Y" & OCMQCLSS == "Narrow") %>%
@@ -172,7 +180,7 @@ lyt <- lyt %>%
   ) %>%
   append_topleft("  OCMQ (Narrow), n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 ## Remove the N=xx column headers for the risk difference columns
 result <- remove_col_count(result)
@@ -212,6 +220,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 31, 31)
+colwidth <- c(64, 21, 21, 21, 21, 30, 31)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

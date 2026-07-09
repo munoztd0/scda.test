@@ -1,14 +1,15 @@
 ###############################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae23b.R
-## R Version:                 4.2.1
-## Short Description:         Create TSFAE23B: Subjects With Related Fatal
-##                            Treatment-emergent Adverse Events by Preferred
-##                            Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      23Feb2024
-## Input:                     ADAE, ADSL
-## Output:                    tsfae23b.rtf
+## Program Name:              tsfae13d.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae13d: Subjects With Related
+##                            Non-serious Treatment-emergent Adverse Events by
+##                            Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae13d.rtf
 ## Remarks:
 ## R-functions:
 ## R-function Sample Call:
@@ -35,17 +36,15 @@ library(junco)
 # Define script level parameters
 ###############################################################################
 
-tblid <- "TSFAE23b"
+tblid <- "TSFAE13d"
 fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
 aerelvar <- "AEREL"
 combined_colspan_trt <- TRUE
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 if (combined_colspan_trt == TRUE) {
@@ -79,6 +78,16 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   create_colspan_var(
     non_active_grp = c("Placebo"),
     non_active_grp_span_lbl = " ",
@@ -105,11 +114,17 @@ trt_map <- create_colspan_map(
 ref_path <- c("colspan_trt", " ", trtvar, "Placebo")
 
 adae0 <- adae_jnj %>%
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(
     !!rlang::sym(popfl) == "Y" &
       !!rlang::sym(aerelvar) == "RELATED" &
       TRTEMFL == "Y" &
-      AEOUT == "FATAL"
+      AESER == "N"
   ) %>%
   left_join(
     subset(adsl, select = c("STUDYID", "USUBJID", "colspan_trt")),
@@ -122,7 +137,7 @@ adae0 <- adae_jnj %>%
     !!rlang::sym(popfl),
     !!rlang::sym(aerelvar),
     TRTEMFL,
-    AEOUT,
+    AESER,
     AEDECOD,
     colspan_trt
   )
@@ -134,6 +149,18 @@ if (nrow(adae0) == 0) {
 } else {
   adae <- adae0
 }
+
+adae <- adae %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 ###############################################################################
 # Define layout and build table
@@ -160,7 +187,7 @@ lyt <- lyt %>%
     show_labels = "hidden",
     afun = a_freq_j,
     extra_args = list(
-      label = "Subjects with >=1 related fatal AE",
+      label = "Subjects with >=1 related non-serious AE",
       .stats = c("count_unique_fraction"),
       val = "Y"
     ),
@@ -182,7 +209,7 @@ if (nrow(adae0) > 0) {
     append_topleft("Preferred Term, n (%)")
 }
 
-result <- build_table(lyt, df = adae, alt_counts_df = adsl)
+result <- build_table(lyt, df = adae, alt_counts_df = adsl, round_type = "sas")
 
 ###############################################################################
 # Post-processing
@@ -206,7 +233,7 @@ if (nrow(adae0) == 0) {
   result <- safe_prune_table(
     result,
     prune_func = remove_rows(
-      removerowtext = "Subjects with >=1 related fatal AE"
+      removerowtext = "Subjects with >=1 related non-serious AE"
     )
   )
 }
@@ -221,6 +248,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ###############################################################################
 
-colwidth <- c(41, 4, 4, 4, 4)
+colwidth <- c(64, 21, 21, 21, 21)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid)

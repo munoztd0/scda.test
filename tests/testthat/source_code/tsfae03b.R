@@ -1,22 +1,24 @@
-###############################################################################################
+################################################################################
 ## Original Reporting Effort: Standards
-## Program Name: tsfae21c.R
-## R Version: 4.2.1
-## junco Version: 1.0
-## Short Description: Program to create tsfae21c: TEAEs by severity (SOC / PT) - Variant 1 Alternative format
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date: 26 Feb 2024
-## Input: ADSL, ADAE.
-## Output: TSFAE21c.rtf
-## Remarks: Template R script version using rtables framework
+## Program Name:              tsfae03b.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae03b: Subjects With Treatment-
+##                            emergent Serious Adverse Events by System Organ
+##                            Class and Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae03b.rtf
+## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-## Rev #: 1
-## Modified By:
-## Reporting effort:
-## Date:
-## Description:
-###############################################################################################
+##  Rev #:
+##  Modified By:
+##  Reporting Effort:
+##  Date:
+##  Description:
+################################################################################
 
 ################################################################################
 # Prep Environment
@@ -37,21 +39,25 @@ library(junco)
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
+# - Choose whether or not you want to present the risk difference columns (default=TRUE)
+# - Choose which risk difference method you would like (default=Wald)
+# - Define what the control treatment group is for your study (e.g Placebo)
 # - Define how to create combined treatment columns (if required)
-# - Define column widths to help with desired page splitting
 ################################################################################
 
-tblid <- "TSFAE21c"
+tblid <- "TSFAE03b"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
+
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
 combined_colspan_trt <- TRUE
+risk_diff <- TRUE
+rr_method <- "wald"
+ctrl_grp <- "Placebo"
 
 if (combined_colspan_trt == TRUE) {
   # Set up levels and label for the required combined columns
@@ -78,64 +84,64 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
 adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y") %>%
-  select(USUBJID, AEBODSYS, AEDECOD, TRTEMFL, AESEV)
-
-# Take maximum severity
-adaemax <- adae %>%
   mutate(
-    AESEVN = case_when(
-      toupper(AESEV) == "MILD" ~ 3,
-      toupper(AESEV) == "MODERATE" ~ 2,
-      toupper(AESEV) == "SEVERE" ~ 1,
-      .default = 99
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
     )
   ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
-  ungroup()
+  filter(TRTEMFL == "Y" & AESER == "Y") %>%
+  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AESER)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
   levels = c("Active Study Agent", " ")
 )
 
+if (risk_diff == TRUE) {
+  adsl$rrisk_header <- "Risk Difference (%) (95% CI)"
+  adsl$rrisk_label <- paste(adsl[[trtvar]], paste("vs", ctrl_grp))
+}
+
+# join data together
+ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+
 colspan_trt_map <- create_colspan_map(
   adsl,
-  non_active_grp = "Placebo",
+  non_active_grp = ctrl_grp,
   non_active_grp_span_lbl = " ",
   active_grp_span_lbl = "Active Study Agent",
   colspan_var = "colspan_trt",
   trt_var = trtvar
 )
 
-# join data together
-ae <- inner_join(adaemax, adsl, by = c("USUBJID"))
-
-ae <- ae %>%
-  mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
-
-if (length(adae$TRTEMFL) == 0) {
-  ae <- right_join(adaemax, adsl, by = c("USUBJID"))
-
-  ae <- ae %>%
-    mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
-}
-
-levels(ae$AESEV2) <- c(levels(ae$AESEV), "Missing")
-
 ################################################################################
 # Define layout and build table:
 ################################################################################
-
-extra_args_1 <- list(
-  denom = "n_altdf",
+ref_path <- c("colspan_trt", " ", "TRT01A", "Placebo")
+extra_args_rr <- list(
+  method = rr_method,
+  ref_path = ref_path,
   .stats = c("count_unique_fraction")
 )
+
 
 lyt <- basic_table(
   top_level_section_div = " ",
@@ -155,14 +161,24 @@ if (combined_colspan_trt == TRUE) {
     split_cols_by(trtvar)
 }
 
+if (risk_diff == TRUE) {
+  lyt <- lyt %>%
+    split_cols_by("rrisk_header", nested = FALSE) %>%
+    split_cols_by(
+      trtvar,
+      labels_var = "rrisk_label",
+      split_fun = remove_split_levels("Placebo")
+    )
+}
+
 lyt <- lyt %>%
   analyze(
     "TRTEMFL",
-    afun = a_freq_j,
     show_labels = "hidden",
+    afun = a_freq_j,
     extra_args = append(
-      extra_args_1,
-      list(label = "Subjects with >=1 AE", val = "Y")
+      extra_args_rr,
+      list(label = "Subjects with >=1 SAE", NULL)
     )
   ) %>%
   split_rows_by(
@@ -176,23 +192,27 @@ lyt <- lyt %>%
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
-    extra_args = extra_args_1
+    extra_args = append(extra_args_rr, NULL)
   ) %>%
-  split_rows_by(
+  analyze(
     "AEDECOD",
-    split_label = "Preferred Term, n (%)",
-    section_div = c(" "),
-    nested = TRUE
+    afun = a_freq_j,
+    extra_args = append(extra_args_rr, NULL)
   ) %>%
-  summarize_row_groups(
-    "AEDECOD",
-    cfun = a_freq_j,
-    extra_args = extra_args_1
-  ) %>%
-  analyze("AESEV2", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
+
+## Remove the N=xx column headers for the risk difference columns
+result <- remove_col_count(result)
+
+# If there is no data remove top row and display "No data to display" text
+if (length(adae$TRTEMFL) == 0) {
+  result <- safe_prune_table(
+    result,
+    prune_func = remove_rows(removerowtext = "Subjects with >=1 SAE")
+  )
+}
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
@@ -212,12 +232,6 @@ if (length(adae$TRTEMFL) != 0) {
     c("root", "AEBODSYS", "*", "AEDECOD"),
     scorefun = jj_complex_scorefun()
   )
-
-  #########################################################################################
-  # Post-Processing step to remove all rows where counts are 0
-  #########################################################################################
-
-  result <- safe_prune_table(result, prune_func = prune_empty_level)
 }
 
 ################################################################################
@@ -230,12 +244,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 23, 21)
+colwidth <- c(64, 21, 21, 21, 21, 30, 30)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
-  result,
-  file = fileid,
-  orientation = "portrait",
-  label_width_ins = 1.5
-)
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

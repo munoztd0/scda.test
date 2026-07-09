@@ -1,17 +1,18 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae03.R
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae03: AE table by SOC/PT - Serious TEAEs
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      19 Jan 2024
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE03.rtf
+## Program Name:              tsfae06.r
+## R version:                 4.5.2
+## junco version:             0.1.3
+## Short Description:         Program to create tsfae06: Subjects With Treatment
+##                            -emergent Adverse Events Leading to Death by Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae06.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
 ##  Reporting Effort:
 ##  Date:
@@ -43,13 +44,11 @@ library(junco)
 # - Define how to create combined treatment columns (if required)
 ################################################################################
 
-tblid <- "TSFAE03"
+tblid <- "TSFAE06"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
@@ -83,12 +82,28 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 
 adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+  filter(.data[[popfl]] == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
 adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y" & AESER == "Y") %>%
-  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD)
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
+  filter(TRTEMFL == "Y" & AEOUT == "FATAL") %>%
+  select(USUBJID, TRTEMFL, AEDECOD, AEOUT)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -112,17 +127,24 @@ colspan_trt_map <- create_colspan_map(
   trt_var = trtvar
 )
 
+ref_path <- c("colspan_trt", " ", trtvar, ctrl_grp)
+
 ################################################################################
 # Define layout and build table:
 ################################################################################
-ref_path <- c("colspan_trt", " ", "TRT01A", "Placebo")
-extra_args_rr <- list(
-  method = rr_method,
+
+extra_args_rr2 <- list(
+  denom = "n_altdf",
+  riskdiff = TRUE,
   ref_path = ref_path,
-  .stats = c("count_unique_fraction")
+  method = "wald",
+  .stats = c("count_unique_fraction"),
+  .formats = c(
+    "rr_ci_3d" = jjcsformat_xx("xx.x (xx.x, xx.x)"),
+    "n_df" = "xx",
+    "aaa" = "xx"
+  )
 )
-
-
 lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
@@ -153,46 +175,19 @@ if (risk_diff == TRUE) {
 
 lyt <- lyt %>%
   analyze(
-    "TRTEMFL",
-    show_labels = "hidden",
-    afun = a_freq_j,
-    extra_args = append(
-      extra_args_rr,
-      list(label = "Subjects with >=1 SAE", NULL)
-    )
-  ) %>%
-  split_rows_by(
-    "AEBODSYS",
-    split_label = "System Organ Class",
-    split_fun = trim_levels_in_group("AEDECOD"),
-    label_pos = "topleft",
-    section_div = c(" "),
-    nested = FALSE
-  ) %>%
-  summarize_row_groups(
-    "AEBODSYS",
-    cfun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
-  ) %>%
-  analyze(
     "AEDECOD",
     afun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
+    extra_args = extra_args_rr2
   ) %>%
-  append_topleft("  Preferred Term, n (%)")
+  append_topleft("Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 ## Remove the N=xx column headers for the risk difference columns
 result <- remove_col_count(result)
 
-# If there is no data remove top row and display "No data to display" text
-if (length(adae$TRTEMFL) == 0) {
-  result <- safe_prune_table(
-    result,
-    prune_func = remove_rows(removerowtext = "Subjects with >=1 SAE")
-  )
-}
+## Remove Null rows
+result <- safe_prune_table(result)
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
@@ -204,12 +199,7 @@ if (length(adae$TRTEMFL) == 0) {
 if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
-    c("root", "AEBODSYS"),
-    scorefun = jj_complex_scorefun()
-  )
-  result <- sort_at_path(
-    result,
-    c("root", "AEBODSYS", "*", "AEDECOD"),
+    c("root", "AEDECOD"),
     scorefun = jj_complex_scorefun()
   )
 }
@@ -224,6 +214,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 31, 31)
+colwidth <- c(35, 5, 5, 5, 17, 29, 29)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

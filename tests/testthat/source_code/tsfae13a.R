@@ -1,14 +1,14 @@
 ###############################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae23a.R
-## R Version:                 4.2.1
-## Short Description:         Create TSFAE23A: Subjects With
-##                            Related Treatment-emergent Serious Adverse Events
-##                            by Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      23Feb2024
-## Input:                     ADAE, ADSL
-## Output:                    tsfae23a.rtf
+## Program Name:              tsfae13a.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae13a: Subjects With Related
+##                            Treatment-emergent Serious Adverse Events by Preferred Term
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae13a.rtf
 ## Remarks:
 ## R-functions:
 ## R-function Sample Call:
@@ -35,17 +35,15 @@ library(junco)
 # Define script level parameters
 ###############################################################################
 
-tblid <- "TSFAE23a"
+tblid <- "TSFAE13a"
 fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
 aerelvar <- "AEREL"
 combined_colspan_trt <- TRUE
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 if (combined_colspan_trt == TRUE) {
@@ -79,6 +77,16 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   create_colspan_var(
     non_active_grp = c("Placebo"),
     non_active_grp_span_lbl = " ",
@@ -105,6 +113,12 @@ trt_map <- create_colspan_map(
 ref_path <- c("colspan_trt", " ", trtvar, "Placebo")
 
 adae0 <- adae_jnj %>%
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(
     !!rlang::sym(popfl) == "Y" &
       !!rlang::sym(aerelvar) == "RELATED" &
@@ -134,6 +148,18 @@ if (nrow(adae0) == 0) {
 } else {
   adae <- adae0
 }
+
+adae <- adae %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 ###############################################################################
 # Define layout and build table
@@ -182,7 +208,7 @@ if (nrow(adae0) > 0) {
     append_topleft("Preferred Term, n (%)")
 }
 
-result <- build_table(lyt, df = adae, alt_counts_df = adsl)
+result <- build_table(lyt, df = adae, alt_counts_df = adsl, round_type = "sas")
 
 ###############################################################################
 # Post-processing
@@ -219,6 +245,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ###############################################################################
 
-colwidth <- c(64, 17, 17, 19, 19)
+colwidth <- c(52, 21, 21, 21, 21)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid)

@@ -1,17 +1,18 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae10.R
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae10: AE table of Related TEAEs ≥[X]% by Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      01 Dec 2023
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE10.rtf
+## Program Name:              tsfae07c.r
+## R version:                 4.5.2
+## junco version:             0.1.3
+## Short Description:         Program to create tsfae07c: Subjects With Treatment
+##                            -emergent Adverse Events of Special Interest
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae07c.rtf
 ## Remarks:                   Template R script version using rtables framework
 ##
 ## Modification History:
-##  Rev #:                    1
+##  Rev #:
 ##  Modified By:
 ##  Reporting Effort:
 ##  Date:
@@ -36,7 +37,6 @@ library(junco)
 # - Define output ID and file location
 # - Define treatment variable used (default=TRT01A)
 # - Define population flag used (default=SAFFL)
-# - Define the ADaM Variable to choose the AE related variable(s)
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
 # - Choose whether or not you want to present the risk difference columns (default=TRUE)
 # - Choose which risk difference method you would like (default=Wald)
@@ -44,20 +44,16 @@ library(junco)
 # - Define how to create combined treatment columns (if required)
 ################################################################################
 
-tblid <- "TSFAE10"
+tblid <- "TSFAE07c"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
-
-aerelvar <- "AEREL"
-
+special_interest_var <- c("CQ01NAM", "CQ02NAM", "CQ03NAM")
 combined_colspan_trt <- TRUE
 risk_diff <- TRUE
 rr_method <- "wald"
@@ -87,13 +83,22 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 
 adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+  filter(.data[[popfl]] == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) %>%
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-# define criteria for related AE
 adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y" & !!rlang::sym(aerelvar) == "RELATED") %>%
-  select(USUBJID, TRTEMFL, AEDECOD)
+  filter(TRTEMFL == "Y" & if_any(all_of(special_interest_var), ~ !is.na(.))) %>%
+  select(USUBJID, TRTEMFL, all_of(special_interest_var))
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -108,7 +113,6 @@ if (risk_diff == TRUE) {
 # join data together
 ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
 
-
 colspan_trt_map <- create_colspan_map(
   adsl,
   non_active_grp = ctrl_grp,
@@ -118,18 +122,24 @@ colspan_trt_map <- create_colspan_map(
   trt_var = trtvar
 )
 
+ref_path <- c("colspan_trt", " ", trtvar, ctrl_grp)
+
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
-ref_path <- c("colspan_trt", " ", "TRT01A", "Placebo")
-extra_args_rr <- list(
-  method = rr_method,
+extra_args_rr2 <- list(
+  denom = "n_altdf",
+  riskdiff = TRUE,
   ref_path = ref_path,
-  .stats = c("count_unique_fraction")
+  method = "wald",
+  .stats = c("count_unique_fraction"),
+  .formats = c(
+    "rr_ci_3d" = jjcsformat_xx("xx.x (xx.x, xx.x)"),
+    "n_df" = "xx",
+    "aaa" = "xx"
+  )
 )
-
-
 lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
@@ -160,43 +170,15 @@ if (risk_diff == TRUE) {
 
 lyt <- lyt %>%
   analyze(
-    "AEDECOD",
+    special_interest_var,
     afun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL),
-    show_labels = "hidden"
+    section_div = " ",
+    show_labels = "hidden",
+    extra_args = extra_args_rr2
   ) %>%
-  append_topleft("Preferred Term, n (%)")
+  append_topleft("AE of Interest Assessment, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
-
-if (length(adae$TRTEMFL) != 0) {
-  #########################################################################################
-  # Post-Processing step to sort by descending count on chosen active treatment columns.
-  # Default is the last treatment (inc. Combined if applicable) under the active treatment
-  # spanning header (defaulted to colspan_trt variable). See function documentation for
-  # jj_complex_scorefun should your require a different sorting behavior.
-  #########################################################################################
-
-  result <- sort_at_path(result, c("AEDECOD"), scorefun = jj_complex_scorefun())
-
-  ################################################################################
-  # Prune table to only keep those that meet x% criteria on any treatment column
-  ################################################################################
-  more_than_x_percent <- has_fraction_in_any_col(
-    atleast = 0.05,
-    col_names = c(
-      "Active Study Agent.Xanomeline High Dose",
-      "Active Study Agent.Xanomeline Low Dose",
-      " .Placebo"
-    )
-  )
-
-  result <- safe_prune_table(result, keep_rows(more_than_x_percent))
-}
-
-## Remove any rogue null rows
-result <- result %>%
-  safe_prune_table(prune_func = keep_rows(keep_non_null_rows))
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 ## Remove the N=xx column headers for the risk difference columns
 result <- remove_col_count(result)
@@ -211,6 +193,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 17, 17, 17, 17, 31, 31)
+colwidth <- c(29, 21, 21, 21, 21, 28, 28)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

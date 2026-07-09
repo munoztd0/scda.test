@@ -1,15 +1,15 @@
 ################################################################################
 ## Original Reporting Effort: Standards
-## Program Name:              tsfae20c.R
-## R version:                 4.4.1
-## Short Description:         Demographic Characteristics for Subjects With
-##                            Treatment-emergent Adverse Events - [OCMQ of Interest /
-##                            Preferred Term of Interest]
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      21 Jul 2025
-## Input:                     ADSL, ADAEOCMQ
-## Output:                    TSFAE20c.rtf
-## Remarks:                   Template R script version using rtables framework
+## Program Name:              tsfae10a.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae10a: Demographic Characteristics
+##                            for Subjects With Treatment-emergent Adverse Events
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae10a.rtf
+## Remarks:
 ##
 ## Modification History:
 ##  Rev #:
@@ -34,17 +34,15 @@ library(junco)
 # Define script level parameters:
 ################################################################################
 
-tblid <- "TSFAE20c"
-titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tblid <- "TSFAE10a"
+titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
+
 fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
-subjFilterText <- "Abdominal Pain"
-varname <- "OCMQNAM"
+subjFilterText <- "AE"
 ctrl_grp <- "Placebo"
 
 ################################################################################
@@ -57,8 +55,65 @@ ctrl_grp <- "Placebo"
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    ),
+    # Canonical demographics decoding (replace * usage)
+    SEX = factor(
+      dplyr::case_when(
+        SEX == "F" ~ "Female",
+        SEX == "M" ~ "Male",
+        SEX == "U" ~ "Unknown",
+        SEX == "INTERSEX" ~ "Intersex"
+      ),
+      levels = c("Male", "Female", "Intersex", "Unknown")
+    ),
+    AGEGR1 = factor(
+      AGEGR1,
+      levels = c(">=18 to <65", ">=65 to <75", ">=75")
+    ),
+    RACE = factor(
+      dplyr::case_when(
+        RACE == "AMERICAN INDIAN OR ALASKA NATIVE" ~ "American Indian or Alaska Native",
+        RACE == "ASIAN" ~ "Asian",
+        RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black or African American",
+        RACE == "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" ~ "Native Hawaiian or other Pacific Islander",
+        RACE == "WHITE" ~ "White",
+        RACE == "MULTIPLE" ~ "Multiple",
+        RACE == "NOT REPORTED" ~ "Not reported",
+        RACE == "UNKNOWN" ~ "Unknown",
+        RACE == "OTHER" ~ "Other"
+      ),
+      levels = c(
+        "American Indian or Alaska Native",
+        "Asian",
+        "Black or African American",
+        "Native Hawaiian or other Pacific Islander",
+        "White",
+        "Multiple",
+        "Not reported",
+        "Unknown",
+        "Other"
+      )
+    ),
+    ETHNIC = factor(
+      dplyr::case_when(
+        ETHNIC == "HISPANIC OR LATINO" ~ "Hispanic or Latino",
+        ETHNIC == "NOT HISPANIC OR LATINO" ~ "Not Hispanic or Latino",
+        ETHNIC == "NOT REPORTED" ~ "Not reported",
+        ETHNIC == "UNKNOWN" ~ "Unknown"
+      ),
+      levels = c("Hispanic or Latino", "Not Hispanic or Latino", "Not reported", "Unknown")
+    )
+  ) %>%
   create_colspan_var(
-    non_active_grp = "Placebo",
+    non_active_grp = ctrl_grp,
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
@@ -68,36 +123,37 @@ adsl <- adsl_jnj %>%
     USUBJID,
     !!rlang::sym(popfl),
     !!rlang::sym(trtvar),
-    SEX_DECODE,
+    SEX,
     AGEGR1,
-    RACE_DECODE,
-    ETHNIC_DECODE,
+    RACE,
+    ETHNIC,
     colspan_trt
   )
 
+
 # Factor reformatting (e.g., Include missing in the "Unknown" category).
-adsl$SEX_DECODE <- forcats::fct_na_value_to_level(
-  adsl$SEX_DECODE,
+adsl$SEX <- forcats::fct_na_value_to_level(
+  adsl$SEX,
   level = "Unknown"
 )
 
-adsl$AGEGR1_DECODE <- forcats::fct_na_value_to_level(
-  factor(stringr::str_replace(as.character(adsl$AGEGR1), ">=", "\u2265")),
+adsl$AGEGR1 <- forcats::fct_na_value_to_level(
+  adsl$AGEGR1,
   level = "Unknown"
 )
 
-adsl$RACE_DECODE <- forcats::fct_collapse(
-  forcats::fct_na_value_to_level(adsl$RACE_DECODE, level = "Unknown"),
+adsl$RACE <- forcats::fct_collapse(
+  forcats::fct_na_value_to_level(adsl$RACE, level = "Unknown"),
   "Not reported or unknown" = c("Not reported", "Unknown")
 )
 
-adsl$ETHNIC_DECODE <- forcats::fct_collapse(
-  forcats::fct_na_value_to_level(adsl$ETHNIC_DECODE, level = "Unknown"),
+adsl$ETHNIC <- forcats::fct_collapse(
+  forcats::fct_na_value_to_level(adsl$ETHNIC, level = "Unknown"),
   "Not reported or unknown" = c("Not reported", "Unknown")
 )
 
-had_ae <- adaeocmq_jnj %>%
-  filter(TRTEMFL == "Y" & CQ01NAM == "Seizure") %>%
+had_ae <- adae_jnj %>%
+  filter(TRTEMFL == "Y") %>%
   select(USUBJID, TRTEMFL) %>%
   distinct(USUBJID, .keep_all = TRUE)
 
@@ -171,7 +227,7 @@ lyt <- lyt %>%
     show_labels = "hidden"
   ) %>%
   analyze(
-    vars = "SEX_DECODE",
+    vars = "SEX",
     var_labels = "Sex, n/Ns (%)",
     show_labels = "visible",
     afun = a_freq_resp_var_j,
@@ -179,7 +235,7 @@ lyt <- lyt %>%
     nested = FALSE
   ) %>%
   analyze(
-    vars = "AGEGR1_DECODE",
+    vars = "AGEGR1",
     var_labels = "Age group (years), n/Ns (%)",
     show_labels = "visible",
     afun = a_freq_resp_var_j,
@@ -187,7 +243,7 @@ lyt <- lyt %>%
     nested = FALSE
   ) %>%
   analyze(
-    vars = "RACE_DECODE",
+    vars = "RACE",
     var_labels = "Race, n/Ns (%)",
     show_labels = "visible",
     afun = a_freq_resp_var_j,
@@ -195,7 +251,7 @@ lyt <- lyt %>%
     nested = FALSE
   ) %>%
   analyze(
-    vars = "ETHNIC_DECODE",
+    vars = "ETHNIC",
     var_labels = "Ethnicity, n/Ns (%)",
     show_labels = "visible",
     afun = a_freq_resp_var_j,
@@ -203,7 +259,7 @@ lyt <- lyt %>%
     nested = FALSE
   )
 
-result <- build_table(lyt, adsl)
+result <- build_table(lyt, adsl, round_type = "sas")
 
 ################################################################################
 # Post-Processing:
@@ -222,6 +278,6 @@ result <- set_titles(result, titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 27, 27, 27, 27)
+colwidth <- c(64, 27, 27, 29, 27)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(rescolwidths = colwidth, resultult, file = fileid, orientation = "landscape")

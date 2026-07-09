@@ -1,22 +1,25 @@
-###############################################################################################
+################################################################################
 ## Original Reporting Effort: Standards
-## Program Name: tsfae21b.R
-## R Version: 4.2.1
-## junco Version: 1.0
-## Short Description: Program to create tsfae21b: TEAEs by toxicity (SOC / PT) - Variant 1
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date: 26 Feb 2024
-## Input: ADSL, ADAE.
-## Output: TSFAE21b.rtf
-## Remarks: Template R script version using rtables framework
+## Program Name:              tsfae12b.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Program to create tsfae12b: Subjects With Treatment-emergent
+##                            Adverse Events by System Organ Class, Preferred Term, and Sex
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae12b.rtf
+## Remarks:                   Template R script version using rtables framework
+## R-functions:
+## R-function Sample Call:
 ##
 ## Modification History:
-## Rev #: 1
-## Modified By:
-## Reporting effort:
-## Date:
-## Description:
-###############################################################################################
+##  Rev #:
+##  Modified By:
+##  Reporting Effort:
+##  Date:
+##  Description:
+################################################################################
 
 ################################################################################
 # Prep Environment
@@ -39,16 +42,13 @@ library(junco)
 # - Choose whether or not you want to present a combined active treatment column (default=TRUE)
 # - Define how to create combined treatment columns (if required)
 # - Define column widths to help with desired page splitting
-# - Option to exclude Grade 5 columns if there are none (default = TRUE but set to FALSE if you want this column regardless)
 ################################################################################
 
-tblid <- "TSFAE21b"
+tblid <- "TSFAE12b"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 trtvar <- "TRT01A"
@@ -74,64 +74,37 @@ if (combined_colspan_trt == TRUE) {
   mysplit <- make_split_fun(post = list(add_combo, rm_combo_from_placebo))
 }
 
-exclude_G5_if_none <- TRUE
-
 ################################################################################
 # Process Data:
 ################################################################################
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
-
-adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y")
-
-# Take maximum toxicity - per PT
-adaemaxpt <- adae %>%
-  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD, AETOXGRN) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice_tail() %>%
-  ungroup()
-
-# Take maximum toxicity - per SOC
-adaemaxsoc <- adae %>%
-  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) %>%
-  mutate(AEBODSYSx = AEBODSYS) %>%
-  arrange(USUBJID, AEBODSYS, AETOXGRN) %>%
-  group_by(USUBJID, AEBODSYS) %>%
-  slice_tail() %>%
-  ungroup() %>%
-  select(USUBJID, AEBODSYS, AETOXGR, AEBODSYSx)
-
-# Merge back in an create a new SOC variable that is only populated for max toxicity SOC rows
-adaemax <- left_join(
-  adaemaxpt,
-  adaemaxsoc,
-  by = c("USUBJID", "AEBODSYS", "AETOXGR")
-)
-
-# Add total
-adaetot <- adae %>%
   mutate(
-    AETOXGR = "Total",
-    AEBODSYSx = AEBODSYS
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
-  ungroup()
-
-# Set data together
-adaeall <- bind_rows(adaemax, adaetot) %>%
-  mutate(
-    AETOXGR = factor(
-      as.character(AETOXGR),
-      levels = c("Total", "1", "2", "3", "4", "5")
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
     )
   ) %>%
-  select(USUBJID, TRTEMFL, AETOXGR, AEBODSYS, AEBODSYSx, AEDECOD)
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), SEX)
+
+adae <- adae_jnj %>%
+  mutate(
+    AEBODSYS = case_when(
+      AEBODSYS == "" ~ "Uncoded",
+      .default = AEBODSYS
+    ),
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
+  filter(TRTEMFL == "Y") %>%
+  select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, SEX)
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -147,79 +120,70 @@ colspan_trt_map <- create_colspan_map(
   trt_var = trtvar
 )
 
-# join data together
-ae <- adaeall %>% inner_join(., adsl, by = c("USUBJID"))
+# Add total for Sex - adsl
+totalsex1 <- adsl %>%
+  mutate(SEX = "Total")
 
-if (length(adae$TRTEMFL) == 0) {
-  ae <- adaeall %>% right_join(., adsl, by = c("USUBJID"))
-}
+adsl <- bind_rows(totalsex1, adsl)
 
-ae$spanheader <- factor(
-  ifelse(ae$AETOXGR == "Total", " ", "Toxicity Grade"),
-  levels = c(" ", "Toxicity Grade")
-)
-
-adsl1 <- adsl %>%
-  mutate(AETOXGR = "Total")
-
-adsl <- adsl1 %>%
+adsl <- adsl %>%
   mutate(
-    AETOXGR = factor(
-      as.character(AETOXGR),
-      levels = c("Total", "1", "2", "3", "4", "5")
+    SEXcat = case_when(
+      SEX == "Total" ~ "Total",
+      SEX == "M" ~ "Male",
+      SEX == "F" ~ "Female"
     )
-  )
+  ) %>%
+  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
+  select(-SEX)
+
 adsl$spanheader <- factor(
-  ifelse(adsl$AETOXGR == "Total", " ", "Toxicity Grade"),
-  levels = c(" ", "Toxicity Grade")
+  ifelse(adsl$SEXcat == "Total", " ", "Sex"),
+  levels = c(" ", "Sex")
 )
 
+adsl$SEXcat <- factor(adsl$SEXcat, levels = c("Total", "Male", "Female"))
 
-grademap <- data.frame(
-  spanheader = c(
-    " ",
-    "Toxicity Grade",
-    "Toxicity Grade",
-    "Toxicity Grade",
-    "Toxicity Grade",
-    "Toxicity Grade"
-  ),
-  AETOXGR = c("Total", "1", "2", "3", "4", "5"),
-  stringsAsFactors = FALSE
-)
+# Add total for Sex - adae
+totalsex2 <- adae %>%
+  mutate(SEX = "Total")
 
-# If there are no grade 5 and user has asked to exclude column then update factors
-anyG5 <- ae %>%
-  filter(AETOXGR == "5")
+adae <- bind_rows(totalsex2, adae)
 
-if (exclude_G5_if_none == TRUE && length(anyG5$AETOXGR) == 0) {
-  grademap <- data.frame(
-    spanheader = c(
-      " ",
-      "Toxicity Grade",
-      "Toxicity Grade",
-      "Toxicity Grade",
-      "Toxicity Grade"
-    ),
-    AETOXGR = c("Total", "1", "2", "3", "4"),
-    stringsAsFactors = FALSE
-  )
-}
+adae <- adae %>%
+  mutate(
+    SEXcat = case_when(
+      SEX == "Total" ~ "Total",
+      SEX == "M" ~ "Male",
+      SEX == "F" ~ "Female"
+    )
+  ) %>%
+  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
+  select(-SEX)
+
+adae$SEXcat <- factor(adae$SEXcat, levels = c("Total", "Male", "Female"))
+
+# join data together
+ae <- left_join(adsl, adae, by = c("USUBJID", "SEXcat"))
 
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
 extra_args_1 <- list(
-  denom = "N_colgroup",
-  .stats = c("count_unique_fraction"),
-  colgroup = trtvar
+  denom = "n_altdf",
+  .stats = c("count_unique_fraction")
 )
 
 
+extra_args_2 <- list(
+  denom = "n_altdf",
+  .stats = c("count_unique")
+)
+
 lyt <- basic_table(
   top_level_section_div = " ",
-  colcount_format = "N=xx"
+  show_colcounts = FALSE
 ) %>%
   split_cols_by(
     "colspan_trt",
@@ -228,18 +192,28 @@ lyt <- basic_table(
 
 if (combined_colspan_trt == TRUE) {
   lyt <- lyt %>%
-    split_cols_by(trtvar, split_fun = mysplit, show_colcounts = TRUE)
+    split_cols_by(trtvar, split_fun = mysplit)
 } else {
   lyt <- lyt %>%
-    split_cols_by(trtvar, show_colcounts = TRUE)
+    split_cols_by(trtvar)
 }
 
 lyt <- lyt %>%
-  split_cols_by(
-    "spanheader",
-    split_fun = trim_levels_to_map(map = grademap)
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("SEXcat")) %>%
+  split_cols_by("SEXcat") %>%
+  analyze(
+    popfl,
+    afun = a_freq_j,
+    show_labels = "hidden",
+    section_div = c(" "),
+    extra_args = append(
+      extra_args_2,
+      list(
+        label = "Analysis set: Safety",
+        val = "Y"
+      )
+    )
   ) %>%
-  split_cols_by("AETOXGR", show_colcounts = FALSE) %>%
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -248,8 +222,7 @@ lyt <- lyt %>%
       extra_args_1,
       list(
         label = "Subjects with >=1 AE",
-        val = "Y",
-        restr_columns = "Total"
+        val = "Y"
       )
     )
   ) %>%
@@ -258,22 +231,21 @@ lyt <- lyt %>%
     split_label = "System Organ Class",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
-    section_div = c(" ")
+    section_div = c(" "),
+    nested = FALSE
   ) %>%
   summarize_row_groups(
-    "AEBODSYSx",
+    "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
   ) %>%
   analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 #########################################################################################
 # Post-Processing step to sort by descending count on chosen active treatment columns.
-# Default is the last treatment (inc. Combined if applicable) under the active treatment
-# spanning header (defaulted to colspan_trt variable).
 # For this table we can use a defined colpath so it takes the appropriate sub-column ("Total")
 # for the last active treatment group/combined and use this for its sort order.
 # If you only have 1 active treatment arm, consider using jj_complex_scorefun(spanningheadercolvar = NA, usefirstcol = TRUE)
@@ -294,7 +266,7 @@ if (length(adae$TRTEMFL) != 0) {
         "Combined",
         "spanheader",
         " ",
-        "AETOXGR",
+        "SEXcat",
         "Total"
       )
     )
@@ -310,7 +282,7 @@ if (length(adae$TRTEMFL) != 0) {
         "Combined",
         "spanheader",
         " ",
-        "AETOXGR",
+        "SEXcat",
         "Total"
       )
     )
@@ -327,12 +299,11 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 17, 19, 17, 21, 21, 21, 17, 17, 17, 21, 19, 23, 17, 19, 17, 21, 21, 21, 17, 17, 17, 17, 17)
-
-tt_to_tlgrtf(
+tt_to_tlgrtf( 
   colwidths = colwidth,
   result,
   file = fileid,
-  orientation = "landscape",
+  orientation = "portrait",
+  label_width_ins = 1.5,
   nosplitin = list(cols = c(trtvar))
 )
