@@ -1,28 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsfvit01.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsfvit01: Listing of Subjects With
-##                            Treatment-emergent Clinically Important Vital
-##                            Signs
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     advs
-## Output:                    lsfvit01.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

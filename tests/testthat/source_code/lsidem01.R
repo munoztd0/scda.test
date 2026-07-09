@@ -1,27 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsidem01.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Create LSIDEM01: Listing of Demographics and
-##                            Baseline Characteristics
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl
-## Output:                    lsidem01.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

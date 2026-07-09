@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae01b.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae01b: Overall Summary of Subjects
-##                            With Treatment-emergent Adverse Events
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae01b.rtf
-## Remarks:                   This variant includes summary of AEs by max toxicity grade.
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

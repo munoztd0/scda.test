@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae10a.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae10a: Demographic Characteristics
-##                            for Subjects With Treatment-emergent Adverse Events
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae10a.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

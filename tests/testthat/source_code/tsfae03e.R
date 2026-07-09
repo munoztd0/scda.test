@@ -1,26 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae03e.r
-## R version:                 4.5.2
-## junco version:             0.1.3
-## Short Description:         Program to create tsfae03e: Subjects With Treatment
-##                            -emergent Adverse Events ≥ Grade 3 by System Organ
-##                            Class and Preferred Term
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae03e.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

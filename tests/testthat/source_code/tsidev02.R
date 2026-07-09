@@ -1,28 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsidev02.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsidev02: Subjects Who Did Not Meet
-##                            Inclusion Criteria or Who Met Exclusion
-##                            Criteria by Region and Center
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, ie
-## Output:                    tsidev02.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

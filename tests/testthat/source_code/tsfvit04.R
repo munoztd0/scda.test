@@ -1,26 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfvit04.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfvit04: Subjects With
-##                            Treatment-emergent Orthostatic Hypotension During
-##                            [Treatment Period]
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, advs
-## Output:                    tsfvit04.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

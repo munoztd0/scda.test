@@ -1,26 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsfae07b.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsfae07b: Selected [Narrow / Broad] OCMQs
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adaeocmq
-## Output:                    lsfae07b.rtf
-## Remarks:                   This variant is for Toxicity
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

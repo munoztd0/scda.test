@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfvit02.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfvit02: Subjects With On-treatment Vital Signs
-##                            by Category
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, advs
-## Output:                    tsfvit02.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

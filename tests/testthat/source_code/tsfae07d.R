@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae07d.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae07d: Subjects With Treatment-
-##                            emergent Adverse Events of Interest - [AE Grouping]
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae, adlb (optional)
-## Output:                    tsfae07d.rtf
-## Remarks:                   This variant includes summary of AEs by max severity version
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

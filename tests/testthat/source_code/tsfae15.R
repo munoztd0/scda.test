@@ -1,26 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae15.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae15: Subjects With Treatment-
-##                            emergent Adverse Events Leading to Discontinuation
-##                            of Study Treatment by Organ System and OCMQ (Narrow)
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adaeocmq
-## Output:                    tsfae15.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

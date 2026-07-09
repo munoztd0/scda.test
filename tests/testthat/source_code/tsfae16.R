@@ -1,26 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae16.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae16: Subjects With Treatment
-##                            -emergent Adverse Events by Organ System and OCMQ
-##                            (Broad and Narrow)
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adaeocmq
-## Output:                    tsfae16.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

@@ -1,27 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae04b.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae04b: Subjects With Treatment-
-##                            emergent Adverse Events With Frequency ≥[5]% in [Drug-treated]
-##                            Group and ≥[2%] More Often in [Drug-treated] Group Than
-##                            [Placebo-treated] Group by Preferred Term
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae04b.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

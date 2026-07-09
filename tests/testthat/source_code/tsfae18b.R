@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae18b.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae18b: Subjects With Treatment-emergent
-##                            Hypoglycemia Algorithmic OCMQ
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adagocmq, adsl
-## Output:                    tsfae18b.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

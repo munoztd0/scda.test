@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae06.r
-## R version:                 4.5.2
-## junco version:             0.1.3
-## Short Description:         Program to create tsfae06: Subjects With Treatment
-##                            -emergent Adverse Events Leading to Death by Preferred Term
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae06.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

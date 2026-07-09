@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfvit01a
-## R version:                 4.2.1
-## Short Description:         Program to create tsfvit01a: Mean Change From Baseline
-##                            in Blood Pressure Over Time by [Subgroup]
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      30JAN2024
-## Input:                     adsl.RDS, advs.RDS
-## Output:                    tsfvit01a.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

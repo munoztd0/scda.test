@@ -1,27 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsidev03.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsidev03: Listing of Subjects [Enrolled/Randomized]
-##                            But Did Not Satisfy Entry Criteria
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, ie
-## Output:                    lsidev03.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

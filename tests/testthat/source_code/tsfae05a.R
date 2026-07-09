@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae05a.r
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae05a: AE table by SOC/PT and Subgroup - Related AEs
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      23 Feb 2024
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE05a.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:                    1
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 

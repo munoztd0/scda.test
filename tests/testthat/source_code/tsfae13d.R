@@ -1,28 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae13d.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae13d: Subjects With Related
-##                            Non-serious Treatment-emergent Adverse Events by
-##                            Preferred Term
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae13d.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

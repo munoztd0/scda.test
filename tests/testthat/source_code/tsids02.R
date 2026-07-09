@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsids02.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsids02: Subject Disposition
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl
-## Output:                    tsids02.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

@@ -1,27 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae20d.r
-## R Version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae20d: Subjects With [Treatment-
-##                            emergent Adverse Events] With Frequency ≥[x]% in
-##                            [Any Treatment Group] by System Organ Class and Preferred
-##                            Term and Onset Time
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, adae
-## Output:                    tsfae20d.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

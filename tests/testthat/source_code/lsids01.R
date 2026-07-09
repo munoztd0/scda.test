@@ -1,27 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsids01.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsids01: Listing of Subjects Who
-##                            Permanently Discontinued Treatment
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, ds
-## Output:                    lsids01.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

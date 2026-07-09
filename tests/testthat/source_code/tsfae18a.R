@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae18a.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create tsfae18a: Subjects With Treatment-
-##                            emergent Muscle Injury Algorithmic OCMQ
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adagocmq, adsl
-## Output:                    tsfae18a.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

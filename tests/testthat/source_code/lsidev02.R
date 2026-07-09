@@ -1,28 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsidev02.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsidev02: Listing of Subjects Who Received
-##                            Incorrect Treatment or Dose by Region and Center
-##                            Adverse Events
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl, dv
-## Output:                    lsidev02.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae13.r
-## R version:                 4.2.1
-## Short Description:         Program to create tsfae13: Exposure-adjusted Incidence
-##                            Rate Analysis by Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      15FEB2024
-## Input:                     adsl.RDS, adae.RDS
-## Output:                    tsfae13.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 

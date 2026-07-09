@@ -1,26 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsfae02.r
-## R version:                 4.5.2
-## junco Version:             0.1.3
-## Short Description:         Program to create lsfae02: Listing of Treatment-emergent Serious Adverse Events
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adae
-## Output:                    lsfae02.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 

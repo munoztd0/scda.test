@@ -1,23 +1,3 @@
-################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsids03.r
-## R version:                 4.5.3
-## junco Version:             0.1.3
-## Short Description:         Program to create tsids03: Analysis Sets
-## Author:                    C&SP Methodology
-## Date:                      2026-09-30
-## Input:                     adsl
-## Output:                    tsids03.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
 ###############################################################################
 #Prep environment
 ###############################################################################
