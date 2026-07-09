@@ -1,6 +1,6 @@
 # 2. Identify Target Scripts
 # 'ls*.R' matches any file starting with 'ls' and ending in '.R'
-all_scripts <- list.files(path = "source_code/", pattern = "^lsfae.*\\.R$", full.names = TRUE)
+all_scripts <- list.files(path = "source_code/", pattern = "^lsfvit.*\\.R$", full.names = TRUE)
 #tsvit #tsi
 #  3. Execution Loop
 for (script in all_scripts) {
