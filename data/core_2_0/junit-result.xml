@@ -1,46 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="lsfae01" timestamp="2026-08-14T09:03:36Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.474">
-    <testcase time="0.474" classname="lsfae01" name="lsfae01"/>
+  <testsuite name="lsfae01" timestamp="2026-08-14T09:05:13Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.727">
+    <testcase time="0.726999999999999" classname="lsfae01" name="lsfae01">
+      <skipped message="Reason: On CRAN ('test-lsfae01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae02" timestamp="2026-08-14T09:03:37Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.56">
-    <testcase time="0.56" classname="lsfae02" name="lsfae02"/>
+  <testsuite name="lsfae02" timestamp="2026-08-14T09:05:14Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.87">
+    <testcase time="0.870000000000001" classname="lsfae02" name="lsfae02">
+      <skipped message="Reason: On CRAN ('test-lsfae02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae03" timestamp="2026-08-14T09:03:37Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.202">
-    <testcase time="0.202" classname="lsfae03" name="lsfae03"/>
+  <testsuite name="lsfae03" timestamp="2026-08-14T09:05:15Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.35">
+    <testcase time="0.35" classname="lsfae03" name="lsfae03">
+      <skipped message="Reason: On CRAN ('test-lsfae03.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae04" timestamp="2026-08-14T09:03:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.119">
-    <testcase time="0.119000000000001" classname="lsfae04" name="lsfae04"/>
+  <testsuite name="lsfae04" timestamp="2026-08-14T09:05:15Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.215">
+    <testcase time="0.215" classname="lsfae04" name="lsfae04">
+      <skipped message="Reason: On CRAN ('test-lsfae04.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae05" timestamp="2026-08-14T09:03:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.29">
-    <testcase time="0.289999999999999" classname="lsfae05" name="lsfae05"/>
+  <testsuite name="lsfae05" timestamp="2026-08-14T09:05:15Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.528">
+    <testcase time="0.528" classname="lsfae05" name="lsfae05">
+      <skipped message="Reason: On CRAN ('test-lsfae05.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae05b" timestamp="2026-08-14T09:03:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.295">
-    <testcase time="0.295" classname="lsfae05b" name="lsfae05b"/>
+  <testsuite name="lsfae05b" timestamp="2026-08-14T09:05:16Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.492">
+    <testcase time="0.491999999999999" classname="lsfae05b" name="lsfae05b">
+      <skipped message="Reason: On CRAN ('test-lsfae05b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae06" timestamp="2026-08-14T09:03:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.204">
-    <testcase time="0.204000000000001" classname="lsfae06" name="lsfae06"/>
+  <testsuite name="lsfae06" timestamp="2026-08-14T09:05:16Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.357">
+    <testcase time="0.357000000000001" classname="lsfae06" name="lsfae06">
+      <skipped message="Reason: On CRAN ('test-lsfae06.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae07a" timestamp="2026-08-14T09:03:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.242">
-    <testcase time="0.242000000000001" classname="lsfae07a" name="lsfae07a"/>
+  <testsuite name="lsfae07a" timestamp="2026-08-14T09:05:16Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.418">
+    <testcase time="0.417999999999999" classname="lsfae07a" name="lsfae07a">
+      <skipped message="Reason: On CRAN ('test-lsfae07a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfae07b" timestamp="2026-08-14T09:03:39Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.247">
-    <testcase time="0.247" classname="lsfae07b" name="lsfae07b"/>
+  <testsuite name="lsfae07b" timestamp="2026-08-14T09:05:17Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.405">
+    <testcase time="0.405000000000001" classname="lsfae07b" name="lsfae07b">
+      <skipped message="Reason: On CRAN ('test-lsfae07b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfvit01" timestamp="2026-08-14T09:03:39Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.706">
-    <testcase time="0.706" classname="lsfvit01" name="lsfvit01"/>
+  <testsuite name="lsfvit01" timestamp="2026-08-14T09:05:17Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.192">
+    <testcase time="1.192" classname="lsfvit01" name="lsfvit01">
+      <skipped message="Reason: On CRAN ('test-lsfvit01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsfvit02" timestamp="2026-08-14T09:03:40Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.84">
-    <testcase time="0.84" classname="lsfvit02" name="lsfvit02part1of3"/>
+  <testsuite name="lsfvit02" timestamp="2026-08-14T09:05:18Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.448">
+    <testcase time="1.448" classname="lsfvit02" name="lsfvit02part1of3">
+      <skipped message="Reason: On CRAN ('test-lsfvit02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsidem01" timestamp="2026-08-14T09:03:40Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.263">
-    <testcase time="0.263" classname="lsidem01" name="lsidem01"/>
+  <testsuite name="lsidem01" timestamp="2026-08-14T09:05:20Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.438">
+    <testcase time="0.437999999999999" classname="lsidem01" name="lsidem01">
+      <skipped message="Reason: On CRAN ('test-lsidem01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsidem02" timestamp="2026-08-14T09:03:41Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.23">
-    <testcase time="0.23" classname="lsidem02" name="lsidem02"/>
+  <testsuite name="lsidem02" timestamp="2026-08-14T09:05:20Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.38">
+    <testcase time="0.380000000000003" classname="lsidem02" name="lsidem02">
+      <skipped message="Reason: On CRAN ('test-lsidem02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsidev01" timestamp="2026-08-14T09:03:41Z" hostname="2d531921e4e8" tests="2" skipped="0" failures="0" errors="0" time="0.357">
-    <testcase time="0.0640000000000001" classname="lsidev01" name="lsidev01">
+  <testsuite name="lsidev01" timestamp="2026-08-14T09:05:21Z" hostname="2cb3a2bb9606" tests="2" skipped="1" failures="0" errors="0" time="0.605">
+    <testcase time="0.122999999999998" classname="lsidev01" name="lsidev01">
       <system-out>There were 3 warnings in `mutate()`.
 The first warning was:
 i In argument: `COL6 = as.integer(DVSTDTC - TRTSDT + (DVSTDTC &gt;= TRTSDT))`.
@@ -65,10 +91,12 @@ Backtrace:
  14.   \-dplyr:::mutate_cols(.data, dplyr_quosures(...), by)
  15.     \-dplyr:::signal_warnings(warnings_state, error_call)</system-out>
     </testcase>
-    <testcase time="0.292999999999999" classname="lsidev01" name="lsidev01"/>
+    <testcase time="0.482000000000003" classname="lsidev01" name="lsidev01">
+      <skipped message="Reason: On CRAN ('test-lsidev01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsidev02" timestamp="2026-08-14T09:03:41Z" hostname="2d531921e4e8" tests="2" skipped="0" failures="0" errors="0" time="0.264">
-    <testcase time="0.0630000000000006" classname="lsidev02" name="lsidev02">
+  <testsuite name="lsidev02" timestamp="2026-08-14T09:05:21Z" hostname="2cb3a2bb9606" tests="2" skipped="1" failures="0" errors="0" time="0.442">
+    <testcase time="0.109999999999999" classname="lsidev02" name="lsidev02">
       <system-out>There were 3 warnings in `mutate()`.
 The first warning was:
 i In argument: `COL6 = as.integer(DVSTDTC - TRTSDT + (DVSTDTC &gt;= TRTSDT))`.
@@ -93,37 +121,42 @@ Backtrace:
  14.   \-dplyr:::mutate_cols(.data, dplyr_quosures(...), by)
  15.     \-dplyr:::signal_warnings(warnings_state, error_call)</system-out>
     </testcase>
-    <testcase time="0.201000000000001" classname="lsidev02" name="lsidev02"/>
-  </testsuite>
-  <testsuite name="lsidev03" timestamp="2026-08-14T09:03:42Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.155">
-    <testcase time="0.154999999999999" classname="lsidev03" name="lsidev03"/>
-  </testsuite>
-  <testsuite name="lsids01" timestamp="2026-08-14T09:03:42Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="1" errors="0" time="0.24">
-    <testcase time="0.24" classname="lsids01" name="lsids01">
-      <failure type="failure" message="Snapshot of `write_test_rtf_for(&quot;lsids01.R&quot;)` has changed. ('test-lsids01.R:4:3')">Snapshot of `write_test_rtf_for("lsids01.R")` has changed.
-</failure>
+    <testcase time="0.332000000000001" classname="lsidev02" name="lsidev02">
+      <skipped message="Reason: On CRAN ('test-lsidev02.R:1:1')"/>
     </testcase>
   </testsuite>
-  <testsuite name="lsids02" timestamp="2026-08-14T09:03:42Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="1" errors="0" time="0.275">
-    <testcase time="0.275" classname="lsids02" name="lsids02">
-      <failure type="failure" message="Snapshot of `write_test_rtf_for(&quot;lsids02.R&quot;)` has changed. ('test-lsids02.R:4:3')">Snapshot of `write_test_rtf_for("lsids02.R")` has changed.
-</failure>
+  <testsuite name="lsidev03" timestamp="2026-08-14T09:05:22Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.262">
+    <testcase time="0.261999999999997" classname="lsidev03" name="lsidev03">
+      <skipped message="Reason: On CRAN ('test-lsidev03.R:1:1')"/>
     </testcase>
   </testsuite>
-  <testsuite name="lsids03" timestamp="2026-08-14T09:03:42Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="1" errors="0" time="0.273">
-    <testcase time="0.273" classname="lsids03" name="lsids03">
-      <failure type="failure" message="Snapshot of `write_test_rtf_for(&quot;lsids03.R&quot;)` has changed. ('test-lsids03.R:4:3')">Snapshot of `write_test_rtf_for("lsids03.R")` has changed.
-</failure>
+  <testsuite name="lsids01" timestamp="2026-08-14T09:05:22Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.384">
+    <testcase time="0.384" classname="lsids01" name="lsids01">
+      <skipped message="Reason: On CRAN ('test-lsids01.R:1:1')"/>
     </testcase>
   </testsuite>
-  <testsuite name="lsids04" timestamp="2026-08-14T09:03:43Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.127">
-    <testcase time="0.126999999999999" classname="lsids04" name="lsids04"/>
+  <testsuite name="lsids02" timestamp="2026-08-14T09:05:22Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.436">
+    <testcase time="0.436" classname="lsids02" name="lsids02">
+      <skipped message="Reason: On CRAN ('test-lsids02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsids05" timestamp="2026-08-14T09:03:43Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.067">
-    <testcase time="0.0670000000000002" classname="lsids05" name="lsids05"/>
+  <testsuite name="lsids03" timestamp="2026-08-14T09:05:23Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.42">
+    <testcase time="0.420000000000002" classname="lsids03" name="lsids03">
+      <skipped message="Reason: On CRAN ('test-lsids03.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="lsids06" timestamp="2026-08-14T09:03:43Z" hostname="2d531921e4e8" tests="3" skipped="0" failures="0" errors="0" time="0.349">
-    <testcase time="0.027000000000001" classname="lsids06" name="lsids06">
+  <testsuite name="lsids04" timestamp="2026-08-14T09:05:23Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.209">
+    <testcase time="0.209" classname="lsids04" name="lsids04">
+      <skipped message="Reason: On CRAN ('test-lsids04.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="lsids05" timestamp="2026-08-14T09:05:23Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.124">
+    <testcase time="0.123999999999999" classname="lsids05" name="lsids05">
+      <skipped message="Reason: On CRAN ('test-lsids05.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="lsids06" timestamp="2026-08-14T09:05:24Z" hostname="2cb3a2bb9606" tests="3" skipped="1" failures="0" errors="0" time="0.932">
+    <testcase time="0.0590000000000011" classname="lsids06" name="lsids06">
       <system-out>Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
 i Please use `all_of(var)` (or `any_of(var)`) instead of `.data[[var]]`
 Backtrace:
@@ -159,7 +192,7 @@ Backtrace:
  29.                 \-tidyselect:::expr_kind(expr, context_mask, error_call)
  30.                   \-tidyselect:::call_kind(expr, context_mask, error_call)</system-out>
     </testcase>
-    <testcase time="0.104999999999999" classname="lsids06" name="lsids06">
+    <testcase time="0.181999999999999" classname="lsids06" name="lsids06">
       <system-out>Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
 i Please use `all_of(var)` (or `any_of(var)`) instead of `.data[[var]]`
 Backtrace:
@@ -188,190 +221,307 @@ Backtrace:
  22.                 \-tidyselect:::expr_kind(expr, context_mask, error_call)
  23.                   \-tidyselect:::call_kind(expr, context_mask, error_call)</system-out>
     </testcase>
-    <testcase time="0.217000000000001" classname="lsids06" name="lsids06"/>
-  </testsuite>
-  <testsuite name="tsfae01a" timestamp="2026-08-14T09:03:43Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.653">
-    <testcase time="1.653" classname="tsfae01a" name="tsfae01a"/>
-  </testsuite>
-  <testsuite name="tsfae01b" timestamp="2026-08-14T09:03:45Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.336">
-    <testcase time="1.336" classname="tsfae01b" name="tsfae01b"/>
-  </testsuite>
-  <testsuite name="tsfae02" timestamp="2026-08-14T09:03:46Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.697">
-    <testcase time="1.697" classname="tsfae02" name="tsfae02"/>
-  </testsuite>
-  <testsuite name="tsfae02a" timestamp="2026-08-14T09:03:48Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="5.957">
-    <testcase time="5.957" classname="tsfae02a" name="tsfae02a"/>
-  </testsuite>
-  <testsuite name="tsfae03a" timestamp="2026-08-14T09:03:54Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.829">
-    <testcase time="1.829" classname="tsfae03a" name="tsfae03a"/>
-  </testsuite>
-  <testsuite name="tsfae03b" timestamp="2026-08-14T09:03:56Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.906">
-    <testcase time="1.906" classname="tsfae03b" name="tsfae03b"/>
-  </testsuite>
-  <testsuite name="tsfae03c" timestamp="2026-08-14T09:03:57Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="2.008">
-    <testcase time="2.008" classname="tsfae03c" name="tsfae03c"/>
-  </testsuite>
-  <testsuite name="tsfae03d" timestamp="2026-08-14T09:03:59Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.444">
-    <testcase time="1.444" classname="tsfae03d" name="tsfae03d"/>
-  </testsuite>
-  <testsuite name="tsfae03e" timestamp="2026-08-14T09:04:01Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.805">
-    <testcase time="1.805" classname="tsfae03e" name="tsfae03e"/>
-  </testsuite>
-  <testsuite name="tsfae03f" timestamp="2026-08-14T09:04:03Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.563">
-    <testcase time="0.563000000000002" classname="tsfae03f" name="tsfae03f"/>
-  </testsuite>
-  <testsuite name="tsfae04a" timestamp="2026-08-14T09:04:03Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.992">
-    <testcase time="0.992000000000004" classname="tsfae04a" name="tsfae04a"/>
-  </testsuite>
-  <testsuite name="tsfae04b" timestamp="2026-08-14T09:04:04Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="2.349">
-    <testcase time="2.349" classname="tsfae04b" name="tsfae04b"/>
-  </testsuite>
-  <testsuite name="tsfae04c" timestamp="2026-08-14T09:04:07Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.556">
-    <testcase time="1.556" classname="tsfae04c" name="tsfae04c"/>
-  </testsuite>
-  <testsuite name="tsfae05" timestamp="2026-08-14T09:04:08Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.59">
-    <testcase time="1.59" classname="tsfae05" name="tsfae05"/>
-  </testsuite>
-  <testsuite name="tsfae05a" timestamp="2026-08-14T09:04:10Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="5.25">
-    <testcase time="5.25" classname="tsfae05a" name="tsfae05a"/>
-  </testsuite>
-  <testsuite name="tsfae06" timestamp="2026-08-14T09:04:15Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.303">
-    <testcase time="0.302999999999997" classname="tsfae06" name="tsfae06"/>
-  </testsuite>
-  <testsuite name="tsfae07a" timestamp="2026-08-14T09:04:15Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.299">
-    <testcase time="1.299" classname="tsfae07a" name="tsfae07a"/>
-  </testsuite>
-  <testsuite name="tsfae07b" timestamp="2026-08-14T09:04:17Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.339">
-    <testcase time="1.33900000000001" classname="tsfae07b" name="tsfae07b"/>
-  </testsuite>
-  <testsuite name="tsfae07c" timestamp="2026-08-14T09:04:18Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.384">
-    <testcase time="0.384" classname="tsfae07c" name="tsfae07c"/>
-  </testsuite>
-  <testsuite name="tsfae07d" timestamp="2026-08-14T09:04:18Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.329">
-    <testcase time="1.329" classname="tsfae07d" name="tsfae07d"/>
-  </testsuite>
-  <testsuite name="tsfae07e" timestamp="2026-08-14T09:04:20Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.402">
-    <testcase time="1.40199999999999" classname="tsfae07e" name="tsfae07e"/>
-  </testsuite>
-  <testsuite name="tsfae08" timestamp="2026-08-14T09:04:21Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.811">
-    <testcase time="1.811" classname="tsfae08" name="tsfae08"/>
-  </testsuite>
-  <testsuite name="tsfae10a" timestamp="2026-08-14T09:04:23Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.861">
-    <testcase time="0.861000000000004" classname="tsfae10a" name="tsfae10a"/>
-  </testsuite>
-  <testsuite name="tsfae10b" timestamp="2026-08-14T09:04:24Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.607">
-    <testcase time="0.606999999999999" classname="tsfae10b" name="tsfae10b"/>
-  </testsuite>
-  <testsuite name="tsfae10c" timestamp="2026-08-14T09:04:24Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.621">
-    <testcase time="0.621000000000002" classname="tsfae10c" name="tsfae10c"/>
-  </testsuite>
-  <testsuite name="tsfae10d" timestamp="2026-08-14T09:04:25Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.821">
-    <testcase time="0.820999999999998" classname="tsfae10d" name="tsfae10d"/>
-  </testsuite>
-  <testsuite name="tsfae11a" timestamp="2026-08-14T09:04:26Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="4.284">
-    <testcase time="4.284" classname="tsfae11a" name="tsfae11apart1of2"/>
-  </testsuite>
-  <testsuite name="tsfae11b" timestamp="2026-08-14T09:04:30Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="5.816">
-    <testcase time="5.816" classname="tsfae11b" name="tsfae11bpart1of4"/>
-  </testsuite>
-  <testsuite name="tsfae11c" timestamp="2026-08-14T09:04:36Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.557">
-    <testcase time="3.557" classname="tsfae11c" name="tsfae11c"/>
-  </testsuite>
-  <testsuite name="tsfae11d" timestamp="2026-08-14T09:04:39Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="4.795">
-    <testcase time="4.795" classname="tsfae11d" name="tsfae11d"/>
-  </testsuite>
-  <testsuite name="tsfae12a" timestamp="2026-08-14T09:04:44Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="5.108">
-    <testcase time="5.10799999999999" classname="tsfae12a" name="tsfae12apart1of4"/>
-  </testsuite>
-  <testsuite name="tsfae12b" timestamp="2026-08-14T09:04:49Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.38">
-    <testcase time="3.38000000000001" classname="tsfae12b" name="tsfae12bpart1of2"/>
-  </testsuite>
-  <testsuite name="tsfae12c" timestamp="2026-08-14T09:04:53Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="5.549">
-    <testcase time="5.54899999999999" classname="tsfae12c" name="tsfae12cpart1of4"/>
-  </testsuite>
-  <testsuite name="tsfae12d" timestamp="2026-08-14T09:04:58Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.198">
-    <testcase time="3.19800000000001" classname="tsfae12d" name="tsfae12dpart1of2"/>
-  </testsuite>
-  <testsuite name="tsfae13" timestamp="2026-08-14T09:05:01Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="1" errors="0" time="1.172">
-    <testcase time="1.172" classname="tsfae13" name="tsfae13">
-      <failure type="failure" message="Snapshot of `write_test_rtf_for(&quot;tsfae13.R&quot;)` has changed. ('test-tsfae13.R:4:3')">Snapshot of `write_test_rtf_for("tsfae13.R")` has changed.
-</failure>
+    <testcase time="0.691000000000003" classname="lsids06" name="lsids06">
+      <skipped message="Reason: On CRAN ('test-lsids06.R:1:1')"/>
     </testcase>
   </testsuite>
-  <testsuite name="tsfae13a" timestamp="2026-08-14T09:05:03Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.735">
-    <testcase time="0.734999999999999" classname="tsfae13a" name="tsfae13a"/>
+  <testsuite name="tsfae01a" timestamp="2026-08-14T09:05:25Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.391">
+    <testcase time="2.391" classname="tsfae01a" name="tsfae01a">
+      <skipped message="Reason: On CRAN ('test-tsfae01a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae13b" timestamp="2026-08-14T09:05:03Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.272">
-    <testcase time="0.272000000000006" classname="tsfae13b" name="tsfae13b"/>
+  <testsuite name="tsfae01b" timestamp="2026-08-14T09:05:27Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.316">
+    <testcase time="2.316" classname="tsfae01b" name="tsfae01b">
+      <skipped message="Reason: On CRAN ('test-tsfae01b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae13c" timestamp="2026-08-14T09:05:04Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.545">
-    <testcase time="0.544999999999987" classname="tsfae13c" name="tsfae13c"/>
+  <testsuite name="tsfae02" timestamp="2026-08-14T09:05:29Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="3.044">
+    <testcase time="3.044" classname="tsfae02" name="tsfae02">
+      <skipped message="Reason: On CRAN ('test-tsfae02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae13d" timestamp="2026-08-14T09:05:04Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.678">
-    <testcase time="0.678000000000011" classname="tsfae13d" name="tsfae13d"/>
+  <testsuite name="tsfae02a" timestamp="2026-08-14T09:05:32Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="9.756">
+    <testcase time="9.756" classname="tsfae02a" name="tsfae02a">
+      <skipped message="Reason: On CRAN ('test-tsfae02a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae14" timestamp="2026-08-14T09:05:05Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="2.842">
-    <testcase time="2.842" classname="tsfae14" name="tsfae14"/>
+  <testsuite name="tsfae03a" timestamp="2026-08-14T09:05:42Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="3.068">
+    <testcase time="3.068" classname="tsfae03a" name="tsfae03a">
+      <skipped message="Reason: On CRAN ('test-tsfae03a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae15" timestamp="2026-08-14T09:05:08Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.921">
-    <testcase time="1.92099999999999" classname="tsfae15" name="tsfae15"/>
+  <testsuite name="tsfae03b" timestamp="2026-08-14T09:05:45Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="3.112">
+    <testcase time="3.112" classname="tsfae03b" name="tsfae03b">
+      <skipped message="Reason: On CRAN ('test-tsfae03b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae16" timestamp="2026-08-14T09:05:10Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="6.307">
-    <testcase time="6.307" classname="tsfae16" name="tsfae16part1of2"/>
+  <testsuite name="tsfae03c" timestamp="2026-08-14T09:05:48Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="3.281">
+    <testcase time="3.281" classname="tsfae03c" name="tsfae03c">
+      <skipped message="Reason: On CRAN ('test-tsfae03c.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae17a" timestamp="2026-08-14T09:05:16Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="7.756">
-    <testcase time="7.756" classname="tsfae17a" name="tsfae17a"/>
+  <testsuite name="tsfae03d" timestamp="2026-08-14T09:05:51Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.412">
+    <testcase time="2.412" classname="tsfae03d" name="tsfae03d">
+      <skipped message="Reason: On CRAN ('test-tsfae03d.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae17b" timestamp="2026-08-14T09:05:24Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="4.952">
-    <testcase time="4.952" classname="tsfae17b" name="tsfae17b"/>
+  <testsuite name="tsfae03e" timestamp="2026-08-14T09:05:54Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.961">
+    <testcase time="2.961" classname="tsfae03e" name="tsfae03e">
+      <skipped message="Reason: On CRAN ('test-tsfae03e.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae17c" timestamp="2026-08-14T09:05:29Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="9.469">
-    <testcase time="9.46900000000001" classname="tsfae17c" name="tsfae17c"/>
+  <testsuite name="tsfae03f" timestamp="2026-08-14T09:05:57Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.905">
+    <testcase time="0.905000000000001" classname="tsfae03f" name="tsfae03f">
+      <skipped message="Reason: On CRAN ('test-tsfae03f.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae17d" timestamp="2026-08-14T09:05:38Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="7.562">
-    <testcase time="7.56199999999998" classname="tsfae17d" name="tsfae17d"/>
+  <testsuite name="tsfae04a" timestamp="2026-08-14T09:05:58Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.582">
+    <testcase time="1.582" classname="tsfae04a" name="tsfae04a">
+      <skipped message="Reason: On CRAN ('test-tsfae04a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae18a" timestamp="2026-08-14T09:05:46Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.394">
-    <testcase time="0.394000000000005" classname="tsfae18a" name="tsfae18a"/>
+  <testsuite name="tsfae04b" timestamp="2026-08-14T09:05:59Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="4.038">
+    <testcase time="4.038" classname="tsfae04b" name="tsfae04b">
+      <skipped message="Reason: On CRAN ('test-tsfae04b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae18b" timestamp="2026-08-14T09:05:46Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.79">
-    <testcase time="0.789999999999992" classname="tsfae18b" name="tsfae18b"/>
+  <testsuite name="tsfae04c" timestamp="2026-08-14T09:06:03Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.797">
+    <testcase time="2.797" classname="tsfae04c" name="tsfae04c">
+      <skipped message="Reason: On CRAN ('test-tsfae04c.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae18c" timestamp="2026-08-14T09:05:47Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.977">
-    <testcase time="0.977000000000004" classname="tsfae18c" name="tsfae18c"/>
+  <testsuite name="tsfae05" timestamp="2026-08-14T09:06:06Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.826">
+    <testcase time="2.826" classname="tsfae05" name="tsfae05">
+      <skipped message="Reason: On CRAN ('test-tsfae05.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae18d" timestamp="2026-08-14T09:05:48Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.423">
-    <testcase time="0.423000000000002" classname="tsfae18d" name="tsfae18d"/>
+  <testsuite name="tsfae05a" timestamp="2026-08-14T09:06:09Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="8.869">
+    <testcase time="8.869" classname="tsfae05a" name="tsfae05a">
+      <skipped message="Reason: On CRAN ('test-tsfae05a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae19a" timestamp="2026-08-14T09:05:48Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.424">
-    <testcase time="0.424000000000007" classname="tsfae19a" name="tsfae19a"/>
+  <testsuite name="tsfae06" timestamp="2026-08-14T09:06:18Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.513">
+    <testcase time="0.513000000000005" classname="tsfae06" name="tsfae06">
+      <skipped message="Reason: On CRAN ('test-tsfae06.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae19b" timestamp="2026-08-14T09:05:49Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.419">
-    <testcase time="0.419000000000011" classname="tsfae19b" name="tsfae19b"/>
+  <testsuite name="tsfae07a" timestamp="2026-08-14T09:06:18Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.259">
+    <testcase time="2.25899999999999" classname="tsfae07a" name="tsfae07a">
+      <skipped message="Reason: On CRAN ('test-tsfae07a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae19c" timestamp="2026-08-14T09:05:49Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.678">
-    <testcase time="0.677999999999997" classname="tsfae19c" name="tsfae19c"/>
+  <testsuite name="tsfae07b" timestamp="2026-08-14T09:06:21Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.286">
+    <testcase time="2.286" classname="tsfae07b" name="tsfae07b">
+      <skipped message="Reason: On CRAN ('test-tsfae07b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae19d" timestamp="2026-08-14T09:05:50Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.667">
-    <testcase time="0.667000000000002" classname="tsfae19d" name="tsfae19d"/>
+  <testsuite name="tsfae07c" timestamp="2026-08-14T09:06:23Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.621">
+    <testcase time="0.621000000000009" classname="tsfae07c" name="tsfae07c">
+      <skipped message="Reason: On CRAN ('test-tsfae07c.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae20a" timestamp="2026-08-14T09:05:50Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.548">
-    <testcase time="1.54799999999997" classname="tsfae20a" name="tsfae20a"/>
+  <testsuite name="tsfae07d" timestamp="2026-08-14T09:06:24Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.181">
+    <testcase time="2.181" classname="tsfae07d" name="tsfae07d">
+      <skipped message="Reason: On CRAN ('test-tsfae07d.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae20b" timestamp="2026-08-14T09:05:52Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.87">
-    <testcase time="1.87" classname="tsfae20b" name="tsfae20b"/>
+  <testsuite name="tsfae07e" timestamp="2026-08-14T09:06:26Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.255">
+    <testcase time="2.255" classname="tsfae07e" name="tsfae07e">
+      <skipped message="Reason: On CRAN ('test-tsfae07e.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae20c" timestamp="2026-08-14T09:05:54Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="7.622">
-    <testcase time="7.62200000000001" classname="tsfae20c" name="tsfae20cpart1of2"/>
+  <testsuite name="tsfae08" timestamp="2026-08-14T09:06:28Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.902">
+    <testcase time="2.902" classname="tsfae08" name="tsfae08">
+      <skipped message="Reason: On CRAN ('test-tsfae08.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfae20d" timestamp="2026-08-14T09:06:02Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="7.536">
-    <testcase time="7.536" classname="tsfae20d" name="tsfae20dpart1of3"/>
+  <testsuite name="tsfae10a" timestamp="2026-08-14T09:06:31Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.45">
+    <testcase time="1.45" classname="tsfae10a" name="tsfae10a">
+      <skipped message="Reason: On CRAN ('test-tsfae10a.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfvit01a" timestamp="2026-08-14T09:06:09Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.814">
-    <testcase time="3.81399999999999" classname="tsfvit01a" name="tsfvit01apart1of4"/>
+  <testsuite name="tsfae10b" timestamp="2026-08-14T09:06:32Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.992">
+    <testcase time="0.992000000000004" classname="tsfae10b" name="tsfae10b">
+      <skipped message="Reason: On CRAN ('test-tsfae10b.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfvit02" timestamp="2026-08-14T09:06:13Z" hostname="2d531921e4e8" tests="3" skipped="0" failures="0" errors="0" time="1.328">
-    <testcase time="0.0550000000000068" classname="tsfvit02" name="tsfvit02">
+  <testsuite name="tsfae10c" timestamp="2026-08-14T09:06:33Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.043">
+    <testcase time="1.04299999999999" classname="tsfae10c" name="tsfae10c">
+      <skipped message="Reason: On CRAN ('test-tsfae10c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae10d" timestamp="2026-08-14T09:06:34Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.393">
+    <testcase time="1.393" classname="tsfae10d" name="tsfae10d">
+      <skipped message="Reason: On CRAN ('test-tsfae10d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae11a" timestamp="2026-08-14T09:06:36Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="6.985">
+    <testcase time="6.985" classname="tsfae11a" name="tsfae11apart1of2">
+      <skipped message="Reason: On CRAN ('test-tsfae11a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae11b" timestamp="2026-08-14T09:06:43Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="9.965">
+    <testcase time="9.965" classname="tsfae11b" name="tsfae11bpart1of4">
+      <skipped message="Reason: On CRAN ('test-tsfae11b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae11c" timestamp="2026-08-14T09:06:53Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.843">
+    <testcase time="5.843" classname="tsfae11c" name="tsfae11c">
+      <skipped message="Reason: On CRAN ('test-tsfae11c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae11d" timestamp="2026-08-14T09:06:59Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="7.903">
+    <testcase time="7.90299999999999" classname="tsfae11d" name="tsfae11d">
+      <skipped message="Reason: On CRAN ('test-tsfae11d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae12a" timestamp="2026-08-14T09:07:06Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="8.67">
+    <testcase time="8.67" classname="tsfae12a" name="tsfae12apart1of4">
+      <skipped message="Reason: On CRAN ('test-tsfae12a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae12b" timestamp="2026-08-14T09:07:15Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.503">
+    <testcase time="5.50300000000001" classname="tsfae12b" name="tsfae12bpart1of2">
+      <skipped message="Reason: On CRAN ('test-tsfae12b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae12c" timestamp="2026-08-14T09:07:21Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="8.827">
+    <testcase time="8.827" classname="tsfae12c" name="tsfae12cpart1of4">
+      <skipped message="Reason: On CRAN ('test-tsfae12c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae12d" timestamp="2026-08-14T09:07:29Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.532">
+    <testcase time="5.53199999999998" classname="tsfae12d" name="tsfae12dpart1of2">
+      <skipped message="Reason: On CRAN ('test-tsfae12d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae13" timestamp="2026-08-14T09:07:35Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.054">
+    <testcase time="2.054" classname="tsfae13" name="tsfae13">
+      <skipped message="Reason: On CRAN ('test-tsfae13.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae13a" timestamp="2026-08-14T09:07:37Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.227">
+    <testcase time="1.227" classname="tsfae13a" name="tsfae13a">
+      <skipped message="Reason: On CRAN ('test-tsfae13a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae13b" timestamp="2026-08-14T09:07:38Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.45">
+    <testcase time="0.450000000000017" classname="tsfae13b" name="tsfae13b">
+      <skipped message="Reason: On CRAN ('test-tsfae13b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae13c" timestamp="2026-08-14T09:07:39Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.925">
+    <testcase time="0.924999999999983" classname="tsfae13c" name="tsfae13c">
+      <skipped message="Reason: On CRAN ('test-tsfae13c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae13d" timestamp="2026-08-14T09:07:40Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.207">
+    <testcase time="1.20699999999999" classname="tsfae13d" name="tsfae13d">
+      <skipped message="Reason: On CRAN ('test-tsfae13d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae14" timestamp="2026-08-14T09:07:41Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="4.634">
+    <testcase time="4.63400000000001" classname="tsfae14" name="tsfae14">
+      <skipped message="Reason: On CRAN ('test-tsfae14.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae15" timestamp="2026-08-14T09:07:45Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="3.209">
+    <testcase time="3.209" classname="tsfae15" name="tsfae15">
+      <skipped message="Reason: On CRAN ('test-tsfae15.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae16" timestamp="2026-08-14T09:07:49Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="10.092">
+    <testcase time="10.092" classname="tsfae16" name="tsfae16part1of2">
+      <skipped message="Reason: On CRAN ('test-tsfae16.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae17a" timestamp="2026-08-14T09:07:59Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="11.812">
+    <testcase time="11.812" classname="tsfae17a" name="tsfae17a">
+      <skipped message="Reason: On CRAN ('test-tsfae17a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae17b" timestamp="2026-08-14T09:08:11Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="7.093">
+    <testcase time="7.09299999999999" classname="tsfae17b" name="tsfae17b">
+      <skipped message="Reason: On CRAN ('test-tsfae17b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae17c" timestamp="2026-08-14T09:08:18Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="14.35">
+    <testcase time="14.35" classname="tsfae17c" name="tsfae17c">
+      <skipped message="Reason: On CRAN ('test-tsfae17c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae17d" timestamp="2026-08-14T09:08:32Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="10.802">
+    <testcase time="10.802" classname="tsfae17d" name="tsfae17d">
+      <skipped message="Reason: On CRAN ('test-tsfae17d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae18a" timestamp="2026-08-14T09:08:43Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.638">
+    <testcase time="0.638000000000005" classname="tsfae18a" name="tsfae18a">
+      <skipped message="Reason: On CRAN ('test-tsfae18a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae18b" timestamp="2026-08-14T09:08:43Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.237">
+    <testcase time="1.23699999999999" classname="tsfae18b" name="tsfae18b">
+      <skipped message="Reason: On CRAN ('test-tsfae18b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae18c" timestamp="2026-08-14T09:08:45Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.492">
+    <testcase time="1.49199999999999" classname="tsfae18c" name="tsfae18c">
+      <skipped message="Reason: On CRAN ('test-tsfae18c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae18d" timestamp="2026-08-14T09:08:46Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.637">
+    <testcase time="0.637" classname="tsfae18d" name="tsfae18d">
+      <skipped message="Reason: On CRAN ('test-tsfae18d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae19a" timestamp="2026-08-14T09:08:47Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.643">
+    <testcase time="0.643000000000001" classname="tsfae19a" name="tsfae19a">
+      <skipped message="Reason: On CRAN ('test-tsfae19a.R:2:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae19b" timestamp="2026-08-14T09:08:47Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.662">
+    <testcase time="0.662000000000006" classname="tsfae19b" name="tsfae19b">
+      <skipped message="Reason: On CRAN ('test-tsfae19b.R:2:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae19c" timestamp="2026-08-14T09:08:48Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.014">
+    <testcase time="1.01399999999998" classname="tsfae19c" name="tsfae19c">
+      <skipped message="Reason: On CRAN ('test-tsfae19c.R:2:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae19d" timestamp="2026-08-14T09:08:49Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.972">
+    <testcase time="0.972000000000008" classname="tsfae19d" name="tsfae19d">
+      <skipped message="Reason: On CRAN ('test-tsfae19d.R:2:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae20a" timestamp="2026-08-14T09:08:50Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.405">
+    <testcase time="2.405" classname="tsfae20a" name="tsfae20a">
+      <skipped message="Reason: On CRAN ('test-tsfae20a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae20b" timestamp="2026-08-14T09:08:53Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.809">
+    <testcase time="2.809" classname="tsfae20b" name="tsfae20b">
+      <skipped message="Reason: On CRAN ('test-tsfae20b.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae20c" timestamp="2026-08-14T09:08:55Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="11.307">
+    <testcase time="11.307" classname="tsfae20c" name="tsfae20cpart1of2">
+      <skipped message="Reason: On CRAN ('test-tsfae20c.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfae20d" timestamp="2026-08-14T09:09:07Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="11.339">
+    <testcase time="11.339" classname="tsfae20d" name="tsfae20dpart1of3">
+      <skipped message="Reason: On CRAN ('test-tsfae20d.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfvit01a" timestamp="2026-08-14T09:09:18Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.813">
+    <testcase time="5.81299999999999" classname="tsfvit01a" name="tsfvit01apart1of4">
+      <skipped message="Reason: On CRAN ('test-tsfvit01a.R:1:1')"/>
+    </testcase>
+  </testsuite>
+  <testsuite name="tsfvit02" timestamp="2026-08-14T09:09:24Z" hostname="2cb3a2bb9606" tests="3" skipped="1" failures="0" errors="0" time="2.336">
+    <testcase time="0.0960000000000036" classname="tsfvit02" name="tsfvit02">
       <system-out>Using an external vector in selections was deprecated in tidyselect 1.1.0.
 i Please use `all_of()` or `any_of()` instead.
   # Was:
@@ -406,7 +556,7 @@ Backtrace:
  21.           \-tidyselect:::walk_data_tree(expr, data_mask, context_mask)
  22.             \-tidyselect:::eval_sym(expr, data_mask, context_mask)</system-out>
     </testcase>
-    <testcase time="0.0799999999999841" classname="tsfvit02" name="tsfvit02">
+    <testcase time="0.12299999999999" classname="tsfvit02" name="tsfvit02">
       <system-out>Using an external vector in selections was deprecated in tidyselect 1.1.0.
 i Please use `all_of()` or `any_of()` instead.
   # Was:
@@ -441,1879 +591,63 @@ Backtrace:
  21.           \-tidyselect:::walk_data_tree(expr, data_mask, context_mask)
  22.             \-tidyselect:::eval_sym(expr, data_mask, context_mask)</system-out>
     </testcase>
-    <testcase time="1.19300000000001" classname="tsfvit02" name="tsfvit02"/>
+    <testcase time="2.11700000000002" classname="tsfvit02" name="tsfvit02">
+      <skipped message="Reason: On CRAN ('test-tsfvit02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfvit03" timestamp="2026-08-14T09:06:14Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="6.737">
-    <testcase time="6.73699999999999" classname="tsfvit03" name="tsfvit03"/>
+  <testsuite name="tsfvit03" timestamp="2026-08-14T09:09:26Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="10.785">
+    <testcase time="10.785" classname="tsfvit03" name="tsfvit03">
+      <skipped message="Reason: On CRAN ('test-tsfvit03.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsfvit04" timestamp="2026-08-14T09:06:21Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.435">
-    <testcase time="3.435" classname="tsfvit04" name="tsfvit04"/>
+  <testsuite name="tsfvit04" timestamp="2026-08-14T09:09:37Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.67">
+    <testcase time="5.67000000000002" classname="tsfvit04" name="tsfvit04">
+      <skipped message="Reason: On CRAN ('test-tsfvit04.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsidem01" timestamp="2026-08-14T09:06:24Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="1.456">
-    <testcase time="1.45599999999999" classname="tsidem01" name="tsidem01"/>
+  <testsuite name="tsidem01" timestamp="2026-08-14T09:09:43Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="2.365">
+    <testcase time="2.36500000000001" classname="tsidem01" name="tsidem01">
+      <skipped message="Reason: On CRAN ('test-tsidem01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsidem02" timestamp="2026-08-14T09:06:26Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.637">
-    <testcase time="0.637" classname="tsidem02" name="tsidem02"/>
+  <testsuite name="tsidem02" timestamp="2026-08-14T09:09:45Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.949">
+    <testcase time="0.949000000000012" classname="tsidem02" name="tsidem02">
+      <skipped message="Reason: On CRAN ('test-tsidem02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsidem03" timestamp="2026-08-14T09:06:26Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.362">
-    <testcase time="0.362000000000023" classname="tsidem03" name="tsidem03"/>
+  <testsuite name="tsidem03" timestamp="2026-08-14T09:09:46Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.605">
+    <testcase time="0.604999999999961" classname="tsidem03" name="tsidem03">
+      <skipped message="Reason: On CRAN ('test-tsidem03.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsidev01" timestamp="2026-08-14T09:06:27Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="3.468">
-    <testcase time="3.46799999999999" classname="tsidev01" name="tsidev01"/>
+  <testsuite name="tsidev01" timestamp="2026-08-14T09:09:47Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="5.563">
+    <testcase time="5.56300000000005" classname="tsidev01" name="tsidev01">
+      <skipped message="Reason: On CRAN ('test-tsidev01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsidev02" timestamp="2026-08-14T09:06:30Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.359">
-    <testcase time="0.359000000000009" classname="tsidev02" name="tsidev02"/>
+  <testsuite name="tsidev02" timestamp="2026-08-14T09:09:52Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.608">
+    <testcase time="0.607999999999947" classname="tsidev02" name="tsidev02">
+      <skipped message="Reason: On CRAN ('test-tsidev02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsids01" timestamp="2026-08-14T09:06:31Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.248">
-    <testcase time="0.24799999999999" classname="tsids01" name="tsids01"/>
+  <testsuite name="tsids01" timestamp="2026-08-14T09:09:53Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.445">
+    <testcase time="0.44500000000005" classname="tsids01" name="tsids01">
+      <skipped message="Reason: On CRAN ('test-tsids01.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsids02" timestamp="2026-08-14T09:06:31Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.921">
-    <testcase time="0.920999999999992" classname="tsids02" name="tsids02"/>
+  <testsuite name="tsids02" timestamp="2026-08-14T09:09:53Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.545">
+    <testcase time="1.54499999999996" classname="tsids02" name="tsids02">
+      <skipped message="Reason: On CRAN ('test-tsids02.R:1:1')"/>
+    </testcase>
   </testsuite>
-  <testsuite name="tsids02b" timestamp="2026-08-14T09:06:32Z" hostname="2d531921e4e8" tests="41" skipped="0" failures="0" errors="0" time="1.867">
-    <testcase time="0.164000000000016" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
+  <testsuite name="tsids02b" timestamp="2026-08-14T09:09:55Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="1.764">
+    <testcase time="1.76400000000001" classname="tsids02b" name="tsids02b">
+      <skipped message="Reason: On CRAN ('test-tsids02b.R:1:1')"/>
     </testcase>
-    <testcase time="0.0209999999999866" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0300000000000011" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0269999999999868" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0289999999999964" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0209999999999866" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0209999999999866" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0289999999999964" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0409999999999968" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0199999999999818" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0300000000000011" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0289999999999964" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0219999999999914" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0300000000000011" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0220000000000198" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0209999999999866" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0219999999999914" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0300000000000011" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0420000000000016" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0229999999999961" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.032999999999987" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0220000000000198" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0289999999999964" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0209999999999866" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0310000000000059" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.021000000000015" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0279999999999916" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0219999999999914" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0310000000000059" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0219999999999914" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0220000000000198" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0229999999999961" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0300000000000011" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.0229999999999961" classname="tsids02b" name="tsids02b">
-      <system-out>partial argument match of 'row_label' to 'row_labels'
-Backtrace:
-     x
-  1. +-testthat::expect_snapshot_file(...) at test-tsids02b.R:4:3
-  2. | \-testthat:::check_string(path)
-  3. |   \-testthat:::.rlang_check_is_string(...)
-  4. |     \-rlang::is_string(x)
-  5. +-scda.test:::write_test_rtf_for("tsids02b.R")
-  6. | \-base::source(ipath) at ./helper.R:20:3
-  7. |   +-base::withVisible(eval(ei, envir))
-  8. |   \-base::eval(ei, envir)
-  9. |     \-base::eval(ei, envir)
- 10. \-rtables::build_table(lyt, addisp, alt_counts_df = adsl, round_type = "sas")
- 11.   \-base::lapply(...)
- 12.     \-rtables (local) FUN(X[[i]], ...)
- 13.       \-rtables:::recursive_applysplit(...)
- 14.         +-rtables:::.make_split_kids(...)
- 15.         \-rtables:::.make_split_kids(...)
- 16.           \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 17.             +-base::unlist(...)
- 18.             \-base::mapply(...)
- 19.               \-rtables (local) `&lt;fn&gt;`(...)
- 20.                 \-rtables:::recursive_applysplit(...)
- 21.                   +-rtables:::.make_split_kids(...)
- 22.                   \-rtables:::.make_split_kids(...)
- 23.                     \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 24.                       +-base::unlist(...)
- 25.                       \-base::mapply(...)
- 26.                         \-rtables (local) `&lt;fn&gt;`(...)
- 27.                           \-rtables:::recursive_applysplit(...)
- 28.                             +-rtables:::.make_split_kids(...)
- 29.                             \-rtables:::.make_split_kids(...)
- 30.                               \-rtables (local) .local(spl, have_controws, make_lrow, ...)
- 31.                                 \-rtables:::.make_analyzed_tab(...)
- 32.                                   +-base::tryCatch(...)
- 33.                                   | \-base (local) tryCatchList(expr, classes, parentenv, handlers)
- 34.                                   |   \-base (local) tryCatchOne(expr, names, parentenv, handlers[[1L]])
- 35.                                   |     \-base (local) doTryCatch(return(expr), name, parentenv, handler)
- 36.                                   \-rtables:::.make_tablerows(...)
- 37.                                     \-rtables:::gen_rowvalues(...)
- 38.                                       \-base::mapply(...)
- 39.                                         \-rtables (local) `&lt;fn&gt;`(...)
- 40.                                           +-base::do.call(func, args)
- 41.                                           \-junco (local) `&lt;fn&gt;`(...)</system-out>
-    </testcase>
-    <testcase time="0.709000000000003" classname="tsids02b" name="tsids02b"/>
   </testsuite>
-  <testsuite name="tsids03" timestamp="2026-08-14T09:06:34Z" hostname="2d531921e4e8" tests="1" skipped="0" failures="0" errors="0" time="0.381">
-    <testcase time="0.381" classname="tsids03" name="tsids03"/>
+  <testsuite name="tsids03" timestamp="2026-08-14T09:09:56Z" hostname="2cb3a2bb9606" tests="1" skipped="1" failures="0" errors="0" time="0.685">
+    <testcase time="0.685000000000002" classname="tsids03" name="tsids03">
+      <skipped message="Reason: On CRAN ('test-tsids03.R:1:1')"/>
+    </testcase>
   </testsuite>
 </testsuites>
