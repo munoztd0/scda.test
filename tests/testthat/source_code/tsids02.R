@@ -1,23 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsids02
-## R version:                 4.2.1
-## Short Description:         Program to create tsids02: Subject Disposition
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      05JAN2024
-## Input:                     adsl.R
-## Output:                    tsids02.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 
@@ -35,18 +16,26 @@ tblid <- "TSIDS02"
 fileid <- write_path(opath, tblid)
 popfl <- "FASFL"
 trtvar <- "TRT01P"
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 ################################################################################
 # Process data:
 ################################################################################
 
-adsl <- adsl_jnj
+adsl <- adsl_jnj %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 no_data_to_report <- function(df, var) {
   if (sum(is.na(df[[var]])) == length(df[[var]])) {
@@ -78,11 +67,8 @@ adsl <- adsl %>%
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
-  mutate(
-    rrisk_header = "Risk Difference (%) 95% CI",
-    rrisk_label = paste(!!rlang::sym(trtvar), "vs Placebo")
   )
+
 
 ################################################################################
 # Define layout and build table:
@@ -98,8 +84,14 @@ colspan_trt_map <- create_colspan_map(
 )
 
 totdf <- tribble(
-  ~valname, ~label, ~levelcombo, ~exargs,
-  "Total", "Total", c("Xanomeline High Dose", "Xanomeline Low Dose", "Placebo"), list()
+  ~valname                                                    ,
+  ~label                                                      ,
+  ~levelcombo                                                 ,
+  ~exargs                                                     ,
+  "Total"                                                     ,
+  "Total"                                                     ,
+  c("Xanomeline High Dose", "Xanomeline Low Dose", "Placebo") ,
+  list()
 )
 
 rr_method <- "wald"
@@ -126,62 +118,17 @@ lyt <- basic_table(
     split_fun = add_combo_levels(totdf, keep_levels = "Total"),
     nested = FALSE
   ) %>%
-  split_cols_by("rrisk_header", nested = FALSE) %>%
-  split_cols_by(
-    trtvar,
-    labels_var = "rrisk_label",
-    split_fun = remove_split_levels("Placebo")
-  ) %>%
-  # Analysis sets
+  # Subjects ongoing treatment
   analyze(
-    popfl,
-    var_labels = "Analysis set",
-    afun = a_freq_j,
-    extra_args = append(
-      extra_args_rr,
-      list(label = "Full", val = "Y", riskdiff = FALSE, NULL)
-    ),
-    show_labels = "visible"
-  ) %>%
-  analyze(
-    "SAFFL",
-    afun = a_freq_j,
-    extra_args = append(
-      extra_args_rr,
-      list(label = "Safety", val = "Y", riskdiff = FALSE, NULL)
-    ),
-    show_labels = "hidden",
-    indent_mod = 1
-  ) %>%
-  analyze(
-    "PPROTFL",
-    afun = a_freq_j,
-    extra_args = append(
-      extra_args_rr,
-      list(
-        label = "Per protocol",
-        val = "Y",
-        riskdiff = FALSE,
-        extrablankline = TRUE,
-        NULL
-      )
-    ),
-    show_labels = "hidden",
-    indent_mod = 1,
-    na_str = " "
-  ) %>%
-  # Ongoing
-  analyze(
-    "EOSSTT",
+    "EOTSTT",
     show_labels = "hidden",
     afun = a_freq_j,
     extra_args = append(
       extra_args_rr,
       list(
-        label = "Subjects ongoing",
+        label = "Subjects ongoing treatment",
         val = "ONGOING",
         riskdiff = FALSE,
-        extrablankline = TRUE,
         NULL
       )
     ),
@@ -216,6 +163,22 @@ lyt <- basic_table(
     na_str = " ",
     extra_args = append(extra_args_rr, list(extrablankline = TRUE))
   ) %>%
+  # Subjects ongoing study
+  analyze(
+    "EOSSTT",
+    show_labels = "hidden",
+    afun = a_freq_j,
+    extra_args = append(
+      extra_args_rr,
+      list(
+        label = "Subjects ongoing study",
+        val = "ONGOING",
+        riskdiff = FALSE,
+        NULL
+      )
+    ),
+    na_str = " "
+  ) %>%
   # Study disposition
   analyze(
     "EOSSTT",
@@ -245,29 +208,26 @@ lyt <- basic_table(
     extra_args = append(extra_args_rr, NULL)
   )
 
-result <- build_table(lyt, adsl)
+result <- build_table(lyt, adsl, round_type = "sas")
 
 ################################################################################
 # Post-Processing
 ################################################################################
 
-## Remove the N=xx column headers for the risk difference columns
-result <- remove_col_count(result, span_label_var = "rrisk_header")
-
 result <- result %>%
   sort_at_path(
     path = c(
-      "ma_FASFL_SAFFL_PPROTFL_EOSSTT_Compl_Trt_DC_Trt_DCTREAS_Compl_Study_DC_Study_DCSREAS",
+      "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
       "DCTREAS"
     ),
     scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "Other")
   ) %>%
   sort_at_path(
     path = c(
-      "ma_FASFL_SAFFL_PPROTFL_EOSSTT_Compl_Trt_DC_Trt_DCTREAS_Compl_Study_DC_Study_DCSREAS",
+      "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
       "DCSREAS"
     ),
-    scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "Other")
+    scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "count_unique_fraction.Other")
   )
 
 # Prune data driven output.
@@ -285,20 +245,6 @@ result <- result %>%
     )
   )
 
-# Prune data driven output.
-result <- result %>%
-  safe_prune_table(prune_func = keep_rows(keep_non_null_rows)) %>%
-  safe_prune_table(
-    prune_func = count_pruner(
-      cols = c("colspan_trt"),
-      cat_exclude = c(
-        "Completed study",
-        "Completed treatment",
-        "Discontinued study",
-        "Discontinued treatment"
-      )
-    )
-  )
 
 ################################################################################
 # Add titles and footnotes:
@@ -309,6 +255,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
-colwidth <- c(38, 23, 23, 23, 25, 37, 37)
+
+colwidth <- c(44, 21, 21, 21, 23)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

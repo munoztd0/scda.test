@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae13.R
-## R version:                 4.2.1
-## Short Description:         Program to create tsfae13: Exposure-adjusted Incidence
-##                            Rate Analysis by Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      15FEB2024
-## Input:                     adsl.RDS, adae.RDS
-## Output:                    tsfae13.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 
@@ -37,11 +17,9 @@ fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
 ctrl_grp <- "Placebo"
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 ################################################################################
@@ -124,7 +102,8 @@ lyt <- basic_table(
       occ_var = "AOCCPFL",
       occ_dy = "ASTDY",
       ref_path = ref_path,
-      drop_levels = TRUE
+      drop_levels = TRUE,
+      row_labels_adj = TRUE
     )
   ) %>%
   append_topleft("Preferred Term, EAIR Per 100 SY")
@@ -156,6 +135,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
-colwidth <- c(64, 10, 12, 10, 35, 37)
+colwidth <- c(52, 12, 10, 10, 37, 35)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

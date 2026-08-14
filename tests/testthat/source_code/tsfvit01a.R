@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfvit01a
-## R version:                 4.2.1
-## Short Description:         Program to create tsfvit01a: Mean Change From Baseline
-##                            in Blood Pressure Over Time by [Subgroup]
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      30JAN2024
-## Input:                     adsl.RDS, advs.RDS
-## Output:                    tsfvit01a.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep environment:
 ################################################################################
 
@@ -34,11 +14,9 @@ library(junco)
 
 tblid <- "TSFVIT01a"
 fileid <- write_path(opath, tblid)
-titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
@@ -429,10 +407,11 @@ result <- set_titles(result, titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(56, 29, 60, 59, 29, 60, 57, 29, 60, 57, 57, 57)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
+colwidth <- c(56, 29, 60, 57, 29, 60, 59, 29, 60, 55, 59, 59)
+
+tt_to_tlgrtf( 
+  colwidths = colwidth, 
   result,
   file = fileid,
   nosplitin = list(cols = c(trtvar, "rrisk_header")),

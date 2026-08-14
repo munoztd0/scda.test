@@ -1,25 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae19d.R
-## R version:                 4.4.1
-## junco Version:             1.0
-## Short Description:         Subjects With Treatment-emergent Adverse Events by
-##                            Female-specific OCMQ (Broad) and Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      28 Apr 2025
-## Input:                     ADSL, ADAEOCMQ
-## Output:                    TSFAE19d.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:                    1
-##  Modified By:
-##  Reporting Effort:         Code Refactoring
-##  Date:                     2025-08-13
-##  Description:              Refactored two_tier_cpct_relrisk to a_freq_j
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 
@@ -50,11 +29,9 @@ library(junco)
 
 tblid <- "TSFAE19d"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -62,11 +39,11 @@ sex <- "F"
 ocmqclass <- "Broad"
 ocmqflag <- "GENSPFFL"
 ocmqnam_list <- c(
-  "Abnormal Uterine Bleeding",
+  "Abnormal uterine bleeding",
   "Amenorrhea",
-  "Bacterial Vaginosis",
-  "Decreased Menstrual Bleeding",
-  "Excessive Menstrual Bleeding"
+  "Bacterial vaginosis",
+  "Decreased menstrual bleeding",
+  "Excessive menstrual bleeding"
 )
 combined_colspan_trt <- FALSE
 risk_diff <- TRUE
@@ -98,9 +75,25 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y" & SEX == sex) %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
 adae <- adaeocmq_jnj %>%
+  mutate(
+    AEDECOD = factor(case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    ))
+  ) %>%
   filter(
     TRTEMFL == "Y" & OCMQCLSS == ocmqclass & (!!rlang::sym(ocmqflag) == "Y")
   ) %>%
@@ -197,7 +190,7 @@ lyt <- lyt %>%
   ) %>%
   append_topleft("  Preferred Term, n (%)")
 
-result <- build_table(lyt, adae, alt_counts_df = adsl)
+result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
 
 # If there is no data display "No data to display" text
 if (nrow(adae) == 0) {
@@ -250,6 +243,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(53, 5, 17, 17, 29, 29)
+colwidth <- c(49, 17, 5, 5, 26, 24)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

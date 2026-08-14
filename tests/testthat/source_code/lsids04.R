@@ -1,26 +1,4 @@
 ###############################################################################
-## Original Reporting Effort: Standards
-## Program Name:              lsids04.R
-## R version:                 4.2.1
-## Short Description:         Create LSIDS04: Listing of Subjects Who Were
-##                            Randomized but Never Treated
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      2024-01-17
-## Input:                     ADSL
-## Output:                    lsids04.rtf
-## Remarks:
-## R-functions:
-## R-function Sample Call:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-###############################################################################
-
-###############################################################################
 # Prep environment
 ###############################################################################
 
@@ -41,11 +19,9 @@ trtvar <- "TRT01P"
 key_cols <- c("COL0", "COL1")
 disp_cols <- paste0("COL", 0:3)
 concat_sep <- " / "
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 
 ###############################################################################
@@ -53,16 +29,57 @@ tab_titles <- list(
 ###############################################################################
 
 adsl <- adsl_jnj %>%
-  filter(RANDFL == "Y" & SAFFL == "N")
+  filter(RANDFL == "Y" & SAFFL == "N") %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    ),
+    SEX = factor(
+      case_when(
+        SEX == "F" ~ "Female",
+        SEX == "M" ~ "Male"
+      ),
+      levels = c("Female", "Male")
+    ),
+    RACE = factor(
+      case_when(
+        RACE == "AMERICAN INDIAN OR ALASKA NATIVE" ~ "American Indian or Alaska Native",
+        RACE == "ASIAN" ~ "Asian",
+        RACE == "BLACK OR AFRICAN AMERICAN" ~ "Black or African American",
+        RACE == "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" ~ "Native Hawaiian or other Pacific Islander",
+        RACE == "WHITE" ~ "White",
+        RACE == "MULTIPLE" ~ "Multiple",
+        RACE == "NOT REPORTED" ~ "Not reported",
+        RACE == "UNKNOWN" ~ "Unknown",
+        RACE == "OTHER" ~ "Other"
+      ),
+      levels = c(
+        "American Indian or Alaska Native",
+        "Asian",
+        "Black or African American",
+        "Native Hawaiian or other Pacific Islander",
+        "White",
+        "Multiple",
+        "Not reported",
+        "Unknown",
+        "Other"
+      )
+    )
+  )
 
 lsting <- adsl %>%
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
-    RACE_DECODE = explicit_na(RACE_DECODE, ""),
+    RACE = explicit_na(RACE, ""),
     COL0 = explicit_na(.data[[trtvar]], ""),
     COL1 = explicit_na(USUBJID, ""),
-    COL2 = paste(AGE, SEX, RACE_DECODE, sep = concat_sep),
+    COL2 = paste(AGE, SEX, RACE, sep = concat_sep),
     # Optional Column: COL3/DCTREAS
     COL3 = explicit_na(DCTREAS, ""),
   ) %>%
@@ -74,7 +91,7 @@ lsting <- var_relabel(
   COL1 = "Subject ID",
   COL2 = paste("Age (years)", "Sex", "Race", sep = concat_sep),
   # Optional Column: COL3/DCTREAS
-  COL3 = "Primary Reason for no Treatment"
+  COL3 = "Primary Reason Not Treated"
 )
 
 ###############################################################################
@@ -84,7 +101,8 @@ lsting <- var_relabel(
 result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
-  disp_cols = disp_cols
+  disp_cols = disp_cols,
+  round_type = "sas"
 )
 
 ###############################################################################
@@ -97,6 +115,4 @@ result <- set_titles(result, tab_titles)
 # Output listing
 ###############################################################################
 
-colwidth <- c(21, 13, 18, 23)
-
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

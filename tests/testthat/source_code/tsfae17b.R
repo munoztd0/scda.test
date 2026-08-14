@@ -1,26 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae17b.R
-## R version:                 4.4.1
-## junco Version:             1.0
-## Short Description:         Subjects With Treatment-emergent Adverse Events Leading
-##                            to Discontinuation of Study Treatment by Organ System,
-##                            OCMQ (Narrow) and Preferred Term
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      2025-07-21
-## Input:                     ADSL, ADAEOCMQ
-## Output:                    TSFAE17b.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:                    1
-##  Modified By:
-##  Reporting Effort:         Code Refactoring
-##  Date:                     2025-08-13
-##  Description:              Refactored cpct_relrisk_fact to a_freq_j
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 
@@ -48,11 +26,9 @@ library(junco)
 
 tblid <- "TSFAE17b"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -87,16 +63,27 @@ if (combined_colspan_trt == TRUE) {
 
 adsl <- adsl_jnj %>%
   filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  )
 
-adae_full <- adaeocmq_jnj %>%
+adae <- adaeocmq_jnj %>%
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) %>%
   filter(TRTEMFL == "Y" & TRDISCFL == "Y" & OCMQCLSS == ocmqclass) %>%
   select(USUBJID, TRTEMFL, OCMQSOC, OCMQNAM, AEDECOD)
-
-adae <- adae_full %>%
-  group_by(OCMQSOC) %>%
-  slice(1) %>%
-  ungroup()
 
 adsl$colspan_trt <- factor(
   ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
@@ -192,7 +179,7 @@ lyt <- lyt %>%
   ) %>%
   append_topleft("    Preferred Term, n (%)")
 
-result <- build_table(lyt, ae, alt_counts_df = adsl)
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
 
 ## Remove the N=xx column headers for the risk difference columns
 result <- remove_col_count(result)
@@ -237,6 +224,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 17, 17, 17, 17, 29, 29)
+colwidth <- c(64, 17, 21, 21, 17, 29, 29)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")

@@ -1,24 +1,4 @@
 ################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfae05a.R
-## R version:                 4.2.1
-## junco Version:             1.0
-## Short Description:         Program to create tsfae05a: AE table by SOC/PT and Subgroup - Related AEs
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      23 Feb 2024
-## Input:                     ADSL, ADAE.
-## Output:                    TSFAE05a.rtf
-## Remarks:                   Template R script version using rtables framework
-##
-## Modification History:
-##  Rev #:                    1
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
 # Prep Environment
 ################################################################################
 
@@ -46,11 +26,9 @@ library(junco)
 
 tblid <- "TSFAE05a"
 fileid <- write_path(opath, tblid)
-tab_titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+tab_titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 trtvar <- "TRT01A"
 popfl <- "SAFFL"
@@ -244,11 +222,11 @@ result <- remove_col_count(result)
 #########################################################################################
 
 if (length(adae$TRTEMFL) != 0) {
-  # result <- sort_at_path(
-  #   result,
-  #   c("subgrpdisplay", "*", "TRTEMFL", "*", "AEBODSYS"),
-  #   scorefun = jj_complex_scorefun()
-  # )
+  result <- sort_at_path(
+    result,
+    c("subgrpdisplay", "*", "TRTEMFL", "*", "AEBODSYS"),
+    scorefun = jj_complex_scorefun()
+  )
   result <- sort_at_path(
     result,
     c("subgrpdisplay", "*", "TRTEMFL", "*", "AEBODSYS", "*", "AEDECOD"),
@@ -266,6 +244,6 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 19, 21, 21, 19, 32, 33)
+colwidth <- c(64, 21, 21, 21, 21, 35, 35)
 
 tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
