@@ -52,7 +52,7 @@ Suggests:
 VignetteBuilder:
     knitr
 Remotes:
-    johnsonandjohnson/junco@450-update-jjcsformat_count_denom_fraction,
+    johnsonandjohnson/junco@dev,
     johnsonandjohnson/pharmaversesdtmjnj@main,
     pharmaverse/formatters@main,
     pharmaverse/pharmaverseadam@main,
