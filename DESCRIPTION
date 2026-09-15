@@ -55,8 +55,8 @@ Remotes:
     pharmaverse/formatters@main,
     pharmaverse/rlistings@main,
     pharmaverse/rtables@main,
-    pharmaverse/tern@main,
-    johnsonandjohnson/junco@junco@450-update-jjcsformat_count_denom_fraction,
+    wwojciech/tern@1514_add_safe_2x2_table,
+    johnsonandjohnson/junco@dev,
     johnsonandjohnson/pharmaverseadamjnj@dev, 
     johnsonandjohnson/pharmaversesdtmjnj@dev, 
     pharmaverse/pharmaverseadam@main
