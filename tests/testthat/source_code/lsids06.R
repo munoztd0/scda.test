@@ -84,14 +84,14 @@ labels <- sapply(flag_vars, function(v) {
 })
 
 adsl_excl_ana <- adsl %>%
-  select(USUBJID, .data[[trtvar]], AGE, SEX, RACE, all_of(flag_vars), all_of(reason_vars)) %>%
+  select(USUBJID, all_of(trtvar), AGE, SEX, RACE, all_of(flag_vars), all_of(reason_vars)) %>%
   pivot_longer(cols = all_of(flag_vars), names_to = "FLAG_VAR", values_to = "FLAG_VAL") %>%
   filter(toupper(FLAG_VAL) != "Y") %>%
   mutate(FLAG_DESC = labels[FLAG_VAR]) %>%
   rowwise() %>%
   mutate(EXCL_REASON = adsl[[flag_reason_map[FLAG_VAR]]][adsl$USUBJID == USUBJID]) %>%
   ungroup() %>%
-  select(USUBJID, .data[[trtvar]], AGE, SEX, RACE, FLAG_VAR, FLAG_VAL, FLAG_DESC, EXCL_REASON)
+  select(USUBJID, all_of(trtvar), AGE, SEX, RACE, FLAG_VAR, FLAG_VAL, FLAG_DESC, EXCL_REASON)
 
 
 lsting <- adsl_excl_ana %>%

@@ -88,7 +88,7 @@ lsting <- adsl %>%
     COL3 = explicit_na(USUBJID, ""),
     COL4 = paste(AGE, SEX, RACE, sep = concat_sep),
     COL5 = explicit_na(as.character(DVSTDT)),
-    COL6 = as.integer(DVSTDTC - TRTSDT + (DVSTDTC >= TRTSDT)),
+    COL6 = as.integer(as.Date(DVSTDTC) - TRTSDT + (as.Date(DVSTDTC) >= TRTSDT)),
     COL7 = explicit_na(DVDECOD),
     COL8 = explicit_na(DVTERM)
   ) %>%
