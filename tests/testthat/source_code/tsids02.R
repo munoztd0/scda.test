@@ -208,7 +208,7 @@ lyt <- basic_table(
     extra_args = append(extra_args_rr, NULL)
   )
 
-result <- build_table(lyt, adsl, round_type = "sas")
+result <- build_table(lyt, adsl, , alt_counts_df = adsl, round_type = "sas")
 
 ################################################################################
 # Post-Processing
