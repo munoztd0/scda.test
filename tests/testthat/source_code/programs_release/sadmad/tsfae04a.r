@@ -1,0 +1,233 @@
+###############################################################
+###                RELEASE VERSION - v2.0.0                 ###
+###############################################################
+
+################################################################################
+## Original Reporting Effort: Standards
+## Program Name:              tsfae04a.r
+## R version:                 4.5.2
+## junco Version:             0.1.3
+## Short Description:         Subjects With Treatment-emergent Adverse Events With Frequency ≥[5]% in [Any Treatment
+##                            Group] by Preferred Term – [SAD/MAD] [Part 1]
+## Disclaimer:                This script is a direct copy of the corresponding Core Standard output identifier. For
+##                            SAD/MAD specific changes, refer to tsfvit02b.r, lsidm05.r, and gsfvit02.r for examples of
+##                            STUDYPRT filtering, COHORT handling, treatment column structure modifications, pooled
+##                            placebo derivations, combined treatment columns, dose-level updates, and other
+##                            output-specific structural differences as applicable.
+## Author:                    C&SP Methodology
+## Date:                      2026-09-30
+## Input:                     adsl, adae
+## Output:                    tsfae04a.rtf
+## Remarks:                   Template R script version using rtables framework
+##
+## Modification History:
+##  Rev #:
+##  Modified By:
+##  Reporting Effort:
+##  Date:
+##  Description:
+################################################################################
+
+################################################################################
+# Prep Environment
+################################################################################
+
+library(envsetup)
+source(read_path(cl, 'utils_jjcs_internal.r'))
+library(tern)
+library(dplyr)
+library(rtables)
+library(junco)
+
+################################################################################
+# Define script level parameters:
+################################################################################
+
+################################################################################
+# - Define output ID and file location
+# - Define treatment variable used (default=TRT01A)
+# - Define population flag used (default=SAFFL)
+# - Choose whether or not you want to present a combined active treatment column (default=TRUE)
+# - Choose whether or not you want to present the risk difference columns (default=TRUE)
+# - Choose which risk difference method you would like (default=Wald)
+# - Define what the control treatment group is for your study (e.g Placebo)
+# - Define how to create combined treatment columns (if required)
+################################################################################
+
+tblid <- "tsfae04a"
+fileid <- write_path(opath, tblid)
+tab_titles <- get_titles_internal(tblid)
+string_map <- make_jj_str_map()
+
+
+trtvar <- "TRT01A"
+popfl <- "SAFFL"
+combined_colspan_trt <- TRUE
+risk_diff <- TRUE
+rr_method <- "wald"
+ctrl_grp <- "Placebo"
+
+if (combined_colspan_trt == TRUE) {
+  # Set up levels and label for the required combined columns
+  add_combo <- add_combo_facet(
+    "Combined",
+    label = "Combined",
+    levels = c("Xanomeline High Dose", "Xanomeline Low Dose")
+  )
+
+  # choose if any facets need to be removed - e.g remove the combined column for placebo
+  rm_combo_from_placebo <- cond_rm_facets(
+    facets = "Combined",
+    ancestor_pos = NA,
+    value = " ",
+    split = "colspan_trt"
+  )
+
+  mysplit <- make_split_fun(post = list(add_combo, rm_combo_from_placebo))
+}
+
+################################################################################
+# Process Data:
+################################################################################
+
+adsl <- haven::read_sas(envsetup::read_path(a_in, "adsl.sas7bdat")) |>
+  df_na() |>
+  filter(!!rlang::sym(popfl) == "Y") |>
+  mutate(
+    !!rlang::sym(trtvar) := factor(
+      .data[[trtvar]],
+      levels = c(
+        "Xanomeline Low Dose",
+        "Xanomeline High Dose",
+        "Placebo"
+      )
+    )
+  ) |>
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
+
+adae <- haven::read_sas(envsetup::read_path(a_in, "adae.sas7bdat")) |>
+  mutate(
+    AEDECOD = case_when(
+      AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
+      .default = AEDECOD
+    )
+  ) |>
+  df_na() |>
+  filter(TRTEMFL == "Y") |>
+  select(USUBJID, TRTEMFL, AEDECOD)
+
+adsl$colspan_trt <- factor(
+  ifelse(adsl[[trtvar]] == "Placebo", " ", "Active Study Agent"),
+  levels = c("Active Study Agent", " ")
+)
+
+if (risk_diff == TRUE) {
+  adsl$rrisk_header <- "Risk Difference (%) (95% CI)"
+  adsl$rrisk_label <- paste(adsl[[trtvar]], paste("vs", ctrl_grp))
+}
+
+# join data together
+ae <- adae |> right_join(adsl, by = c("USUBJID"))
+
+colspan_trt_map <- create_colspan_map(
+  adsl,
+  non_active_grp = ctrl_grp,
+  non_active_grp_span_lbl = " ",
+  active_grp_span_lbl = "Active Study Agent",
+  colspan_var = "colspan_trt",
+  trt_var = trtvar
+)
+
+################################################################################
+# Define layout and build table:
+################################################################################
+
+ref_path <- c("colspan_trt", " ", "TRT01A", "Placebo")
+extra_args_rr <- list(
+  method = rr_method,
+  ref_path = ref_path,
+  .stats = c("count_unique_fraction")
+)
+
+lyt <- basic_table(
+  top_level_section_div = " ",
+  show_colcounts = TRUE,
+  colcount_format = "N=xx"
+) |>
+  split_cols_by(
+    "colspan_trt",
+    split_fun = trim_levels_to_map(map = colspan_trt_map)
+  )
+
+if (combined_colspan_trt == TRUE) {
+  lyt <- lyt |>
+    split_cols_by(trtvar, split_fun = mysplit)
+} else {
+  lyt <- lyt |>
+    split_cols_by(trtvar)
+}
+
+if (risk_diff == TRUE) {
+  lyt <- lyt |>
+    split_cols_by("rrisk_header", nested = FALSE) |>
+    split_cols_by(
+      trtvar,
+      labels_var = "rrisk_label",
+      split_fun = remove_split_levels("Placebo")
+    )
+}
+
+lyt <- lyt |>
+  analyze(
+    "AEDECOD",
+    afun = a_freq_j,
+    extra_args = append(extra_args_rr, NULL),
+    indent_mod = 0L
+  ) |>
+  append_topleft("Preferred Term, n (%)")
+
+result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
+
+#########################################################################################
+# Post-Processing step to sort by descending count on chosen active treatment columns.
+# Default is the last treatment (inc. Combined if applicable) under the active treatment
+# spanning header (defaulted to colspan_trt variable). See function documentation for
+# jj_complex_scorefun should your require a different sorting behavior.
+#########################################################################################
+
+if (length(adae$TRTEMFL) != 0) {
+  result <- sort_at_path(result, c("AEDECOD"), scorefun = jj_complex_scorefun())
+
+  ################################################################################
+  # Prune table to only keep those that meet x% criteria for any treatment column
+  ################################################################################
+
+  more_than_x_percent <- has_fraction_in_any_col(
+    atleast = 0.05,
+    col_names = c(
+      "Active Study Agent.Xanomeline High Dose",
+      "Active Study Agent.Xanomeline Low Dose",
+      " .Placebo"
+    )
+  )
+
+  result <- safe_prune_table(result, keep_rows(more_than_x_percent))
+}
+
+## Remove the N=xx column headers for the risk difference columns
+result <- remove_col_count(result)
+
+## Remove any rogue null rows
+result <- result |>
+  safe_prune_table(prune_func = keep_rows(keep_non_null_rows))
+
+################################################################################
+# Add titles and footnotes:
+################################################################################
+
+result <- set_titles(result, tab_titles)
+
+################################################################################
+# Convert to tbl file and output table
+################################################################################
+tt_to_tlgrtf(string_map = string_map, tt = result, file = fileid, orientation = "landscape")
