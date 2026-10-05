@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -53,8 +49,8 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -64,10 +60,10 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -77,27 +73,27 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
+  ) |>
   filter(TRTEMFL == "Y")
 
 # Take maximum severity - per PT
-adaemaxpt <- adae %>%
-  filter(AESEV %in% c("Mild", "Moderate", "Severe")) %>%
+adaemaxpt <- adae |>
+  filter(AESEV %in% c("Mild", "Moderate", "Severe")) |>
   mutate(
     AESEVN = case_when(
       toupper(AESEV) == "MILD" ~ 3,
       toupper(AESEV) == "MODERATE" ~ 2,
       toupper(AESEV) == "SEVERE" ~ 1
     )
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
+  ) |>
+  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) |>
+  group_by(USUBJID, AEBODSYS, AEDECOD) |>
+  slice(1) |>
   ungroup()
 
 # Take maximum severity - per SOC
-adaemaxsoc <- adae %>%
-  filter(AESEV %in% c("Mild", "Moderate", "Severe")) %>%
+adaemaxsoc <- adae |>
+  filter(AESEV %in% c("Mild", "Moderate", "Severe")) |>
   mutate(
     AESEVN = case_when(
       toupper(AESEV) == "MILD" ~ 3,
@@ -105,11 +101,11 @@ adaemaxsoc <- adae %>%
       toupper(AESEV) == "SEVERE" ~ 1
     ),
     AEBODSYSx = AEBODSYS
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AESEVN) %>%
-  group_by(USUBJID, AEBODSYS) %>%
-  slice(1) %>%
-  ungroup() %>%
+  ) |>
+  arrange(USUBJID, AEBODSYS, AESEVN) |>
+  group_by(USUBJID, AEBODSYS) |>
+  slice(1) |>
+  ungroup() |>
   select(USUBJID, AEBODSYS, AESEV, AEBODSYSx)
 
 # Merge back in an create a new SOC variable that is only populated for max severity SOC rows
@@ -120,24 +116,24 @@ adaemax <- left_join(
 )
 
 # Add total
-adaetot <- adae %>%
+adaetot <- adae |>
   mutate(
     AESEV = "Total",
     AEBODSYSx = AEBODSYS
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
+  ) |>
+  arrange(USUBJID, AEBODSYS, AEDECOD) |>
+  group_by(USUBJID, AEBODSYS, AEDECOD) |>
+  slice(1) |>
   ungroup()
 
 # Set data together
-adaeall <- bind_rows(adaemax, adaetot) %>%
+adaeall <- bind_rows(adaemax, adaetot) |>
   mutate(
     ASEV = factor(
       as.character(AESEV),
       levels = c("Total", "Mild", "Moderate", "Severe")
     )
-  ) %>%
+  ) |>
   select(USUBJID, TRTEMFL, ASEV, AEBODSYS, AEBODSYSx, AEDECOD)
 
 adsl$colspan_trt <- factor(
@@ -155,10 +151,10 @@ colspan_trt_map <- create_colspan_map(
 )
 
 # join data together
-ae <- adaeall %>% inner_join(., adsl, by = c("USUBJID"))
+ae <- adaeall |> inner_join(adsl, by = c("USUBJID"))
 
 if (length(adae$TRTEMFL) == 0) {
-  ae <- adaeall %>% right_join(., adsl, by = c("USUBJID"))
+  ae <- adaeall |> right_join(adsl, by = c("USUBJID"))
 }
 
 ae$spanheader <- factor(
@@ -166,10 +162,10 @@ ae$spanheader <- factor(
   levels = c(" ", "Severity")
 )
 
-adsl1 <- adsl %>%
+adsl1 <- adsl |>
   mutate(AESEV = "Total")
 
-adsl <- adsl1 %>%
+adsl <- adsl1 |>
   mutate(
     ASEV = factor(
       as.character(AESEV),
@@ -195,23 +191,23 @@ extra_args_1 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit, show_colcounts = TRUE)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, show_colcounts = TRUE)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("ASEV")) %>%
-  split_cols_by("ASEV", show_colcounts = FALSE) %>%
+lyt <- lyt |>
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("ASEV")) |>
+  split_cols_by("ASEV", show_colcounts = FALSE) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -224,20 +220,20 @@ lyt <- lyt %>%
         restr_columns = "Total"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
     section_div = c(" ")
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYSx",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -299,10 +295,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 17, 21, 21, 21, 17, 21, 21, 21, 17, 21, 21, 17, 17)
+
+# [AUTO-COLWIDTH]
 
 tt_to_tlgrtf( 
-  colwidths = colwidth, 
   result,
   file = fileid,
   orientation = "landscape",

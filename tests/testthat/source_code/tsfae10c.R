@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(forcats)
@@ -32,8 +28,8 @@ ctrl_grp <- "Placebo"
 # - Additional factor reformatting added below.
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -94,14 +90,14 @@ adsl <- adsl_jnj %>%
       AGEGR1,
       level = "Unknown"
     )
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
+  ) |>
   select(
     USUBJID,
     !!rlang::sym(popfl),
@@ -113,13 +109,13 @@ adsl <- adsl_jnj %>%
     colspan_trt
   )
 
-had_ae <- adaeocmq_jnj %>%
-  filter(TRTEMFL == "Y" & tolower(.data[[varname]]) == tolower(subjFilterText)) %>%
-  select(USUBJID, TRTEMFL) %>%
+had_ae <- adaeocmq_jnj |>
+  filter(TRTEMFL == "Y" & tolower(.data[[varname]]) == tolower(subjFilterText)) |>
+  select(USUBJID, TRTEMFL) |>
   distinct(USUBJID, .keep_all = TRUE)
 
-adsl <- adsl %>%
-  left_join(had_ae) %>%
+adsl <- adsl |>
+  left_join(had_ae) |>
   mutate(TRTEMFL = ifelse(is.na(TRTEMFL), "N", "Y"))
 
 ################################################################################
@@ -165,15 +161,15 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
-  append_topleft("Characteristic") %>%
+) |>
+  append_topleft("Characteristic") |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
+  ) |>
   split_cols_by(trtvar, split_fun = add_active_combo)
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -186,7 +182,7 @@ lyt <- lyt %>%
       )
     ),
     show_labels = "hidden"
-  ) %>%
+  ) |>
   analyze(
     vars = "SEX",
     var_labels = "Sex, n/Ns (%)",
@@ -194,7 +190,7 @@ lyt <- lyt %>%
     afun = a_freq_resp_var_j,
     extra_args = extra_args_rr2,
     nested = FALSE
-  ) %>%
+  ) |>
   analyze(
     vars = "AGEGR1",
     var_labels = "Age group (years), n/Ns (%)",
@@ -202,7 +198,7 @@ lyt <- lyt %>%
     afun = a_freq_resp_var_j,
     extra_args = extra_args_rr2,
     nested = FALSE
-  ) %>%
+  ) |>
   analyze(
     vars = "RACE",
     var_labels = "Race, n/Ns (%)",
@@ -210,7 +206,7 @@ lyt <- lyt %>%
     afun = a_freq_resp_var_j,
     extra_args = extra_args_rr2,
     nested = FALSE
-  ) %>%
+  ) |>
   analyze(
     vars = "ETHNIC",
     var_labels = "Ethnicity, n/Ns (%)",
@@ -232,6 +228,7 @@ result <- set_titles(result, titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 25, 25, 27, 23)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+# [AUTO-COLWIDTH]
+
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

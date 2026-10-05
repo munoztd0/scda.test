@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -237,6 +233,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(50, 5, 5, 17, 31, 31)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+# [AUTO-COLWIDTH]
+
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -58,8 +54,8 @@ if (combined_colspan_trt == TRUE) {
 ################################################################################
 # Process Data:
 ################################################################################
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -69,15 +65,15 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), all_of(agegrpvar))
 
-adsl_levels <- adsl %>%
+adsl_levels <- adsl |>
   filter(!is.na(!!rlang::sym(agegrpvar)))
 
 agelevels <- c("Total", levels(adsl_levels[[agegrpvar]]))
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -87,8 +83,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, all_of(agegrpvar))
 
 adsl$colspan_trt <- factor(
@@ -106,12 +102,12 @@ colspan_trt_map <- create_colspan_map(
 )
 
 # Add total for Age - adsl
-totalage1 <- adsl %>%
+totalage1 <- adsl |>
   mutate(!!agegrpvar := "Total")
 
 adsl <- bind_rows(totalage1, adsl)
 
-adsl <- adsl %>%
+adsl <- adsl |>
   filter(!!rlang::sym(agegrpvar) %in% agelevels)
 
 adsl$spanheader <- factor(
@@ -122,12 +118,12 @@ adsl$spanheader <- factor(
 adsl[[agegrpvar]] <- factor(adsl[[agegrpvar]], levels = agelevels)
 
 # Add total for Age - adae
-totalage2 <- adae %>%
+totalage2 <- adae |>
   mutate(!!agegrpvar := "Total")
 
 adae <- bind_rows(totalage2, adae)
 
-adae <- adae %>%
+adae <- adae |>
   filter(!!rlang::sym(agegrpvar) %in% agelevels)
 
 adae[[agegrpvar]] <- factor(adae[[agegrpvar]], levels = agelevels)
@@ -153,23 +149,23 @@ extra_args_2 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = FALSE
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group(agegrpvar)) %>%
-  split_cols_by(agegrpvar) %>%
+lyt <- lyt |>
+  split_cols_by("spanheader", split_fun = trim_levels_in_group(agegrpvar)) |>
+  split_cols_by(agegrpvar) |>
   analyze(
     popfl,
     afun = a_freq_j,
@@ -182,7 +178,7 @@ lyt <- lyt %>%
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -194,7 +190,7 @@ lyt <- lyt %>%
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -202,13 +198,13 @@ lyt <- lyt %>%
     label_pos = "topleft",
     section_div = c(" "),
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -268,7 +264,8 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21, 21, 19, 21, 21, 21, 21, 21, 21, 21, 19, 19, 21)
+
+# [AUTO-COLWIDTH]
 
 tt_to_tlgrtf( 
   result,

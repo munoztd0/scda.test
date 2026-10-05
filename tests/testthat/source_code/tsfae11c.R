@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -54,8 +50,8 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -65,10 +61,10 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -78,12 +74,12 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, AEBODSYS, AEDECOD, TRTEMFL, AESEV)
 
 # Take maximum severity
-adaemax <- adae %>%
+adaemax <- adae |>
   mutate(
     AESEVN = case_when(
       toupper(AESEV) == "MILD" ~ 3,
@@ -91,10 +87,10 @@ adaemax <- adae %>%
       toupper(AESEV) == "SEVERE" ~ 1,
       .default = 99
     )
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
+  ) |>
+  arrange(USUBJID, AEBODSYS, AEDECOD, AESEVN) |>
+  group_by(USUBJID, AEBODSYS, AEDECOD) |>
+  slice(1) |>
   ungroup()
 
 adsl$colspan_trt <- factor(
@@ -114,13 +110,13 @@ colspan_trt_map <- create_colspan_map(
 # join data together
 ae <- inner_join(adaemax, adsl, by = c("USUBJID"))
 
-ae <- ae %>%
+ae <- ae |>
   mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
 
 if (length(adae$TRTEMFL) == 0) {
   ae <- right_join(adaemax, adsl, by = c("USUBJID"))
 
-  ae <- ae %>%
+  ae <- ae |>
     mutate(AESEV2 = as.factor(ifelse(is.na(AESEV), "Missing", AESEV)))
 }
 
@@ -139,21 +135,21 @@ lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -162,7 +158,7 @@ lyt <- lyt %>%
       extra_args_1,
       list(label = "Subjects with >=1 AE", val = "Y")
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -170,24 +166,24 @@ lyt <- lyt %>%
     label_pos = "topleft",
     section_div = c(" "),
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
+  ) |>
   split_rows_by(
     "AEDECOD",
     split_label = "Preferred Term, n (%)",
     section_div = c(" "),
     nested = TRUE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEDECOD",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AESEV2", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AESEV2", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -228,10 +224,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 21, 21, 21)
+
+# [AUTO-COLWIDTH]
 
 tt_to_tlgrtf( 
-  colwidths = colwidth, 
   result,
   file = fileid,
   orientation = "portrait",

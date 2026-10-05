@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -52,8 +48,8 @@ if (combined_colspan_trt == TRUE) {
 # Process data
 ###############################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -63,14 +59,14 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = c("Placebo"),
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
+  ) |>
   select(
     STUDYID,
     USUBJID,
@@ -89,23 +85,23 @@ trt_map <- create_colspan_map(
 )
 ref_path <- c("colspan_trt", " ", trtvar, "Placebo")
 
-adae0 <- adae_jnj %>%
+adae0 <- adae_jnj |>
   mutate(
     AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
+  ) |>
   filter(
     !!rlang::sym(popfl) == "Y" &
       !!rlang::sym(aerelvar) == "RELATED" &
       TRTEMFL == "Y" &
       AEACN == "DRUG WITHDRAWN"
-  ) %>%
+  ) |>
   left_join(
     subset(adsl, select = c("STUDYID", "USUBJID", "colspan_trt")),
     by = c("STUDYID", "USUBJID")
-  ) %>%
+  ) |>
   select(
     STUDYID,
     USUBJID,
@@ -119,14 +115,14 @@ adae0 <- adae_jnj %>%
   )
 
 if (nrow(adae0) == 0) {
-  adae <- adae0 %>%
-    select(STUDYID, USUBJID, TRTEMFL, AEDECOD) %>%
+  adae <- adae0 |>
+    select(STUDYID, USUBJID, TRTEMFL, AEDECOD) |>
     right_join(adsl, by = c("STUDYID", "USUBJID"))
 } else {
   adae <- adae0
 }
 
-adae <- adae %>%
+adae <- adae |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -146,18 +142,18 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
+) |>
   split_cols_by("colspan_trt", split_fun = trim_levels_to_map(map = trt_map))
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     vars = "TRTEMFL",
     show_labels = "hidden",
@@ -171,17 +167,17 @@ lyt <- lyt %>%
   )
 
 if (nrow(adae0) > 0) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     count_occurrences(
       vars = "AEDECOD",
       .stats = c("count_fraction_fixed_dp"),
       .indent_mods = c(count_fraction = -1L),
       .formats = c("count_fraction_fixed_dp" = jjcsformat_count_fraction),
       nested = FALSE
-    ) %>%
+    ) |>
     append_topleft("Preferred Term, n (%)")
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     append_topleft("Preferred Term, n (%)")
 }
 
@@ -224,6 +220,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ###############################################################################
 
-colwidth <- c(64, 21, 21, 21, 21)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid)
+# [AUTO-COLWIDTH]
+
+tt_to_tlgrtf(result, file = fileid)

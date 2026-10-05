@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -61,8 +57,8 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(.data[[popfl]] == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(.data[[popfl]] == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -72,11 +68,11 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y" & if_any(all_of(special_interest_var), ~ !is.na(.))) %>%
+adae <- adae_jnj |>
+  filter(TRTEMFL == "Y" & if_any(all_of(special_interest_var), ~ !is.na(.))) |>
   select(USUBJID, TRTEMFL, all_of(special_interest_var))
 
 adsl$colspan_trt <- factor(
@@ -90,7 +86,7 @@ if (risk_diff == TRUE) {
 }
 
 # join data together
-ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+ae <- adae |> right_join(adsl, by = c("USUBJID"))
 
 colspan_trt_map <- create_colspan_map(
   adsl,
@@ -123,23 +119,23 @@ lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
 if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
+  lyt <- lyt |>
+    split_cols_by("rrisk_header", nested = FALSE) |>
     split_cols_by(
       trtvar,
       labels_var = "rrisk_label",
@@ -147,14 +143,14 @@ if (risk_diff == TRUE) {
     )
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     special_interest_var,
     afun = a_freq_j,
     section_div = " ",
     show_labels = "hidden",
     extra_args = extra_args_rr2
-  ) %>%
+  ) |>
   append_topleft("AE of Interest Assessment, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -172,6 +168,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(29, 21, 21, 21, 21, 28, 28)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+# [AUTO-COLWIDTH]
+
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
