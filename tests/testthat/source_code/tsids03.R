@@ -1,6 +1,3 @@
-###############################################################################
-#Prep environment
-###############################################################################
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -140,6 +137,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-colwidth <- c(20, 23, 23, 25, 23, 25)
+# [AUTO-COLWIDTH]
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid)
+tt_to_tlgrtf(result, file = fileid)

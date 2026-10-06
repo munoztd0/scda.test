@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -19,6 +15,7 @@ fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01P"
 key_cols <- c("COL0", "COL1")
+sort_cols <- c("COL0", "COL1")
 disp_cols <- paste0("COL", 0:9)
 concat_sep <- " / "
 tab_titles <- list(title = "Dummy Title",
@@ -30,8 +27,8 @@ tab_titles <- list(title = "Dummy Title",
 # Process data
 ###############################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y" & UNBLNDFL == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y" & UNBLNDFL == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -74,8 +71,8 @@ adsl <- adsl_jnj %>%
     )
   )
 
-adexsum <- adexsum_jnj %>%
-  filter(PARAMCD == "CUMDOSE") %>%
+adexsum <- adexsum_jnj |>
+  filter(PARAMCD == "CUMDOSE") |>
   select(STUDYID, USUBJID, PARAMCD, PARAM, AVAL)
 
 adsl_adexsum <- left_join(
@@ -87,7 +84,7 @@ adsl_adexsum <- left_join(
   )
 )
 
-lsting <- adsl_adexsum %>%
+lsting <- adsl_adexsum |>
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
@@ -127,7 +124,7 @@ lsting <- adsl_adexsum %>%
       EOSSTT == "DISCONTINUED" ~ "Yes",
       EOSSTT != "DISCONTINUED" ~ "No"
     )
-  ) %>%
+  ) |>
   arrange(COL0, COL1)
 
 lsting <- lsting |>
@@ -160,6 +157,7 @@ result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
   disp_cols = disp_cols,
+  sort_cols = sort_cols,
   round_type = "sas"
 )
 
@@ -176,4 +174,4 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(21, 13, 67, 18, 23, 33, 20, 20, 25, 39)
 
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

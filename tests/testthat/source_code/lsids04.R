@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -17,6 +13,7 @@ tblid <- "LSIDS04"
 fileid <- write_path(opath, tblid)
 trtvar <- "TRT01P"
 key_cols <- c("COL0", "COL1")
+sort_cols <- c("COL0", "COL1")
 disp_cols <- paste0("COL", 0:3)
 concat_sep <- " / "
 tab_titles <- list(title = "Dummy Title",
@@ -28,8 +25,8 @@ tab_titles <- list(title = "Dummy Title",
 # Process data
 ###############################################################################
 
-adsl <- adsl_jnj %>%
-  filter(RANDFL == "Y" & SAFFL == "N") %>%
+adsl <- adsl_jnj |>
+  filter(RANDFL == "Y" & SAFFL == "N") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -72,7 +69,7 @@ adsl <- adsl_jnj %>%
     )
   )
 
-lsting <- adsl %>%
+lsting <- adsl |>
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
@@ -82,7 +79,7 @@ lsting <- adsl %>%
     COL2 = paste(AGE, SEX, RACE, sep = concat_sep),
     # Optional Column: COL3/DCTREAS
     COL3 = explicit_na(DCTREAS, ""),
-  ) %>%
+  ) |>
   arrange(COL0, COL1)
 
 lsting <- var_relabel(
@@ -102,6 +99,7 @@ result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
   disp_cols = disp_cols,
+  sort_cols = sort_cols,
   round_type = "sas"
 )
 
@@ -115,4 +113,7 @@ result <- set_titles(result, tab_titles)
 # Output listing
 ###############################################################################
 
-tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")
+
+colwidth <- c(21, 13, 18, 23)
+
+tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")

@@ -1,3 +1,7 @@
+################################################################################
+# Prep environment:
+################################################################################
+
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -5,10 +9,10 @@ library(rtables)
 library(junco)
 
 ################################################################################
-# Define script level parameters:
+# Define output ID and file location:
 ################################################################################
 
-tblid <- "TSIDS02"
+tblid <- "TSIDS02a"
 fileid <- write_path(opath, tblid)
 popfl <- "FASFL"
 trtvar <- "TRT01P"
@@ -21,17 +25,7 @@ tab_titles <- list(title = "Dummy Title",
 # Process data:
 ################################################################################
 
-adsl <- adsl_jnj |>
-  mutate(
-    !!rlang::sym(trtvar) := factor(
-      .data[[trtvar]],
-      levels = c(
-        "Xanomeline Low Dose",
-        "Xanomeline High Dose",
-        "Placebo"
-      )
-    )
-  )
+adsl <- adsl_jnj
 
 no_data_to_report <- function(df, var) {
   if (sum(is.na(df[[var]])) == length(df[[var]])) {
@@ -43,8 +37,8 @@ no_data_to_report <- function(df, var) {
 adsl <- no_data_to_report(df = adsl, var = "DCTREAS")
 adsl <- no_data_to_report(df = adsl, var = "DCSREAS")
 
-adsl <- adsl |>
-  filter(!!rlang::sym(popfl) == "Y") |>
+adsl <- adsl %>%
+  filter(!!rlang::sym(popfl) == "Y") %>%
   select(
     USUBJID,
     !!rlang::sym(trtvar),
@@ -55,20 +49,26 @@ adsl <- adsl |>
     DCTREAS,
     EOSSTT,
     DCSREAS,
-    RACE
-  ) |>
+    RACE_DECODE
+  ) %>%
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
+  ) %>%
+  mutate(
+    rrisk_header = "Risk Difference (%) 95% CI",
+    rrisk_label = paste(!!rlang::sym(trtvar), "vs Placebo")
   )
 
-
-################################################################################
-# Define layout and build table:
-################################################################################
+# Added since label_fstr not working with cpct_relrisk
+adsl$RACE <- as.factor(as.character(ifelse(
+  is.na(adsl$RACE_DECODE),
+  NA,
+  paste("Race:", adsl$RACE_DECODE)
+)))
 
 colspan_trt_map <- create_colspan_map(
   adsl,
@@ -78,6 +78,11 @@ colspan_trt_map <- create_colspan_map(
   colspan_var = "colspan_trt",
   trt_var = trtvar
 )
+ref_path <- c("colspan_trt", " ", trtvar, "Placebo")
+
+################################################################################
+# Define layout and build table:
+################################################################################
 
 totdf <- tribble(
   ~valname                                                    ,
@@ -90,12 +95,26 @@ totdf <- tribble(
   list()
 )
 
-rr_method <- "wald"
-ref_path <- c("colspan_trt", " ", trtvar, "Placebo")
-extra_args_rr <- list(
-  method = rr_method,
-  ref_path = ref_path,
-  .stats = c("count_unique_fraction")
+
+extra_args1 <- list(
+  denom = "n_altdf",
+  denom_by = "RACE",
+  riskdiff = FALSE,
+  .stats = "count_unique"
+)
+extra_args2 <- list(
+  denom = "n_altdf",
+  denom_by = "RACE",
+  riskdiff = FALSE,
+  .stats = "count_unique_fraction"
+)
+extra_args3 <- list(
+  denom = "n_altdf",
+  denom_by = "RACE",
+  riskdiff = TRUE,
+  method = "wald",
+  .stats = "count_unique_fraction",
+  ref_path = ref_path
 )
 
 
@@ -103,33 +122,72 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) |>
+) %>%
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) |>
-  split_cols_by(trtvar) |>
+  ) %>%
+  split_cols_by(trtvar) %>%
   split_cols_by(
     trtvar,
     split_fun = add_combo_levels(totdf, keep_levels = "Total"),
     nested = FALSE
-  ) |>
+  ) %>%
+  split_cols_by("rrisk_header", nested = FALSE) %>%
+  split_cols_by(
+    trtvar,
+    labels_var = "rrisk_label",
+    split_fun = remove_split_levels("Placebo")
+  ) %>%
+  split_rows_by("RACE", split_fun = drop_split_levels, section_div = " ") %>%
+  summarize_row_groups(
+    "RACE",
+    cfun = a_freq_j,
+    indent_mod = 0L,
+    # na_str = " ",
+    extra_args = extra_args1
+  ) %>%
+  # Analysis sets
+  analyze(
+    popfl,
+    var_labels = "Analysis set:",
+    afun = a_freq_j,
+    extra_args = append(extra_args2, list(label = "Full", val = "Y")),
+    show_labels = "visible"
+  ) %>%
+  analyze(
+    "SAFFL",
+    afun = a_freq_j,
+    extra_args = append(extra_args2, list(label = "Safety", val = "Y")),
+    show_labels = "hidden",
+    indent_mod = 1
+  ) %>%
+  analyze(
+    "PPROTFL",
+    afun = a_freq_j,
+    extra_args = append(
+      extra_args2,
+      list(label = "Per protocol", val = "Y", extrablankline = TRUE)
+    ),
+    show_labels = "hidden",
+    indent_mod = 1,
+    na_str = " "
+  ) %>%
   # Subjects ongoing treatment
   analyze(
     "EOTSTT",
     show_labels = "hidden",
     afun = a_freq_j,
+    na_str = " ",
     extra_args = append(
-      extra_args_rr,
+      extra_args2,
       list(
-        label = "Subjects ongoing treatment",
         val = "ONGOING",
-        riskdiff = FALSE,
-        NULL
+        label = "Subjects ongoing treatment",
+        extrablankline = TRUE
       )
-    ),
-    na_str = " "
-  ) |>
+    )
+  ) %>%
   # Treatment disposition
   analyze(
     "EOTSTT",
@@ -137,44 +195,45 @@ lyt <- basic_table(
     show_labels = "hidden",
     afun = a_freq_j,
     extra_args = append(
-      extra_args_rr,
-      list(label = "Completed treatment", val = "COMPLETED", NULL)
+      extra_args3,
+      list(label = "Completed treatment", val = "COMPLETED")
     )
-  ) |>
+  ) %>%
   analyze(
     "EOTSTT",
     table_names = "DC_Trt",
     show_labels = "hidden",
     afun = a_freq_j,
     extra_args = append(
-      extra_args_rr,
-      list(label = "Discontinued treatment", val = "DISCONTINUED", NULL)
+      extra_args3,
+      list(label = "Discontinued treatment", val = "DISCONTINUED")
     )
-  ) |>
+  ) %>%
   analyze(
     "DCTREAS",
     show_labels = "hidden",
     indent_mod = 1,
     afun = a_freq_j,
-    na_str = " ",
-    extra_args = append(extra_args_rr, list(extrablankline = TRUE))
-  ) |>
+    extra_args = append(
+      extra_args3,
+      list(extrablankline = TRUE, drop_levels = TRUE)
+    )
+  ) %>%
   # Subjects ongoing study
   analyze(
     "EOSSTT",
     show_labels = "hidden",
     afun = a_freq_j,
+    na_str = " ",
     extra_args = append(
-      extra_args_rr,
+      extra_args2,
       list(
-        label = "Subjects ongoing study",
         val = "ONGOING",
-        riskdiff = FALSE,
-        NULL
+        label = "Subjects ongoing study",
+        extrablankline = TRUE
       )
-    ),
-    na_str = " "
-  ) |>
+    )
+  ) %>%
   # Study disposition
   analyze(
     "EOSSTT",
@@ -182,76 +241,64 @@ lyt <- basic_table(
     show_labels = "hidden",
     afun = a_freq_j,
     extra_args = append(
-      extra_args_rr,
-      list(label = "Completed study", val = "COMPLETED", NULL)
+      extra_args3,
+      list(label = "Completed study", val = "COMPLETED")
     )
-  ) |>
+  ) %>%
   analyze(
     "EOSSTT",
     show_labels = "hidden",
     table_names = "DC_Study",
     afun = a_freq_j,
     extra_args = append(
-      extra_args_rr,
-      list(label = "Discontinued study", val = "DISCONTINUED", NULL)
+      extra_args3,
+      list(label = "Discontinued study", val = "DISCONTINUED")
     )
-  ) |>
+  ) %>%
   analyze(
     "DCSREAS",
     show_labels = "hidden",
     indent_mod = 1,
     afun = a_freq_j,
-    extra_args = append(extra_args_rr, NULL)
+    extra_args = append(extra_args3, list(drop_levels = TRUE))
   )
 
-result <- build_table(lyt, adsl, round_type = "sas")
+result <- build_table(lyt, adsl, alt_counts_df = adsl)
 
 ################################################################################
 # Post-Processing
 ################################################################################
 
-result <- result |>
+# Remove the N=xx column headers for the risk difference columns
+result <- remove_col_count(result, span_label_var = "rrisk_header")
+
+# Sort DCTREAS and DCSREAD by descending total column.
+result <- result %>%
   sort_at_path(
-    path = c(
-      "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
-      "DCTREAS"
-    ),
+    path = c("RACE", "*", "DCTREAS"),
     scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "Other")
-  ) |>
+  ) %>%
   sort_at_path(
-    path = c(
-      "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
-      "DCSREAS"
-    ),
-    scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "count_unique_fraction.Other")
+    path = c("RACE", "*", "DCSREAS"),
+    scorefun = jj_complex_scorefun(colpath = "Total")
   )
 
-# Prune data driven output.
-result <- result |>
-  safe_prune_table(prune_func = keep_rows(keep_non_null_rows)) |>
-  safe_prune_table(
-    prune_func = count_pruner(
-      cols = c("colspan_trt"),
-      cat_exclude = c(
-        "Completed study",
-        "Completed treatment",
-        "Discontinued study",
-        "Discontinued treatment"
-      )
-    )
-  )
-
+result <- prune_table(
+  result,
+  prune_func = remove_rows(removerowtext = "No data to report")
+)
 
 ################################################################################
 # Add titles and footnotes:
 ################################################################################
 
 result <- set_titles(result, tab_titles)
+
 ################################################################################
 # Convert to tbl file and output table:
 ################################################################################
 
 
-colwidth <- c(44, 21, 21, 21, 23)
+# [AUTO-COLWIDTH]
 
 tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -18,6 +14,7 @@ fileid <- write_path(opath, tblid)
 popfl <- "FASFL"
 trtvar <- "TRT01P"
 key_cols <- c("COL0", "COL1")
+sort_cols <- c("COL0", "COL1", "COL2", "COL3")
 disp_cols <- paste0("COL", 0:8)
 concat_sep <- " / "
 tab_titles <- list(title = "Dummy Title",
@@ -29,8 +26,8 @@ tab_titles <- list(title = "Dummy Title",
 # Process data
 ###############################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y" & !(EOTSTT %in% c("COMPLETED", "ONGOING"))) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y" & !(EOTSTT %in% c("COMPLETED", "ONGOING"))) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -73,19 +70,19 @@ adsl <- adsl_jnj %>%
     )
   )
 
-ds <- ds_jnj %>%
+ds <- ds_jnj |>
   filter(
     (DSSCAT %in% c("TREATMENT")) &
       DSCAT == "DISPOSITION EVENT" &
       DSDECOD != "COMPLETED"
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, DSSCAT)
 
-adsl_ds <- adsl %>%
+adsl_ds <- adsl |>
   left_join(ds, by = c("STUDYID" = "STUDYID", "USUBJID" = "USUBJID"))
 
-adexsum <- adexsum_jnj %>%
-  filter(PARAMCD == "CUMDOSE") %>%
+adexsum <- adexsum_jnj |>
+  filter(PARAMCD == "CUMDOSE") |>
   select(STUDYID, USUBJID, PARAMCD, PARAM, AVAL)
 
 adsl_ds_adexsum <- left_join(
@@ -97,7 +94,7 @@ adsl_ds_adexsum <- left_join(
   )
 )
 
-lsting <- adsl_ds_adexsum %>%
+lsting <- adsl_ds_adexsum |>
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
@@ -132,7 +129,7 @@ lsting <- adsl_ds_adexsum %>%
       DCTREAS == "OTHER" ~ paste0(DCTREAS, " (", stringr::str_to_sentence(DCTREASP), ")"),
       DCTREAS != "OTHER" ~ DCTREAS
     )
-  ) %>%
+  ) |>
   arrange(COL0, COL1, COL2, COL3)
 
 lsting <- lsting |>
@@ -166,6 +163,7 @@ result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
   disp_cols = disp_cols,
+  sort_cols = sort_cols,
   round_type = "sas"
 )
 
@@ -182,4 +180,4 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(21, 25, 67, 23, 36, 33, 20, 33, 27)
 
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -27,8 +23,8 @@ if (ran_enrl_var == "RANDFL") {
 # Process data
 ###############################################################################
 
-adsl <- adsl_jnj %>%
-  filter(SCRNFL == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(SCRNFL == "Y") |>
   select(
     STUDYID,
     USUBJID,
@@ -48,9 +44,9 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
-  add_overall_col(label = "Total") %>%
-  split_rows_by("SCRFFL", split_fun = keep_split_levels("Y")) %>%
+) |>
+  add_overall_col(label = "Total") |>
+  split_rows_by("SCRFFL", split_fun = keep_split_levels("Y")) |>
   summarize_row_groups(
     "SCRFFL",
     cfun = a_freq_j,
@@ -59,7 +55,7 @@ lyt <- basic_table(
       .stats = c("count_unique_fraction"),
       label = "Screening failures"
     )
-  ) %>%
+  ) |>
   analyze(
     "DCSCREEN",
     afun = a_freq_j,
@@ -67,8 +63,8 @@ lyt <- basic_table(
       riskdiff = FALSE,
       .stats = c("count_unique_fraction")
     )
-  ) %>%
-  split_rows_by("RESCRNFL", split_fun = keep_split_levels("Y")) %>%
+  ) |>
+  split_rows_by("RESCRNFL", split_fun = keep_split_levels("Y")) |>
   summarize_row_groups(
     "RESCRNFL",
     cfun = a_freq_j,
@@ -77,7 +73,7 @@ lyt <- basic_table(
       .stats = c("count_unique"),
       label = "Subjects re-screened"
     )
-  ) %>%
+  ) |>
   analyze(
     "SCRFFL",
     afun = a_freq_j,
@@ -89,7 +85,7 @@ lyt <- basic_table(
       label = "Screening failures",
       denom = "n_rowdf"
     )
-  ) %>%
+  ) |>
   analyze(
     ran_enrl_var,
     afun = a_freq_j,
@@ -101,8 +97,8 @@ lyt <- basic_table(
       label = paste0("Subjects ", ran_enrl_lbl),
       denom = "n_rowdf"
     )
-  ) %>%
-  split_rows_by(ran_enrl_var, split_fun = keep_split_levels("Y")) %>%
+  ) |>
+  split_rows_by(ran_enrl_var, split_fun = keep_split_levels("Y")) |>
   summarize_row_groups(
     ran_enrl_var,
     cfun = a_freq_j,
@@ -147,7 +143,7 @@ if (nrow(adsl) == 0) {
     length(kids) == 0
   }
 
-  result <- result %>% trim_rows(prune_empty_level_tablerow)
+  result <- result |> trim_rows(prune_empty_level_tablerow)
 }
 
 ###############################################################################
@@ -163,4 +159,4 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(64, 23)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid)
+tt_to_tlgrtf(result, file = fileid)
