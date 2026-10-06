@@ -203,6 +203,6 @@ result <- set_titles(result, titles)
 ################################################################################
 
 
-# [AUTO-COLWIDTH]
+colwidth <- c(64, 21, 21, 21, 23)
 
 tt_to_tlgrtf(result, fileid)
