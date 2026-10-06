@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -322,6 +318,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-colwidth <- c(22, 21, 13, 42, 78, 25, 25, 22, 37)
+colwidth <- c(21, 21, 13, 43, 78, 25, 25, 22, 37)
 
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

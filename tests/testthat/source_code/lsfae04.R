@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -19,6 +15,7 @@ fileid <- write_path(opath, tblid)
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
 key_cols <- c("COL0", "COL1", "COL2")
+sort_cols <- c("COL0", "COL1", "COL2")
 disp_cols <- paste0("COL", 0:11)
 concat_sep <- " / "
 tab_titles <- list(title = "Dummy Title",
@@ -50,14 +47,14 @@ if (combination_trt) {
 # Process data
 ###############################################################################
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(!!rlang::sym(popfl) == "Y" & AEOUT == "FATAL") %>%
+  ) |>
+  filter(!!rlang::sym(popfl) == "Y" & AEOUT == "FATAL") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -161,7 +158,7 @@ adae <- adae_jnj %>%
 ###################################
 
 if (combination_trt) {
-  adae <- adae %>%
+  adae <- adae |>
     mutate(
       across(
         all_of(comb_relvars),
@@ -206,7 +203,7 @@ if (combination_trt) {
 
 ###################################
 
-lsting <- adae %>%
+lsting <- adae |>
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
@@ -256,7 +253,7 @@ lsting <- adae %>%
   )
 
 if (combination_trt) {
-  lsting <- lsting %>%
+  lsting <- lsting |>
     mutate(
       across(
         all_of(comb_dosvars),
@@ -273,18 +270,18 @@ if (combination_trt) {
     )
 }
 
-lsting <- lsting %>%
-  {
+lsting <- lsting |>
+  (\(x) {
     if (!combination_trt) {
       mutate(
-        .,
+        x,
         COL3 = paste(paste0(DOSEON, " ", DOSEU), DOSEDY, sep = concat_sep),
         # Optional Column: COL8/AEACN
         COL8 = explicit_na(AEACN, ""),
         COL9 = explicit_na(AEREL, "")
       )
     } else if (combination_trt) {
-      rowwise(.) %>%
+      rowwise(x) |>
         mutate(
           COL3 = paste(
             paste0(
@@ -309,7 +306,7 @@ lsting <- lsting %>%
           )
         )
     }
-  } %>%
+  })() |>
   mutate(
     COL0 = explicit_na(.data[[trtvar]], ""),
     COL1 = explicit_na(USUBJID, ""),
@@ -355,7 +352,7 @@ lsting <- lsting %>%
     COL10 = paste(AETOXGR, AESER, sep = concat_sep),
     # Optional Column: COL11/AESCAT
     COL11 = explicit_na(AESCAT, "")
-  ) %>%
+  ) |>
   arrange(
     COL0,
     COL1,
@@ -407,6 +404,7 @@ result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
   disp_cols = disp_cols,
+  sort_cols = sort_cols,
   round_type = "sas"
 )
 
@@ -421,6 +419,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-colwidth <- c(18, 13, 65, 23, 38, 8, 24, 24, 22, 22, 15, 11)
+colwidth <- c(18, 13, 40, 23, 57, 8, 24, 24, 22, 22, 15, 16)
 
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

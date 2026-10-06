@@ -254,6 +254,6 @@ result <- set_titles(result, titles)
 ################################################################################
 
 
-# [AUTO-COLWIDTH]
+colwidth <- c(64, 27, 27, 29, 27)
 
 tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
