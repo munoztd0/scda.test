@@ -49,8 +49,7 @@ adsl <- adsl_jnj |>
   ) |>
   select(STUDYID, USUBJID, all_of(c(popfl, trtvar)))
 
-adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sas7bdat"))) |>
-
+adlb_complete <- adlb_jnj
 flagvars <- c("ONTRTFL", "TRTEMFL", "LVOTFL")
 adlb00 <- adlb_complete |>
   # Filter to CHEMISTRY and HEMATOLOGY only
@@ -319,7 +318,7 @@ build_result_parcat1 <- function(
 # Define layout and build table:
 ################################################################################
 
-result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid, save2rtf = FALSE)
+result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
 
 colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
 

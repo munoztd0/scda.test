@@ -23,7 +23,7 @@ trtvar <- "TRT01A"
 ctrl_grp <- "Placebo"
 
 # Lab parameters Category of interest on PARCAT1 (name = file suffix).
-param_cat <- c(chm = "CHEMISTRY", hem = "HEMATOLOGY")
+param_cat <- c(chm = "CHEMISTRY") #, hem = "HEMATOLOGY")
 
 # Lab sign parameters of interest.
 param_cd <- NULL
@@ -214,200 +214,200 @@ adlb <- adlb |>
 # Define layout and build table (loop over categories):
 ################################################################################
 
-for (cat_suffix in names(param_cat)) {
-  adlb_cat <- filter(adlb, PARCAT1 == param_cat[[cat_suffix]]) |>
-    filter(ABLFL == "Y" | ANL02FL == "Y" | APOBLFL == "Y")
-  fileid <- write_path(opath, paste0(tblid, cat_suffix))
+cat_suffix <- param_cat
+adlb_cat <- filter(adlb, PARCAT1 == param_cat[[1]]) |>
+  filter(ABLFL == "Y" | ANL02FL == "Y" | APOBLFL == "Y")
+fileid <- write_path(opath, paste0(tblid, cat_suffix))
 
-  colspan_trt_map <- if (!is.null(ctrl_grp)) {
-    create_colspan_map(
-      adlb_cat,
-      non_active_grp = ctrl_grp,
-      non_active_grp_span_lbl = " ",
-      active_grp_span_lbl = "Active Study Agent",
-      colspan_var = "colspan_trt",
-      trt_var = trtvar
-    )
-  } else {
-    tibble(
-      colspan_trt = "Active Study Agent",
-      !!trtvar := levels(adlb[[trtvar]])
-    )
-  }
+colspan_trt_map <- if (!is.null(ctrl_grp)) {
+  create_colspan_map(
+    adlb_cat,
+    non_active_grp = ctrl_grp,
+    non_active_grp_span_lbl = " ",
+    active_grp_span_lbl = "Active Study Agent",
+    colspan_var = "colspan_trt",
+    trt_var = trtvar
+  )
+} else {
+  tibble(
+    colspan_trt = "Active Study Agent",
+    !!trtvar := levels(adlb[[trtvar]])
+  )
+}
 
-  # Common stats for time point / change from baseline to time point.
-  stats <- c("n", "mean_sd", "median_range")
-  formats <- junco_get_formats_from_stats(stats)
-  labels <- junco_get_labels_from_stats(stats, labels_in = c(n = "N"))
-  indent_mods <- c(n = 1L, mean_sd = 2L, median_range = 2L)
+# Common stats for time point / change from baseline to time point.
+stats <- c("n", "mean_sd", "median_range")
+formats <- junco_get_formats_from_stats(stats)
+labels <- junco_get_labels_from_stats(stats, labels_in = c(n = "N"))
+indent_mods <- c(n = 1L, mean_sd = 2L, median_range = 2L)
 
-  # Dynamic label for the "Change from baseline ..." sections.
-  a_chg_label <- function(x, .spl_context) {
-    last_split <- length(.spl_context$split)
-    label <- paste("Change from baseline to", .spl_context$value[last_split])
-    rtables::rcell(NULL, label = label)
-  }
+# Dynamic label for the "Change from baseline ..." sections.
+a_chg_label <- function(x, .spl_context) {
+  last_split <- length(.spl_context$split)
+  label <- paste("Change from baseline to", .spl_context$value[last_split])
+  rtables::rcell(NULL, label = label)
+}
 
-  # Difference in means parameters.
-  CI_cl <- tern::control_analyze_vars()$conf_level
-  a_diff_means_args <- list(
-    ref_path = c("colspan_trt", " ", trtvar, ctrl_grp),
-    conf.level = CI_cl,
-    .stats = "diff_means_est_ci",
-    .formats = "default",
-    .labels = c(
-      diff_means_est_ci = paste0(
-        "Difference in mean vs. ",
-        tolower(ctrl_grp),
-        " (",
-        tern::f_conf_level(CI_cl),
-        ")"
-      )
+# Difference in means parameters.
+CI_cl <- tern::control_analyze_vars()$conf_level
+a_diff_means_args <- list(
+  ref_path = c("colspan_trt", " ", trtvar, ctrl_grp),
+  conf.level = CI_cl,
+  .stats = "diff_means_est_ci",
+  .formats = "default",
+  .labels = c(
+    diff_means_est_ci = paste0(
+      "Difference in mean vs. ",
+      tolower(ctrl_grp),
+      " (",
+      tern::f_conf_level(CI_cl),
+      ")"
     )
   )
+)
 
-  lyt <- basic_table(
-    show_colcounts = TRUE,
-    colcount_format = "N=xx",
-    top_level_section_div = " "
-  ) |>
-    append_topleft("Laboratory Test") |>
-    split_cols_by(
-      "colspan_trt",
-      split_fun = trim_levels_to_map(map = colspan_trt_map)
-    )
+lyt <- basic_table(
+  show_colcounts = TRUE,
+  colcount_format = "N=xx",
+  top_level_section_div = " "
+) |>
+  append_topleft("Laboratory Test") |>
+  split_cols_by(
+    "colspan_trt",
+    split_fun = trim_levels_to_map(map = colspan_trt_map)
+  )
 
-  if (combined_colspan_trt == TRUE) {
-    lyt <- lyt |>
-      split_cols_by(trtvar, split_fun = mysplit)
-  } else {
-    lyt <- lyt |>
-      split_cols_by(trtvar)
-  }
-
+if (combined_colspan_trt == TRUE) {
   lyt <- lyt |>
-    split_rows_by(
-      "PARAMCD",
-      split_fun = if (!is.null(param_cd)) keep_split_levels(param_cd) else drop_split_levels,
-      labels_var = "PARAM",
-      child_labels = "visible"
-    ) |>
-    summarize_row_groups(
-      "AVAL",
-      cfun = c_summary_subset_label,
-      extra_args = list(
-        filter_expr = expression(ABLFL == "Y"),
-        .stats = stats,
-        .formats = "default",
-        formats_var = "fmt_d",
-        .labels = labels,
-        .indent_mods = indent_mods,
-        label = "Baseline"
-      )
-    ) |>
-    split_rows_by(
-      "AVISIT",
-      split_fun = if (!is.null(nonbl_visits)) keep_split_levels(nonbl_visits) else drop_split_levels,
-      indent_mod = -1,
-      section_div = " ",
-    ) |>
-    analyze(
-      "AVAL",
-      afun = tern::a_summary,
-      extra_args = list(
-        .stats = stats,
-        .formats = "default",
-        .labels = labels,
-        .indent_mods = indent_mods - 1,
-        na_rm = TRUE
-      ),
+    split_cols_by(trtvar, split_fun = mysplit)
+} else {
+  lyt <- lyt |>
+    split_cols_by(trtvar)
+}
+
+lyt <- lyt |>
+  split_rows_by(
+    "PARAMCD",
+    split_fun = if (!is.null(param_cd)) keep_split_levels(param_cd) else drop_split_levels,
+    labels_var = "PARAM",
+    child_labels = "visible"
+  ) |>
+  summarize_row_groups(
+    "AVAL",
+    cfun = c_summary_subset_label,
+    extra_args = list(
+      filter_expr = expression(ABLFL == "Y"),
+      .stats = stats,
+      .formats = "default",
       formats_var = "fmt_d",
-      show_labels = "hidden",
-      section_div = " "
-    ) |>
+      .labels = labels,
+      .indent_mods = indent_mods,
+      label = "Baseline"
+    )
+  ) |>
+  split_rows_by(
+    "AVISIT",
+    split_fun = if (!is.null(nonbl_visits)) keep_split_levels(nonbl_visits) else drop_split_levels,
+    indent_mod = -1,
+    section_div = " ",
+  ) |>
+  analyze(
+    "AVAL",
+    afun = tern::a_summary,
+    extra_args = list(
+      .stats = stats,
+      .formats = "default",
+      .labels = labels,
+      .indent_mods = indent_mods - 1,
+      na_rm = TRUE
+    ),
+    formats_var = "fmt_d",
+    show_labels = "hidden",
+    section_div = " "
+  ) |>
+  analyze(
+    "CHG",
+    afun = a_chg_label,
+    table_names = "chg_bl_label",
+    show_labels = "hidden",
+    indent_mod = -1L
+  ) |>
+  analyze(
+    "CHG",
+    afun = tern::a_summary,
+    extra_args = list(
+      .stats = "n",
+      .formats = "default",
+      .labels = labels,
+      na_rm = TRUE # Subjects with non-missing values at both baseline and the postbaseline time point.
+    ),
+    formats_var = "fmt_d",
+    show_labels = "hidden"
+  ) |>
+  analyze(
+    "BASE",
+    afun = a_summary_subset,
+    extra_args = list(
+      filter_expr = expression(!is.na(CHG)),
+      na_rm = TRUE,
+      .stats = "mean_sd",
+      .formats = "default",
+      .labels = c(mean_sd = "Baseline mean (SD)")
+    ),
+    formats_var = "fmt_d",
+    table_names = "chg_bl_mean",
+    show_labels = "hidden",
+    indent_mod = 1L
+  ) |>
+  analyze(
+    "CHG",
+    afun = tern::a_summary,
+    extra_args = list(
+      .stats = c("mean_sd", "median_range"),
+      .formats = "default",
+      .labels = labels,
+      na_rm = TRUE
+    ),
+    formats_var = "fmt_d",
+    table_names = "chg_mm",
+    show_labels = "hidden",
+    indent_mod = 1L
+  )
+
+if (comp_btw_group) {
+  lyt <- lyt |>
     analyze(
       "CHG",
-      afun = a_chg_label,
-      table_names = "chg_bl_label",
-      show_labels = "hidden",
-      indent_mod = -1L
-    ) |>
-    analyze(
-      "CHG",
-      afun = tern::a_summary,
-      extra_args = list(
-        .stats = "n",
-        .formats = "default",
-        .labels = labels,
-        na_rm = TRUE # Subjects with non-missing values at both baseline and the postbaseline time point.
-      ),
+      afun = a_diff_means,
+      extra_args = a_diff_means_args,
       formats_var = "fmt_d",
-      show_labels = "hidden"
-    ) |>
-    analyze(
-      "BASE",
-      afun = a_summary_subset,
-      extra_args = list(
-        filter_expr = expression(!is.na(CHG)),
-        na_rm = TRUE,
-        .stats = "mean_sd",
-        .formats = "default",
-        .labels = c(mean_sd = "Baseline mean (SD)")
-      ),
-      formats_var = "fmt_d",
-      table_names = "chg_bl_mean",
-      show_labels = "hidden",
-      indent_mod = 1L
-    ) |>
-    analyze(
-      "CHG",
-      afun = tern::a_summary,
-      extra_args = list(
-        .stats = c("mean_sd", "median_range"),
-        .formats = "default",
-        .labels = labels,
-        na_rm = TRUE
-      ),
-      formats_var = "fmt_d",
-      table_names = "chg_mm",
+      table_names = "chg_diff_means",
       show_labels = "hidden",
       indent_mod = 1L
     )
-
-  if (comp_btw_group) {
-    lyt <- lyt |>
-      analyze(
-        "CHG",
-        afun = a_diff_means,
-        extra_args = a_diff_means_args,
-        formats_var = "fmt_d",
-        table_names = "chg_diff_means",
-        show_labels = "hidden",
-        indent_mod = 1L
-      )
-  }
-
-  result <- build_table(lyt, adlb_cat, alt_counts_df = adsl, round_type = "sas")
-
-  # Add an empty line after each "Screening" section.
-  # Use `section_div_at_path()` as a workaround for the missing
-  # `section_div` argument in `summarize_row_groups()`.
-  # (Feature request: https://github.com/insightsengineering/rtables/issues/1083)
-  # The path below is determined from `rtables::row_paths_summary(result)`.
-  section_div_at_path(result, c("PARAMCD", "*", "@content", last(stats))) <- " "
-
-  ################################################################################
-  # Add titles and footnotes:
-  ################################################################################
-
-  result <- set_titles(result, tab_titles)
-
-  ################################################################################
-  # Convert to tbl file and output table:
-  ################################################################################
-
-
-# [AUTO-COLWIDTH]
-
-  tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
 }
+
+result <- build_table(lyt, adlb_cat, alt_counts_df = adsl, round_type = "sas")
+
+# Add an empty line after each "Screening" section.
+# Use `section_div_at_path()` as a workaround for the missing
+# `section_div` argument in `summarize_row_groups()`.
+# (Feature request: https://github.com/insightsengineering/rtables/issues/1083)
+# The path below is determined from `rtables::row_paths_summary(result)`.
+section_div_at_path(result, c("PARAMCD", "*", "@content", last(stats))) <- " "
+
+################################################################################
+# Add titles and footnotes:
+################################################################################
+
+result <- set_titles(result, tab_titles)
+
+################################################################################
+# Convert to tbl file and output table:
+################################################################################
+
+
+colwidth <- c(64, 37, 37, 37, 34)
+
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
+

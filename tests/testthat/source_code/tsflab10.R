@@ -50,7 +50,7 @@ selvisit <- c("Cycle 02", "Cycle 05", "Cycle 04", "Cycle 03")
 ################################################################################
 
 ### Markedly Abnormal spreadsheet
-markedlyabnormal_file <- read_path(dpspath, "markedlyabnormal.xlsx")
+markedlyabnormal_file <- read_path(datapath, "markedlyabnormal.xlsx")
 
 markedlyabnormal_sheets <- readxl::excel_sheets(markedlyabnormal_file)
 

@@ -40,8 +40,7 @@ show_pct <- FALSE
 # Initial processing of data
 ################################################################################
 
-adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sas7bdat"))) |>
-
+adlb_complete <- adlb_jnj
 
 ################################################################################
 # Process Data:

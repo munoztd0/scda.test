@@ -61,7 +61,8 @@ tblid_hem <- paste0(tblid, "hem")
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
 ################################################################################
-adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sas7bdat"))) |>
+adlb_complete <- adlb_jnj
+
 
 
 ################################################################################
@@ -70,7 +71,7 @@ adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sa
 
 ### Markedly Abnormal spreadsheet
 
-markedlyabnormal_file <- read_path(dpspath, "markedlyabnormal.xlsx")
+markedlyabnormal_file <- read_path(datapath, "markedlyabnormal.xlsx")
 
 markedlyabnormal_sheets <- readxl::excel_sheets(markedlyabnormal_file)
 
@@ -440,14 +441,14 @@ build_result_parcat1 <- function(
 # Define layout and build table:
 ################################################################################
 
-result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid, save2rtf = FALSE)
+result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
 
 colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
-  result,
-  file = fileid,
-  orientation = "landscape",
-  nosplitin = list(cols = c(trtvar, "rrisk_header"))
-)
+# tt_to_tlgrtf(
+#   colwidths = colwidth,
+#   result,
+#   file = fileid,
+#   orientation = "landscape",
+#   nosplitin = list(cols = c(trtvar, "rrisk_header"))
+# )

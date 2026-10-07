@@ -67,15 +67,14 @@ trtemfl <- TRUE
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
 ################################################################################
-adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sas7bdat"))) |>
-
+adlb_complete <- adlb_jnj
 
 ################################################################################
 # Retrieve markedly abnormal values from spreadsheet:
 ################################################################################
 ### Markedly Abnormal spreadsheet
 
-markedlyabnormal_file <- read_path(dpspath, "markedlyabnormal.xlsx")
+markedlyabnormal_file <- read_path(datapath, "markedlyabnormal.xlsx")
 
 
 markedlyabnormal_sheets <- readxl::excel_sheets(markedlyabnormal_file)
@@ -501,4 +500,4 @@ result <- set_titles(result, tab_titles)
 
 # [AUTO-COLWIDTH]
 
-tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
+#tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

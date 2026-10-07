@@ -61,10 +61,9 @@ ad_domain <- "ADLB"
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
 ################################################################################
-adlb_complete <- haven::read_sas(read_path(a_in, paste0(tolower(ad_domain), ".sas7bdat"))) |>
+adlb_complete <- adlb_jnj
 
-
-lbtoxgrade_file <- read_path(dpspath, "lbtoxgrade.xlsx")
+lbtoxgrade_file <- read_path(datapath, "lbtoxgrade.xlsx")
 
 ### CTC5 or DAIDS21c : default CTC5
 
