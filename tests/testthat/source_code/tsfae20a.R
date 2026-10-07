@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -29,7 +25,7 @@ tab_titles <- list(title = "Dummy Title",
 #   split function to generate separate facets for AEs & Related AEs.
 ################################################################################
 
-adsl <- adsl_jnj %>%
+adsl <- adsl_jnj |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -39,16 +35,16 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+  ) |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
-  mutate(COLSPAN_REL = "AEs") %>%
+  ) |>
+  mutate(COLSPAN_REL = "AEs") |>
   select(
     USUBJID,
     !!rlang::sym(popfl),
@@ -58,8 +54,8 @@ adsl <- adsl_jnj %>%
   )
 
 
-adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y") %>%
+adae <- adae_jnj |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AEREL)
 
 
@@ -101,13 +97,13 @@ extra_args1 <- list(
 lyt <- basic_table(
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
-  split_cols_by(trtvar, show_colcounts = TRUE) %>%
-  split_cols_by("COLSPAN_REL", split_fun = add_combo_levels(combodf, trim = TRUE), show_colcounts = FALSE) %>%
+  ) |>
+  split_cols_by(trtvar, show_colcounts = TRUE) |>
+  split_cols_by("COLSPAN_REL", split_fun = add_combo_levels(combodf, trim = TRUE), show_colcounts = FALSE) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_subcol_j,
@@ -118,7 +114,7 @@ lyt <- basic_table(
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -126,13 +122,13 @@ lyt <- basic_table(
     split_fun = trim_levels_in_group("AEDECOD"),
     section_div = " ",
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_subcol_j,
     extra_args = extra_args1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_subcol_j, extra_args = extra_args1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_subcol_j, extra_args = extra_args1) |>
   append_topleft(" Preferred Term, n (%)")
 
 result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
@@ -142,11 +138,11 @@ result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
 # Sort by descending AEBODSYS/AEDECOD in combined AE column
 ################################################################################
 
-result <- result %>%
+result <- result |>
   sort_at_path(
     path = c("AEBODSYS"),
     scorefun = cont_n_onecol("Active Study Agent.Xanomeline High Dose.AEs")
-  ) %>%
+  ) |>
   sort_at_path(
     path = c("AEBODSYS", "*", "AEDECOD"),
     scorefun = score_occurrences_cols(
@@ -164,10 +160,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 21, 21)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth,
   result,
   file = fileid,
   orientation = "landscape",

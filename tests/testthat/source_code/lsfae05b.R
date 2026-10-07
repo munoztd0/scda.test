@@ -1,7 +1,3 @@
-###############################################################################
-# Prep environment
-###############################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -20,6 +16,7 @@ popfl <- "SAFFL"
 aeivars <- "^SMQ[0-9]{2}NAM$"
 trtvar <- "TRT01A"
 key_cols <- c("COL0", "COL1", "COL2", "COL3")
+sort_cols <- c("COL0", "COL1", "COL2", "COL3")
 disp_cols <- paste0("COL", 0:12)
 concat_sep <- " / "
 tab_titles <- list(title = "Dummy Title",
@@ -51,15 +48,15 @@ if (combination_trt) {
 # Process data
 ###############################################################################
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
+  ) |>
   # Update CQzzNAM variabe based on study requirements
-  filter(!!rlang::sym(popfl) == "Y" & TRTEMFL == "Y" & if_any(matches(aeivars), ~ !is.na(.))) %>%
+  filter(!!rlang::sym(popfl) == "Y" & TRTEMFL == "Y" & if_any(matches(aeivars), ~ !is.na(.))) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -163,7 +160,7 @@ adae <- adae_jnj %>%
 ###################################
 
 if (combination_trt) {
-  adae <- adae %>%
+  adae <- adae |>
     mutate(
       across(
         all_of(comb_relvars),
@@ -208,15 +205,15 @@ if (combination_trt) {
 
 ###################################
 
-adae_pvt <- adae %>%
+adae_pvt <- adae |>
   tidyr::pivot_longer(
     cols = matches(aeivars),
     names_to = "SMQ",
     values_to = "AEIVAR"
-  ) %>%
+  ) |>
   filter(!is.na(AEIVAR))
 
-lsting <- adae_pvt %>%
+lsting <- adae_pvt |>
   mutate(
     AGE = explicit_na(as.character(AGE), ""),
     SEX = explicit_na(SEX, ""),
@@ -267,7 +264,7 @@ lsting <- adae_pvt %>%
   )
 
 if (combination_trt) {
-  lsting <- lsting %>%
+  lsting <- lsting |>
     mutate(
       across(
         all_of(comb_dosvars),
@@ -284,11 +281,11 @@ if (combination_trt) {
     )
 }
 
-lsting <- lsting %>%
-  {
+lsting <- lsting |>
+  (\(x) {
     if (!combination_trt) {
       mutate(
-        .,
+        x,
         COL4 = paste(paste0(DOSEON, " ", DOSEU), DOSEDY, sep = concat_sep),
         # To be used if Dose Unit is not used
         # COL4 = explicit_na(DOSEDY, ""),
@@ -297,7 +294,7 @@ lsting <- lsting %>%
         COL10 = explicit_na(AEREL, "")
       )
     } else if (combination_trt) {
-      rowwise(.) %>%
+      rowwise(x) |>
         mutate(
           COL4 = paste(
             paste0(
@@ -327,7 +324,7 @@ lsting <- lsting %>%
           )
         )
     }
-  } %>%
+  })() |>
   mutate(
     COL0 = explicit_na(AEIVAR, ""),
     COL1 = explicit_na(.data[[trtvar]], ""),
@@ -374,7 +371,7 @@ lsting <- lsting %>%
     COL11 = paste(AEOUTC, AETOXGR, AESER, sep = concat_sep),
     # Optional Column: COL12/AESCAT
     COL12 = explicit_na(AESCAT, "")
-  ) %>%
+  ) |>
   arrange(
     COL0,
     COL1,
@@ -427,6 +424,7 @@ result <- rlistings::as_listing(
   df = lsting,
   key_cols = key_cols,
   disp_cols = disp_cols,
+  sort_cols = sort_cols,
   round_type = "sas"
 )
 
@@ -441,6 +439,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-colwidth <- c(28, 21, 13, 18, 23, 25, 25, 25, 16, 22, 22, 37, 11)
+colwidth <- c(28, 21, 13, 18, 23, 25, 25, 25, 16, 22, 22, 37, 16)
 
-tt_to_tlgrtf(colwidths = colwidth, head(result, 100), file = fileid, orientation = "landscape")
+tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

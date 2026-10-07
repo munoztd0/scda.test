@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -55,9 +51,9 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -69,7 +65,7 @@ adsl <- adsl_jnj %>%
     )
   )
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -79,8 +75,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y" & AESER == "N") %>%
+  ) |>
+  filter(TRTEMFL == "Y" & AESER == "N") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AESER)
 
 adsl$colspan_trt <- factor(
@@ -89,7 +85,7 @@ adsl$colspan_trt <- factor(
 )
 
 # join data together
-ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+ae <- adae |> right_join(adsl, by = c("USUBJID"))
 
 colspan_trt_map <- create_colspan_map(
   adsl,
@@ -114,21 +110,21 @@ lyt <- rtables::basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -137,7 +133,7 @@ lyt <- lyt %>%
       extra_args_1,
       list(label = subjFilterText, val = "Y")
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     child_labels = "hidden",
@@ -146,13 +142,13 @@ lyt <- lyt %>%
     split_fun = trim_levels_in_group("AEDECOD"),
     section_div = c(" "),
     indent_mod = 0L
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -207,6 +203,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "portrait")
+tt_to_tlgrtf(result, file = fileid, orientation = "portrait")

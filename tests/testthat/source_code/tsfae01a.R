@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -63,8 +59,8 @@ if (combination_trt) {
 # Process data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -74,14 +70,14 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = ctrl_grp,
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
+  ) |>
   select(
     USUBJID,
     !!rlang::sym(popfl),
@@ -95,8 +91,8 @@ if (risk_diff == TRUE) {
 }
 
 
-adae <- adae_jnj %>%
-  filter(TRTEMFL == "Y") %>%
+adae <- adae_jnj |>
+  filter(TRTEMFL == "Y") |>
   select(
     USUBJID,
     all_of(comb_trtvars),
@@ -115,11 +111,11 @@ adae <- adae_jnj %>%
     AEOUT,
     AOCCIFL,
     TRTEMFL
-  ) %>%
-  group_by(USUBJID) %>%
-  mutate(maxsev = ASEVN[which(AOCCIFL == "Y")][1]) %>%
-  ungroup() %>%
-  mutate(maxsev = ifelse(is.na(maxsev), "Missing", maxsev)) %>%
+  ) |>
+  group_by(USUBJID) |>
+  mutate(maxsev = ASEVN[which(AOCCIFL == "Y")][1]) |>
+  ungroup() |>
+  mutate(maxsev = ifelse(is.na(maxsev), "Missing", maxsev)) |>
   mutate(
     maxsev = factor(
       maxsev,
@@ -136,11 +132,11 @@ adae <- adae_jnj %>%
         "Missing"
       )
     )
-  ) %>%
-  {
-    df <- .
+  ) |>
+  (\(z) {
+    df <- z
 
-    df %>%
+    df |>
       mutate(
         !!!setNames(
           lapply(comb_relvars, function(x) {
@@ -163,7 +159,7 @@ adae <- adae_jnj %>%
           paste0("Rel_AE_Death", comb_suffix)
         )
       )
-  } %>%
+  })() |>
   mutate(
     across(
       all_of(comb_acnvars),
@@ -172,7 +168,7 @@ adae <- adae_jnj %>%
         .
       }
     )
-  ) %>%
+  ) |>
   select(
     -any_of(trtvar)
   )
@@ -184,17 +180,17 @@ adae <- inner_join(adae, adsl, by = c("USUBJID"))
 ################################################################################
 
 if (combination_trt) {
-  comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related AEs")
+  comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "related AEs")
 
   comb_rel_sae_vars <- paste0("Rel_SAEs", seq_len(n_comb_trt))
-  comb_rel_sae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related SAEs")
+  comb_rel_sae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "related SAEs")
 
   comb_rel_aedth_vars <- paste0("Rel_AE_Death", seq_len(n_comb_trt))
-  comb_rel_aedth_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related AEs leading to death")
+  comb_rel_aedth_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "related AEs leading to death")
 
   comb_acn_labels <- paste(
     "AE leading to dose modification of study treatment",
-    sapply(comb_trtvars, \(x) unique(adae[[x]])[1]),
+    sapply(comb_trtvars, \(x) tolower(unique(adae[[x]])[1])),
     "~[super a,b]"
   )
 } else if (!combination_trt) {
@@ -223,11 +219,11 @@ colspan_trt_map <- create_colspan_map(
 # Check the levels of AEACN
 ##################################
 
-aeacn_levels <- adae %>%
-  select(all_of(comb_acnvars)) %>%
-  lapply(levels) %>%
-  unlist(use.names = FALSE) %>%
-  unique() %>%
+aeacn_levels <- adae |>
+  select(all_of(comb_acnvars)) |>
+  lapply(levels) |>
+  unlist(use.names = FALSE) |>
+  unique() |>
   str_to_sentence()
 
 # Here we are not considering "Drug Withdrawn", "Dose Not Changed", "Not Applicable"
@@ -246,7 +242,7 @@ newsort_AEACN <- unique(c(
 ))
 
 
-adae <- adae %>%
+adae <- adae |>
   mutate(
     across(
       all_of(comb_acnvars),
@@ -290,24 +286,24 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
-  append_topleft(c(" ", " ", "Event, n (%)")) %>%
+) |>
+  append_topleft(c(" ", " ", "Event, n (%)")) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
 if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
+  lyt <- lyt |>
+    split_cols_by("rrisk_header", nested = FALSE) |>
     split_cols_by(
       trtvar,
       labels_var = "rrisk_label",
@@ -315,12 +311,12 @@ if (risk_diff == TRUE) {
     )
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_rows_by(
     "TRTEMFL",
     split_fun = keep_split_levels("Y"),
     section_div = " "
-  ) %>%
+  ) |>
   summarize_row_groups(
     "TRTEMFL",
     cfun = a_freq_j,
@@ -330,7 +326,7 @@ lyt <- lyt %>%
       ref_path = ref_path,
       .stats = c("count_unique_fraction")
     )
-  ) %>%
+  ) |>
   analyze(
     "AESER",
     afun = a_freq_j,
@@ -342,7 +338,7 @@ lyt <- lyt %>%
   )
 
 for (i in seq_along(comb_relvars)) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     analyze(
       comb_relvars[i],
       afun = a_freq_j,
@@ -351,7 +347,7 @@ for (i in seq_along(comb_relvars)) {
         extra_args_rr,
         list(label = comb_rel_ae_labels[i], val = toupper("Related"), NULL)
       )
-    ) %>%
+    ) |>
     analyze(
       comb_rel_sae_vars[i],
       afun = a_freq_j,
@@ -363,7 +359,7 @@ for (i in seq_along(comb_relvars)) {
     )
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   analyze(
     "TRDISCFL",
     afun = a_freq_j,
@@ -375,7 +371,7 @@ lyt <- lyt %>%
   )
 
 for (i in seq_along(comb_rel_aedth_vars)) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     analyze(
       comb_rel_aedth_vars[i],
       afun = a_freq_j,
@@ -387,14 +383,14 @@ for (i in seq_along(comb_rel_aedth_vars)) {
     )
 }
 
-lyt <- lyt %>%
-  split_rows_by("maxsev", split_fun = aesevall_spf) %>%
+lyt <- lyt |>
+  split_rows_by("maxsev", split_fun = aesevall_spf) |>
   analyze("maxsev", afun = a_freq_j, extra_args = append(extra_args_rr, NULL))
 
 
 for (i in seq_along(comb_acnvars)) {
-  lyt <- lyt %>%
-    split_rows_by(comb_acnvars[i], split_fun = dosemod_spf, section_div = " ") %>%
+  lyt <- lyt |>
+    split_rows_by(comb_acnvars[i], split_fun = dosemod_spf, section_div = " ") |>
     summarize_row_groups(
       comb_acnvars[i],
       cfun = a_freq_j,
@@ -404,7 +400,7 @@ for (i in seq_along(comb_acnvars)) {
         ref_path = ref_path,
         .stats = c("count_unique_fraction")
       )
-    ) %>%
+    ) |>
     analyze(
       comb_acnvars[i],
       table_names = comb_acnvars[i],
@@ -422,12 +418,12 @@ for (i in seq_along(comb_acnvars)) {
 }
 
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_rows_by(
     "AESER",
     split_fun = sae_class,
     section_div = " ",
-  ) %>%
+  ) |>
   analyze(
     "AESDTH",
     afun = a_freq_j,
@@ -436,7 +432,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Death", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESLIFE",
     afun = a_freq_j,
@@ -445,7 +441,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Life-threatening", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESHOSP",
     afun = a_freq_j,
@@ -454,7 +450,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Requires or prolongs hospitalization", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESDISAB",
     afun = a_freq_j,
@@ -467,7 +463,7 @@ lyt <- lyt %>%
         NULL
       )
     )
-  ) %>%
+  ) |>
   analyze(
     "AESCONG",
     afun = a_freq_j,
@@ -476,7 +472,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Congenital anomaly or birth defect", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESMIE",
     afun = a_freq_j,
@@ -522,6 +518,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 33, 31)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

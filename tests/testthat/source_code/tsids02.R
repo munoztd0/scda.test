@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -25,7 +21,7 @@ tab_titles <- list(title = "Dummy Title",
 # Process data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
+adsl <- adsl_jnj |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -47,8 +43,8 @@ no_data_to_report <- function(df, var) {
 adsl <- no_data_to_report(df = adsl, var = "DCTREAS")
 adsl <- no_data_to_report(df = adsl, var = "DCSREAS")
 
-adsl <- adsl %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   select(
     USUBJID,
     !!rlang::sym(trtvar),
@@ -60,7 +56,7 @@ adsl <- adsl %>%
     EOSSTT,
     DCSREAS,
     RACE
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
@@ -107,17 +103,17 @@ lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx",
   top_level_section_div = " "
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
-  split_cols_by(trtvar) %>%
+  ) |>
+  split_cols_by(trtvar) |>
   split_cols_by(
     trtvar,
     split_fun = add_combo_levels(totdf, keep_levels = "Total"),
     nested = FALSE
-  ) %>%
+  ) |>
   # Subjects ongoing treatment
   analyze(
     "EOTSTT",
@@ -133,7 +129,7 @@ lyt <- basic_table(
       )
     ),
     na_str = " "
-  ) %>%
+  ) |>
   # Treatment disposition
   analyze(
     "EOTSTT",
@@ -144,7 +140,7 @@ lyt <- basic_table(
       extra_args_rr,
       list(label = "Completed treatment", val = "COMPLETED", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "EOTSTT",
     table_names = "DC_Trt",
@@ -154,7 +150,7 @@ lyt <- basic_table(
       extra_args_rr,
       list(label = "Discontinued treatment", val = "DISCONTINUED", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "DCTREAS",
     show_labels = "hidden",
@@ -162,7 +158,7 @@ lyt <- basic_table(
     afun = a_freq_j,
     na_str = " ",
     extra_args = append(extra_args_rr, list(extrablankline = TRUE))
-  ) %>%
+  ) |>
   # Subjects ongoing study
   analyze(
     "EOSSTT",
@@ -178,7 +174,7 @@ lyt <- basic_table(
       )
     ),
     na_str = " "
-  ) %>%
+  ) |>
   # Study disposition
   analyze(
     "EOSSTT",
@@ -189,7 +185,7 @@ lyt <- basic_table(
       extra_args_rr,
       list(label = "Completed study", val = "COMPLETED", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "EOSSTT",
     show_labels = "hidden",
@@ -199,7 +195,7 @@ lyt <- basic_table(
       extra_args_rr,
       list(label = "Discontinued study", val = "DISCONTINUED", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "DCSREAS",
     show_labels = "hidden",
@@ -208,20 +204,20 @@ lyt <- basic_table(
     extra_args = append(extra_args_rr, NULL)
   )
 
-result <- build_table(lyt, adsl, , alt_counts_df = adsl, round_type = "sas")
+result <- build_table(lyt, adsl, round_type = "sas")
 
 ################################################################################
 # Post-Processing
 ################################################################################
 
-result <- result %>%
+result <- result |>
   sort_at_path(
     path = c(
       "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
       "DCTREAS"
     ),
     scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "Other")
-  ) %>%
+  ) |>
   sort_at_path(
     path = c(
       "ma_EOTSTT_Compl_Trt_DC_Trt_DCTREAS_EOSSTT_Compl_Study_DC_Study_DCSREAS",
@@ -231,8 +227,8 @@ result <- result %>%
   )
 
 # Prune data driven output.
-result <- result %>%
-  safe_prune_table(prune_func = keep_rows(keep_non_null_rows)) %>%
+result <- result |>
+  safe_prune_table(prune_func = keep_rows(keep_non_null_rows)) |>
   safe_prune_table(
     prune_func = count_pruner(
       cols = c("colspan_trt"),
@@ -258,4 +254,4 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(44, 21, 21, 21, 23)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

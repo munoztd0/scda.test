@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -86,9 +82,9 @@ lab_vals <- c("2,3", "2,3") # Note both character or numeric values can be enclo
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -107,31 +103,31 @@ if (labsection == TRUE) {
   for (i in 1:length(lab_params)) {
     filter_val <- unlist(strsplit(lab_vals[[i]], ","))
 
-    adlb <- adlb_jnj %>%
+    adlb <- adlb_jnj |>
       filter(
         TRTEMFL == "Y" &
           PARAMCD == lab_params[[i]] &
           !!rlang::sym(lab_var[[i]]) %in% filter_val
-      ) %>%
-      mutate(criteria = lab_labels[[i]]) %>%
+      ) |>
+      mutate(criteria = lab_labels[[i]]) |>
       select(USUBJID, TRTEMFL, PARAMCD, all_of(lab_var[[i]]), criteria)
 
     lbdata <- bind_rows(adlb, lbdata)
   }
 
-  adlb <- lbdata %>%
-    group_by(USUBJID, TRTEMFL, PARAMCD, criteria) %>%
-    slice(1) %>%
+  adlb <- lbdata |>
+    group_by(USUBJID, TRTEMFL, PARAMCD, criteria) |>
+    slice(1) |>
     ungroup()
 
   # Create flag variable for each parameter that met the condition to merge back onto adsl
   # Overall row
-  adlbparamall <- adlb %>%
-    filter(PARAMCD %in% lab_params) %>%
-    mutate(lab_flag = "Y") %>%
-    group_by(USUBJID) %>%
-    slice(1) %>%
-    ungroup() %>%
+  adlbparamall <- adlb |>
+    filter(PARAMCD %in% lab_params) |>
+    mutate(lab_flag = "Y") |>
+    group_by(USUBJID) |>
+    slice(1) |>
+    ungroup() |>
     select(USUBJID, lab_flag)
 
   adsl <- left_join(adsl, adlbparamall, by = c("USUBJID"))
@@ -140,25 +136,25 @@ if (labsection == TRUE) {
   for (i in 1:length(lab_params)) {
     flagvar <- paste0("lab_flag", i)
 
-    adlbparam <- adlb %>%
-      filter(PARAMCD == lab_params[[i]] & criteria == lab_labels[[i]]) %>%
-      mutate(!!flagvar := lab_labels[[i]]) %>%
-      group_by(USUBJID) %>%
-      slice(1) %>%
-      ungroup() %>%
+    adlbparam <- adlb |>
+      filter(PARAMCD == lab_params[[i]] & criteria == lab_labels[[i]]) |>
+      mutate(!!flagvar := lab_labels[[i]]) |>
+      group_by(USUBJID) |>
+      slice(1) |>
+      ungroup() |>
       select(USUBJID, all_of(flagvar))
     adsl <- left_join(adsl, adlbparam, by = c("USUBJID"))
   }
 }
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEDECOD = case_when(
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(interest_var))) %>%
+  ) |>
+  filter(TRTEMFL == "Y" & !is.na(!!rlang::sym(interest_var))) |>
   select(
     USUBJID,
     TRTEMFL,
@@ -178,7 +174,7 @@ adae <- adae_jnj %>%
     AESCONG,
     AESMIE,
     TRDISCFL
-  ) %>%
+  ) |>
   select(
     -any_of(trtvar)
   )
@@ -194,14 +190,14 @@ if (risk_diff == TRUE) {
 }
 
 # join data together
-ae <- adae %>% inner_join(., adsl, by = c("USUBJID"))
+ae <- adae |> inner_join(adsl, by = c("USUBJID"))
 
 # Keep only maximum severity for the particular AESI
-ae <- ae %>%
-  group_by(USUBJID, .data[[interest_var]]) %>%
-  mutate(ASEV = ASEVN[which(.data[[interest_fl]] == "Y")][1]) %>%
-  ungroup() %>%
-  mutate(ASEV = ifelse(is.na(ASEV), "Missing", as.character(ASEV))) %>%
+ae <- ae |>
+  group_by(USUBJID, .data[[interest_var]]) |>
+  mutate(ASEV = ASEVN[which(.data[[interest_fl]] == "Y")][1]) |>
+  ungroup() |>
+  mutate(ASEV = ifelse(is.na(ASEV), "Missing", as.character(ASEV))) |>
   mutate(
     ASEV = factor(
       ASEV,
@@ -225,7 +221,7 @@ ae <- ae %>%
 levels(ae$ASEV)[levels(ae$ASEV) == "Missing"] <- NA
 
 if (combination_trt) {
-  comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "Related~[super b]")
+  comb_rel_ae_labels <- paste(sapply(comb_trtvars, \(x) unique(adae[[x]])[1]), "related~[super b]")
 } else if (!combination_trt) {
   comb_rel_ae_labels <- "Related~[super b]"
 }
@@ -254,23 +250,23 @@ lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
 if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
+  lyt <- lyt |>
+    split_cols_by("rrisk_header", nested = FALSE) |>
     split_cols_by(
       trtvar,
       labels_var = "rrisk_label",
@@ -278,7 +274,7 @@ if (risk_diff == TRUE) {
     )
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_rows_by(
     interest_var,
     split_label = "",
@@ -286,12 +282,12 @@ lyt <- lyt %>%
     label_pos = "topleft",
     indent_mod = 0,
     section_div = c(" ")
-  ) %>%
+  ) |>
   summarize_row_groups(
     interest_var,
     cfun = a_freq_j,
     extra_args = append(extra_args_rr, NULL)
-  ) %>%
+  ) |>
   analyze(
     "AEDECOD",
     var_labels = "Preferred term",
@@ -299,30 +295,30 @@ lyt <- lyt %>%
     indent_mod = 0,
     show_labels = "visible",
     extra_args = append(extra_args_rr, NULL)
-  ) %>%
+  ) |>
   split_rows_by(
     "rowhead",
     split_label = "",
     label_pos = "topleft",
     indent_mod = 0,
     section_div = c(" ")
-  ) %>%
+  ) |>
   analyze(
     "ASEV",
     afun = a_freq_j,
     indent_mod = 0,
     extra_args = append(extra_args_rr, NULL)
-  ) %>%
+  ) |>
   split_rows_by(
     "AESER",
     split_fun = keep_split_levels("Y"),
     section_div = c(" ")
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AESER",
     cfun = a_freq_j,
     extra_args = append(extra_args_rr, list(label = "SAE classification~[super a]", NULL))
-  ) %>%
+  ) |>
   analyze(
     "AESDTH",
     afun = a_freq_j,
@@ -331,7 +327,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Death", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESLIFE",
     afun = a_freq_j,
@@ -340,7 +336,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Life-threatening", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESHOSP",
     afun = a_freq_j,
@@ -349,7 +345,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Requires or prolongs hospitalization", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESDISAB",
     afun = a_freq_j,
@@ -362,7 +358,7 @@ lyt <- lyt %>%
         NULL
       )
     )
-  ) %>%
+  ) |>
   analyze(
     "AESCONG",
     afun = a_freq_j,
@@ -371,7 +367,7 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Congenital anomaly or birth defect", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AESMIE",
     afun = a_freq_j,
@@ -380,12 +376,12 @@ lyt <- lyt %>%
       extra_args_rr,
       list(label = "Other medically important event", val = "Y", NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "TRDISCFL",
     afun = a_freq_j,
     show_labels = "hidden",
-    nested = FALSE,
+    at_sibling = "AESER",
     extra_args = append(
       extra_args_rr,
       list(
@@ -397,12 +393,12 @@ lyt <- lyt %>%
   )
 
 for (i in seq_along(comb_relvars)) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     analyze(
       comb_relvars[i],
       afun = a_freq_j,
       show_labels = "hidden",
-      nested = i > 1,
+      at_sibling = if (i == 1) "TRDISCFL" else NULL,
       extra_args = append(
         extra_args_rr,
         list(label = comb_rel_ae_labels[i], val = toupper("Related"), NULL)
@@ -411,12 +407,12 @@ for (i in seq_along(comb_relvars)) {
 }
 
 if (labsection == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     analyze(
       "lab_flag",
       afun = a_freq_j,
       show_labels = "hidden",
-      nested = FALSE,
+      at_sibling = comb_relvars[1],
       extra_args = append(
         extra_args_rr,
         list(label = "Laboratory assessment~[super c]", NULL)
@@ -426,7 +422,7 @@ if (labsection == TRUE) {
   for (i in 1:length(lab_params)) {
     aflagvar <- paste0("lab_flag", i)
 
-    lyt <- lyt %>%
+    lyt <- lyt |>
       analyze(
         aflagvar,
         afun = a_freq_j,
@@ -438,7 +434,7 @@ if (labsection == TRUE) {
   }
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   append_topleft("AE of Interest Assessment, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -468,6 +464,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 33, 30)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

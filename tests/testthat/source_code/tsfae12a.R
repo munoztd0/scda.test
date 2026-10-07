@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -55,8 +51,8 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -66,10 +62,10 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), RACE)
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -79,8 +75,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, RACE)
 
 adsl$colspan_trt <- factor(
@@ -98,13 +94,13 @@ colspan_trt_map <- create_colspan_map(
 )
 
 # Add total for Race - adsl
-totalrace1 <- adsl %>%
-  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) %>%
+totalrace1 <- adsl |>
+  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) |>
   mutate(RACE = "Total")
 
 adsl <- bind_rows(totalrace1, adsl)
 
-adsl <- adsl %>%
+adsl <- adsl |>
   mutate(
     RACEcat = case_when(
       RACE == "Total" ~ "Total",
@@ -113,8 +109,8 @@ adsl <- adsl %>%
       RACE == "ASIAN" ~ "Asian",
       RACE == "OTHER" ~ "Other"
     )
-  ) %>%
-  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
+  ) |>
+  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) |>
   select(-RACE)
 
 adsl$spanheader <- factor(
@@ -128,13 +124,13 @@ adsl$RACEcat <- factor(
 )
 
 # Add total for Race - adae
-totalrace2 <- adae %>%
-  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) %>%
+totalrace2 <- adae |>
+  filter(!RACE %in% c("UNKNOWN", "NOT REPORTED") & !is.na(RACE)) |>
   mutate(RACE = "Total")
 
 adae <- bind_rows(totalrace2, adae)
 
-adae <- adae %>%
+adae <- adae |>
   mutate(
     RACEcat = case_when(
       RACE == "Total" ~ "Total",
@@ -143,8 +139,8 @@ adae <- adae %>%
       RACE == "ASIAN" ~ "Asian",
       RACE == "OTHER" ~ "Other"
     )
-  ) %>%
-  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) %>%
+  ) |>
+  filter(RACEcat %in% c("Total", "White", "Black", "Asian", "Other")) |>
   select(-RACE)
 
 adae$RACEcat <- factor(
@@ -174,23 +170,23 @@ extra_args_2 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = FALSE
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("RACEcat")) %>%
-  split_cols_by("RACEcat") %>%
+lyt <- lyt |>
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("RACEcat")) |>
+  split_cols_by("RACEcat") |>
   analyze(
     popfl,
     afun = a_freq_j,
@@ -204,7 +200,7 @@ lyt <- lyt %>%
         section_div = c(" ")
       )
     )
-  ) %>%
+  ) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -217,7 +213,7 @@ lyt <- lyt %>%
         section_div = c(" ")
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -225,13 +221,13 @@ lyt <- lyt %>%
     label_pos = "topleft",
     section_div = c(" "),
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -291,10 +287,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 19, 19, 19, 19, 21, 21, 21, 21, 19, 21, 21, 19, 21, 19, 21, 19, 19, 19, 19)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth, 
   result,
   file = fileid,
   orientation = "portrait",

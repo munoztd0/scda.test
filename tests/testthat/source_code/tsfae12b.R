@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -55,8 +51,8 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -66,10 +62,10 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), SEX)
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -79,8 +75,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, SEX)
 
 adsl$colspan_trt <- factor(
@@ -98,20 +94,20 @@ colspan_trt_map <- create_colspan_map(
 )
 
 # Add total for Sex - adsl
-totalsex1 <- adsl %>%
+totalsex1 <- adsl |>
   mutate(SEX = "Total")
 
 adsl <- bind_rows(totalsex1, adsl)
 
-adsl <- adsl %>%
+adsl <- adsl |>
   mutate(
     SEXcat = case_when(
       SEX == "Total" ~ "Total",
       SEX == "M" ~ "Male",
       SEX == "F" ~ "Female"
     )
-  ) %>%
-  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
+  ) |>
+  filter(SEXcat %in% c("Total", "Male", "Female")) |>
   select(-SEX)
 
 adsl$spanheader <- factor(
@@ -122,20 +118,20 @@ adsl$spanheader <- factor(
 adsl$SEXcat <- factor(adsl$SEXcat, levels = c("Total", "Male", "Female"))
 
 # Add total for Sex - adae
-totalsex2 <- adae %>%
+totalsex2 <- adae |>
   mutate(SEX = "Total")
 
 adae <- bind_rows(totalsex2, adae)
 
-adae <- adae %>%
+adae <- adae |>
   mutate(
     SEXcat = case_when(
       SEX == "Total" ~ "Total",
       SEX == "M" ~ "Male",
       SEX == "F" ~ "Female"
     )
-  ) %>%
-  filter(SEXcat %in% c("Total", "Male", "Female")) %>%
+  ) |>
+  filter(SEXcat %in% c("Total", "Male", "Female")) |>
   select(-SEX)
 
 adae$SEXcat <- factor(adae$SEXcat, levels = c("Total", "Male", "Female"))
@@ -161,23 +157,23 @@ extra_args_2 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = FALSE
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("SEXcat")) %>%
-  split_cols_by("SEXcat") %>%
+lyt <- lyt |>
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("SEXcat")) |>
+  split_cols_by("SEXcat") |>
   analyze(
     popfl,
     afun = a_freq_j,
@@ -190,7 +186,7 @@ lyt <- lyt %>%
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -202,7 +198,7 @@ lyt <- lyt %>%
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -210,13 +206,13 @@ lyt <- lyt %>%
     label_pos = "topleft",
     section_div = c(" "),
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -276,10 +272,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth, 
   result,
   file = fileid,
   orientation = "portrait",

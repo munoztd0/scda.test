@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -29,7 +25,7 @@ tab_titles <- list(title = "Dummy Title",
 #   split function to generate separate facets for AEs & AEs with TOXGR > 3.
 ################################################################################
 
-adsl <- adsl_jnj %>%
+adsl <- adsl_jnj |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -39,16 +35,16 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+  ) |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
-  mutate(COLSPAN_TOX = "AEs") %>%
+  ) |>
+  mutate(COLSPAN_TOX = "AEs") |>
   select(
     USUBJID,
     !!rlang::sym(popfl),
@@ -57,7 +53,7 @@ adsl <- adsl_jnj %>%
     COLSPAN_TOX
   )
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -67,9 +63,9 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
-  mutate(TOXGE3 = ifelse(AETOXGRN == 3 | AETOXGRN > 3, ">= 3", "< 3")) %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
+  mutate(TOXGE3 = ifelse(AETOXGRN == 3 | AETOXGRN > 3, ">= 3", "< 3")) |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AETOXGR, TOXGE3)
 
 adae <- inner_join(adae, adsl, by = c("USUBJID"))
@@ -119,18 +115,18 @@ extra_args1 <- list(
   subcol_val = ">= 3"
 )
 
-lyt <- basic_table(top_level_section_div = " ") %>%
+lyt <- basic_table(top_level_section_div = " ") |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
+  ) |>
   split_cols_by(
     trtvar,
     split_fun = add_active_combo,
     show_colcounts = TRUE,
     colcount_format = "N=xx"
-  ) %>%
-  split_cols_by("COLSPAN_TOX", split_fun = add_tox_levels) %>%
+  ) |>
+  split_cols_by("COLSPAN_TOX", split_fun = add_tox_levels) |>
   analyze(
     "TRTEMFL",
     nested = FALSE,
@@ -142,7 +138,7 @@ lyt <- basic_table(top_level_section_div = " ") %>%
         val = "Y"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -150,13 +146,13 @@ lyt <- basic_table(top_level_section_div = " ") %>%
     split_fun = trim_levels_in_group("AEDECOD"),
     section_div = " ",
     nested = FALSE
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_subcol_j,
     extra_args = extra_args1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_subcol_j, extra_args = extra_args1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_subcol_j, extra_args = extra_args1) |>
   append_topleft(" Preferred Term, n (%)")
 
 result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
@@ -167,11 +163,11 @@ result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
 # Prune table to only keep those that meet x% criteria
 ################################################################################
 
-result <- result %>%
+result <- result |>
   sort_at_path(
     path = c("AEBODSYS"),
     scorefun = cont_n_onecol("Active Study Agent.Combined.TOXGR")
-  ) %>%
+  ) |>
   sort_at_path(
     path = c("AEBODSYS", "*", "AEDECOD"),
     scorefun = score_occurrences_cols("Active Study Agent.Combined.TOXGR")
@@ -199,10 +195,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 21, 21, 21, 21)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth,
   result,
   file = fileid,
   orientation = "landscape",

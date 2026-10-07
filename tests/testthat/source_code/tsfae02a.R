@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -66,9 +62,9 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), all_of(subgrpvar)) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl), all_of(subgrpvar)) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -84,7 +80,7 @@ adsl <- adsl_jnj %>%
     )
   )
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -94,8 +90,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD)
 
 adsl$colspan_trt <- factor(
@@ -109,7 +105,7 @@ if (risk_diff == TRUE) {
 }
 
 # join data together
-ae <- adae %>% right_join(., adsl, by = c("USUBJID"))
+ae <- adae |> right_join(adsl, by = c("USUBJID"))
 
 colspan_trt_map <- create_colspan_map(
   adsl,
@@ -147,23 +143,23 @@ lyt <- basic_table(
   top_level_section_div = " ",
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar)
 }
 
 if (risk_diff == TRUE) {
-  lyt <- lyt %>%
-    split_cols_by("rrisk_header", nested = FALSE) %>%
+  lyt <- lyt |>
+    split_cols_by("rrisk_header", nested = FALSE) |>
     split_cols_by(
       trtvar,
       labels_var = "rrisk_label",
@@ -171,7 +167,7 @@ if (risk_diff == TRUE) {
     )
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_rows_by(
     subgrpvar,
     split_label = "",
@@ -179,41 +175,36 @@ lyt <- lyt %>%
     indent_mod = -1L,
     section_div = c(" "),
     page_by = TRUE
-  ) %>% # Set page_by = FALSE if you do not wish to start a new page after a new subgroup
+  ) |> # Set page_by = FALSE if you do not wish to start a new page after a new subgroup
 
   summarize_row_groups(
     subgrpvar,
     cfun = a_freq_j,
     extra_args = append(extra_args_rr, list(label_fstr = subgrpvar_f))
-  ) %>%
-  split_rows_by(
+  ) |>
+  analyze(
     "TRTEMFL",
-    split_fun = keep_split_levels("Y"),
-    indent_mod = -1L,
-    section_div = c(" ")
-  ) %>%
-  summarize_row_groups(
-    "TRTEMFL",
-    cfun = a_freq_j,
+    afun = a_freq_j,
     extra_args = append(
       extra_args_rr2,
-      list(label = "Subjects with >=1 AE", extrablankline = TRUE)
+      list(val = "Y", label = "Subjects with >=1 AE", extrablankline = TRUE)
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
     indent_mod = 0L,
-    section_div = c(" ")
-  ) %>%
+    section_div = c(" "),
+    at_sibling = "TRTEMFL"
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_j,
     extra_args = extra_args_rr2
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_rr2) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_rr2) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -231,12 +222,12 @@ result <- remove_col_count(result)
 if (length(adae$TRTEMFL) != 0) {
   result <- sort_at_path(
     result,
-    c(subgrpvar, "*", "TRTEMFL", "*", "AEBODSYS"),
+    c(subgrpvar, "*", "AEBODSYS"),
     scorefun = jj_complex_scorefun()
   )
   result <- sort_at_path(
     result,
-    c(subgrpvar, "*", "TRTEMFL", "*", "AEBODSYS", "*", "AEDECOD"),
+    c(subgrpvar, "*", "AEBODSYS", "*", "AEDECOD"),
     scorefun = jj_complex_scorefun()
   )
 }
@@ -251,6 +242,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 35, 35)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

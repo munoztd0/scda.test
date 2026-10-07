@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(dplyr)
 library(rtables)
@@ -27,7 +23,6 @@ risk_diff <- TRUE
 ################################################################################
 
 adsl <- adsl_jnj |>
-
   filter(.data[[popfl]] == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
@@ -50,7 +45,6 @@ adsl <- adsl_jnj |>
   select(USUBJID, all_of(trtvar), colspan_trt, rrisk_header, rrisk_label)
 
 adagocmq <- adagocmq_jnj |>
-
   filter(.data[[popfl]] == "Y", ACAT1 == "Hypersensitivity", ANL01FL == "Y") |>
   select(USUBJID, ATERM, ATERMN) |>
   right_join(adsl) |>
@@ -182,6 +176,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
+
 colwidth <- c(64, 17, 5, 17, 17, 29, 29)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

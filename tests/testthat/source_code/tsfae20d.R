@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(forcats)
@@ -30,8 +26,8 @@ tab_titles <- list(title = "Dummy Title",
 # Filter AE dataframe to include 1st occurenace of a given PT.
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -41,14 +37,14 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
     colspan_var = "colspan_trt",
     trt_var = trtvar
-  ) %>%
+  ) |>
   mutate(
     months = (TRTEDY + 30) / 30.4375,
     ACAT1 = case_when(
@@ -69,7 +65,7 @@ adsl <- adsl_jnj %>%
         "Beyond 13 months"
       )
     )
-  ) %>%
+  ) |>
   select(
     USUBJID,
     !!rlang::sym(popfl),
@@ -79,7 +75,7 @@ adsl <- adsl_jnj %>%
     ACAT1
   )
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -89,8 +85,8 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
-  filter(TRTEMFL == "Y") %>%
+  ) |>
+  filter(TRTEMFL == "Y") |>
   select(
     USUBJID,
     TRTEMFL,
@@ -101,7 +97,7 @@ adae <- adae_jnj %>%
     AOCCFL,
     AOCCPFL,
     AOCCSFL
-  ) %>%
+  ) |>
   mutate(
     ACAT1 = forcats::fct_na_value_to_level(factor(
       ACAT1,
@@ -113,10 +109,10 @@ adae <- adae_jnj %>%
         "Beyond 13 months"
       )
     ))
-  ) %>%
+  ) |>
   arrange(USUBJID, AEBODSYS, AEDECOD, ASTDT)
 
-adae <- inner_join(adae, adsl %>% select(-ACAT1), by = c("USUBJID"))
+adae <- inner_join(adae, adsl |> select(-ACAT1), by = c("USUBJID"))
 
 adae$TRTEMFL <- factor(adae$TRTEMFL)
 
@@ -174,12 +170,12 @@ extra_args1 <- list(
   .stats = "count_unique_fraction"
 )
 
-lyt <- basic_table(top_level_section_div = " ") %>%
+lyt <- basic_table(top_level_section_div = " ") |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
-  split_cols_by(trtvar) %>%
+  ) |>
+  split_cols_by(trtvar) |>
   split_cols_by(
     "ACAT1",
     split_fun = add_combo_levels(
@@ -187,7 +183,7 @@ lyt <- basic_table(top_level_section_div = " ") %>%
       trim = FALSE,
       keep_levels = combodf$valname
     )
-  ) %>%
+  ) |>
   analyze(
     popfl,
     show_labels = "hidden",
@@ -196,7 +192,7 @@ lyt <- basic_table(top_level_section_div = " ") %>%
       label = "Analysis set: Safety",
       .stats = "n_altdf"
     )
-  ) %>%
+  ) |>
   analyze(
     "TRTEMFL",
     nested = FALSE,
@@ -210,14 +206,14 @@ lyt <- basic_table(top_level_section_div = " ") %>%
         flag_var = NULL
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
     label_pos = "topleft",
     split_fun = trim_levels_in_group("AEDECOD"),
     section_div = c(" ")
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYS",
     cfun = a_freq_combos_j,
@@ -225,7 +221,7 @@ lyt <- basic_table(top_level_section_div = " ") %>%
       extra_args1,
       list(flag_var = NULL)
     )
-  ) %>%
+  ) |>
   analyze(
     "AEDECOD",
     afun = a_freq_combos_j,
@@ -233,7 +229,7 @@ lyt <- basic_table(top_level_section_div = " ") %>%
       extra_args1,
       list(flag_var = NULL)
     )
-  ) %>%
+  ) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
@@ -244,14 +240,14 @@ result <- build_table(lyt, adae, alt_counts_df = adsl, round_type = "sas")
 
 result <- safe_prune_table(result, prune_func = bspt_pruner())
 
-result <- result %>%
+result <- result |>
   sort_at_path(
     path = c("root", "AEBODSYS"),
     #Provide the entire path below in colpath argument. The paths can be identified using col_paths(result).
     scorefun = jj_complex_scorefun(
       colpath = c("colspan_trt", "Active Study Agent", "TRT01A", "Xanomeline High Dose", "ACAT1", "Total")
     )
-  ) %>%
+  ) |>
   sort_at_path(
     path = c("root", "AEBODSYS", "*", "AEDECOD"),
     #Provide the entire path below in colpath argument. The paths can be identified using col_paths(result).
@@ -270,10 +266,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table:
 ################################################################################
 
+
 colwidth <- c(64, 21, 19, 21, 21, 19, 21, 21, 19, 19, 19, 19, 21, 21, 19, 17, 21, 19, 19)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth,
   result,
   file = fileid,
   orientation = "landscape",

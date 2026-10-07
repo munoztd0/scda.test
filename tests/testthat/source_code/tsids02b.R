@@ -1,7 +1,3 @@
-################################################################################
-# Prep environment:
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -25,9 +21,8 @@ tab_titles <- list(title = "Dummy Title",
 # Process data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  mutate(factor(EOTSTT)) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -37,7 +32,7 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(
     STUDYID,
     USUBJID,
@@ -47,7 +42,7 @@ adsl <- adsl_jnj %>%
     DCTREAS,
     EOSSTT,
     DCSREAS,
-  ) %>%
+  ) |>
   create_colspan_var(
     non_active_grp = "Placebo",
     non_active_grp_span_lbl = " ",
@@ -57,23 +52,23 @@ adsl <- adsl_jnj %>%
   )
 
 # Actual Dataset
-addisp1 <- addisp_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+addisp1 <- addisp_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   select(USUBJID, PARAMCD, AVALC)
 
 # Create treatment names
-addisp2 <- addisp_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y" & !is.na(DSSCAT) & DSSCAT != "") %>%
+addisp2 <- addisp_jnj |>
+  filter(!!rlang::sym(popfl) == "Y" & !is.na(DSSCAT) & DSSCAT != "") |>
   select(USUBJID, DSSCAT)
 
 a <- tolower(unique(addisp2$DSSCAT))
 
 
-addisp <- addisp1 %>%
+addisp <- addisp1 |>
   tidyr::pivot_wider(
     names_from = c(PARAMCD),
     values_from = AVALC
-  ) %>%
+  ) |>
   mutate(
     ONGOING_SUB = case_when(
       rowSums(dplyr::across(dplyr::starts_with("EOTS"), ~ toupper(.x) == "ONGOING"), na.rm = TRUE) > 0 ~ "Y",
@@ -97,7 +92,7 @@ addisp <- addisp1 %>%
       rowSums(dplyr::across(dplyr::starts_with("EOTS"), ~ toupper(.x) == "DISCONTINUED"), na.rm = TRUE) > 0 ~ "Y",
       TRUE ~ NA_character_
     )
-  ) %>%
+  ) |>
   mutate(
     dplyr::across(
       dplyr::starts_with("EOTS"),
@@ -138,8 +133,9 @@ avalc_cols <- grep("^(EOTS|DCTS|LTVIST)", names(addisp), value = TRUE)
 all_levels <- sort(unique(unlist(lapply(addisp[avalc_cols], function(x) {
   if (is.factor(x)) levels(x) else unique(na.omit(x))
 }))))
-addisp <- addisp %>%
+addisp <- addisp |>
   mutate(across(all_of(avalc_cols), ~ factor(.x, levels = all_levels)))
+
 
 ################################################################################
 # Define layout and build table:
@@ -196,18 +192,18 @@ map1 <- tribble(
 lyt <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  ) %>%
-  split_cols_by(trtvar) %>%
+  ) |>
+  split_cols_by(trtvar) |>
   split_cols_by(
     trtvar,
     split_fun = add_combo_levels(totdf, keep_levels = "Total"),
     nested = FALSE
-  ) %>%
-  split_rows_by(var = "STUDYID", section_div = "", child_labels = "hidden", parent_name = "STUDYID1") %>%
+  ) |>
+  split_rows_by(var = "STUDYID", section_div = "", child_labels = "hidden", parent_name = "STUDYID1") |>
   analyze(
     vars = c("ONGOING_SUB", "COMPL_SUB", "DISC_BOTH_TREATMENT", "DISC_ONE_TREATMENT"),
     afun = a_freq_j,
@@ -258,20 +254,20 @@ for (ag in agents) {
     xmap$label[xmap$value == "COMPLETED"] <- paste0("Completed treatment with ", agent_lbl)
     xmap$label[xmap$value == "DISCONTINUED"] <- paste0("Discontinued treatment with ", agent_lbl)
 
-    lyt <- lyt %>%
+    lyt <- lyt |>
       split_rows_by(
         var = "STUDYID",
         section_div = "",
         child_labels = "hidden",
         nested = FALSE,
         parent_name = paste0("STUDYIDag", ag)
-      ) %>%
+      ) |>
       split_rows_by(
         stat_var,
         split_fun = keep_split_levels(c("COMPLETED", "DISCONTINUED")),
         child_labels = "hidden",
         nested = TRUE
-      ) %>%
+      ) |>
       analyze(
         vars = stat_var,
         afun = a_two_tier,
@@ -302,20 +298,20 @@ xmap$label[xmap$value == "COMPLETED"] <- "Completed study"
 xmap$label[xmap$value == "DISCONTINUED"] <- "Discontinued study"
 xmap$label[xmap$value == "ONGOING"] <- "Subjects ongoing study"
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_rows_by(
     var = "STUDYID",
     section_div = "",
     child_labels = "hidden",
     nested = FALSE,
     parent_name = "STUDYIDlast"
-  ) %>%
+  ) |>
   split_rows_by(
     stat_var,
     split_fun = keep_split_levels(c("ONGOING", "COMPLETED", "DISCONTINUED")),
     nested = TRUE,
     child_labels = "hidden"
-  ) %>%
+  ) |>
   analyze(
     vars = stat_var,
     afun = a_two_tier,
@@ -339,7 +335,7 @@ for (ag in agents) {
   stat_var <- paste0("EOTS", ag, "STT") # <-- dynamic status variable
 
   if (stat_var %in% names(addisp)) {
-    result <- result %>%
+    result <- result |>
       sort_at_path(
         path = c(paste0("STUDYIDag", ag), "*", stat_var, "DISCONTINUED", stat_var),
         scorefun = jj_complex_scorefun(colpath = "Total", lastcat = "Other")
@@ -367,4 +363,4 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(64, 21, 21, 21, 23)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")

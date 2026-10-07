@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -58,8 +54,8 @@ exclude_G5_if_none <- TRUE
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -69,10 +65,10 @@ adsl <- adsl_jnj %>%
         "Placebo"
       )
     )
-  ) %>%
+  ) |>
   select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl))
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -82,25 +78,25 @@ adae <- adae_jnj %>%
       AEDECOD == "" ~ paste0("Uncoded: ", AETERM),
       .default = AEDECOD
     )
-  ) %>%
+  ) |>
   filter(TRTEMFL == "Y")
 
 # Take maximum toxicity - per PT
-adaemaxpt <- adae %>%
-  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD, AETOXGRN) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice_tail() %>%
+adaemaxpt <- adae |>
+  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) |>
+  arrange(USUBJID, AEBODSYS, AEDECOD, AETOXGRN) |>
+  group_by(USUBJID, AEBODSYS, AEDECOD) |>
+  slice_tail() |>
   ungroup()
 
 # Take maximum toxicity - per SOC
-adaemaxsoc <- adae %>%
-  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) %>%
-  mutate(AEBODSYSx = AEBODSYS) %>%
-  arrange(USUBJID, AEBODSYS, AETOXGRN) %>%
-  group_by(USUBJID, AEBODSYS) %>%
-  slice_tail() %>%
-  ungroup() %>%
+adaemaxsoc <- adae |>
+  filter(AETOXGR %in% c("1", "2", "3", "4", "5")) |>
+  mutate(AEBODSYSx = AEBODSYS) |>
+  arrange(USUBJID, AEBODSYS, AETOXGRN) |>
+  group_by(USUBJID, AEBODSYS) |>
+  slice_tail() |>
+  ungroup() |>
   select(USUBJID, AEBODSYS, AETOXGR, AEBODSYSx)
 
 # Merge back in an create a new SOC variable that is only populated for max toxicity SOC rows
@@ -111,24 +107,24 @@ adaemax <- left_join(
 )
 
 # Add total
-adaetot <- adae %>%
+adaetot <- adae |>
   mutate(
     AETOXGR = "Total",
     AEBODSYSx = AEBODSYS
-  ) %>%
-  arrange(USUBJID, AEBODSYS, AEDECOD) %>%
-  group_by(USUBJID, AEBODSYS, AEDECOD) %>%
-  slice(1) %>%
+  ) |>
+  arrange(USUBJID, AEBODSYS, AEDECOD) |>
+  group_by(USUBJID, AEBODSYS, AEDECOD) |>
+  slice(1) |>
   ungroup()
 
 # Set data together
-adaeall <- bind_rows(adaemax, adaetot) %>%
+adaeall <- bind_rows(adaemax, adaetot) |>
   mutate(
     AETOXGR = factor(
       as.character(AETOXGR),
       levels = c("Total", "1", "2", "3", "4", "5")
     )
-  ) %>%
+  ) |>
   select(USUBJID, TRTEMFL, AETOXGR, AEBODSYS, AEBODSYSx, AEDECOD)
 
 adsl$colspan_trt <- factor(
@@ -146,10 +142,10 @@ colspan_trt_map <- create_colspan_map(
 )
 
 # join data together
-ae <- adaeall %>% inner_join(., adsl, by = c("USUBJID"))
+ae <- adaeall |> inner_join(adsl, by = c("USUBJID"))
 
 if (length(adae$TRTEMFL) == 0) {
-  ae <- adaeall %>% right_join(., adsl, by = c("USUBJID"))
+  ae <- adaeall |> right_join(adsl, by = c("USUBJID"))
 }
 
 ae$spanheader <- factor(
@@ -157,10 +153,10 @@ ae$spanheader <- factor(
   levels = c(" ", "Toxicity Grade")
 )
 
-adsl1 <- adsl %>%
+adsl1 <- adsl |>
   mutate(AETOXGR = "Total")
 
-adsl <- adsl1 %>%
+adsl <- adsl1 |>
   mutate(
     AETOXGR = factor(
       as.character(AETOXGR),
@@ -187,7 +183,7 @@ grademap <- data.frame(
 )
 
 # If there are no grade 5 and user has asked to exclude column then update factors
-anyG5 <- ae %>%
+anyG5 <- ae |>
   filter(AETOXGR == "5")
 
 if (exclude_G5_if_none == TRUE && length(anyG5$AETOXGR) == 0) {
@@ -218,26 +214,26 @@ extra_args_1 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
   )
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit, show_colcounts = TRUE)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, show_colcounts = TRUE)
 }
 
-lyt <- lyt %>%
+lyt <- lyt |>
   split_cols_by(
     "spanheader",
     split_fun = trim_levels_to_map(map = grademap)
-  ) %>%
-  split_cols_by("AETOXGR", show_colcounts = FALSE) %>%
+  ) |>
+  split_cols_by("AETOXGR", show_colcounts = FALSE) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
@@ -250,20 +246,20 @@ lyt <- lyt %>%
         restr_columns = "Total"
       )
     )
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
     split_fun = trim_levels_in_group("AEDECOD"),
     label_pos = "topleft",
     section_div = c(" ")
-  ) %>%
+  ) |>
   summarize_row_groups(
     "AEBODSYSx",
     cfun = a_freq_j,
     extra_args = extra_args_1
-  ) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 result <- build_table(lyt, ae, alt_counts_df = adsl, round_type = "sas")
@@ -325,10 +321,10 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(64, 21, 17, 17, 17, 17, 21, 21, 17, 19, 19, 19, 21, 21, 17, 17, 17, 19, 21, 21, 17, 17, 17, 19, 17)
+
+colwidth <- c(64, 21, 17, 17, 17, 19, 21, 21, 17, 19, 17, 19, 19, 21, 17, 19, 17, 19, 21, 21, 17, 17, 17, 17, 19)
 
 tt_to_tlgrtf( 
-  colwidths = colwidth, 
   result,
   file = fileid,
   orientation = "landscape",

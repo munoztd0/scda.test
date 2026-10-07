@@ -1,7 +1,3 @@
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -50,9 +46,9 @@ if (combined_colspan_trt == TRUE) {
 # Process Data:
 ################################################################################
 
-adsl <- adsl_jnj %>%
-  filter(!!rlang::sym(popfl) == "Y") %>%
-  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) %>%
+adsl <- adsl_jnj |>
+  filter(!!rlang::sym(popfl) == "Y") |>
+  select(STUDYID, USUBJID, all_of(trtvar), all_of(popfl)) |>
   mutate(
     !!rlang::sym(trtvar) := factor(
       .data[[trtvar]],
@@ -64,7 +60,7 @@ adsl <- adsl_jnj %>%
     )
   )
 
-adae <- adae_jnj %>%
+adae <- adae_jnj |>
   mutate(
     AEBODSYS = case_when(
       AEBODSYS == "" ~ "Uncoded",
@@ -75,16 +71,16 @@ adae <- adae_jnj %>%
       .default = AEDECOD
     ),
     AERELTOT = ifelse(AEREL %in% c("RELATED", "NOT RELATED"), stringr::str_to_title(AEREL), NA)
-  ) %>%
-  filter(TRTEMFL == "Y" & !is.na(AERELTOT)) %>%
+  ) |>
+  filter(TRTEMFL == "Y" & !is.na(AERELTOT)) |>
   select(USUBJID, TRTEMFL, AEBODSYS, AEDECOD, AEREL, AERELTOT)
 
-adaetot <- adae %>%
+adaetot <- adae |>
   mutate(
     AERELTOT = "Total"
   )
 
-adaeall <- bind_rows(adae, adaetot) %>%
+adaeall <- bind_rows(adae, adaetot) |>
   mutate(AERELTOT = factor(as.character(AERELTOT), levels = c("Total", "Not Related", "Related")))
 
 
@@ -94,14 +90,14 @@ adsl$colspan_trt <- factor(
 )
 
 # join data together
-ae <- adaeall %>% inner_join(., adsl, by = c("USUBJID"))
+ae <- adaeall |> inner_join(adsl, by = c("USUBJID"))
 
 ae$spanheader <- factor(ifelse(ae$AERELTOT == "Total", " ", "Relationship"), levels = c(" ", "Relationship"))
 
-adsl1 <- adsl %>%
+adsl1 <- adsl |>
   mutate(AERELTOT = "Total")
 
-adsl <- adsl1 %>%
+adsl <- adsl1 |>
   mutate(AERELTOT = factor(as.character(AERELTOT), levels = c("Total", "Not Related", "Related")))
 adsl$spanheader <- factor(ifelse(adsl$AERELTOT == "Total", " ", "Relationship"), levels = c(" ", "Relationship"))
 
@@ -139,26 +135,26 @@ extra_args_1 <- list(
 lyt <- basic_table(
   top_level_section_div = " ",
   colcount_format = "N=xx"
-) %>%
+) |>
   split_cols_by("colspan_trt", split_fun = trim_levels_to_map(map = colspan_trt_map))
 
 if (combined_colspan_trt == TRUE) {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, split_fun = mysplit, show_colcounts = TRUE)
 } else {
-  lyt <- lyt %>%
+  lyt <- lyt |>
     split_cols_by(trtvar, show_colcounts = TRUE)
 }
 
-lyt <- lyt %>%
-  split_cols_by("spanheader", split_fun = trim_levels_in_group("AERELTOT")) %>%
-  split_cols_by("AERELTOT", show_colcounts = FALSE) %>%
+lyt <- lyt |>
+  split_cols_by("spanheader", split_fun = trim_levels_in_group("AERELTOT")) |>
+  split_cols_by("AERELTOT", show_colcounts = FALSE) |>
   analyze(
     "TRTEMFL",
     afun = a_freq_j,
     show_labels = "hidden",
     extra_args = append(extra_args_1, list(label = "Subjects with >=1 AE", val = "Y"))
-  ) %>%
+  ) |>
   split_rows_by(
     "AEBODSYS",
     split_label = "System Organ Class",
@@ -166,9 +162,9 @@ lyt <- lyt %>%
     label_pos = "topleft",
     section_div = c(" "),
     nested = FALSE
-  ) %>%
-  summarize_row_groups("AEBODSYS", cfun = a_freq_j, extra_args = extra_args_1) %>%
-  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) %>%
+  ) |>
+  summarize_row_groups("AEBODSYS", cfun = a_freq_j, extra_args = extra_args_1) |>
+  analyze("AEDECOD", afun = a_freq_j, extra_args = extra_args_1) |>
   append_topleft("  Preferred Term, n (%)")
 
 
@@ -207,6 +203,7 @@ result <- set_titles(result, tab_titles)
 # Convert to tbl file and output table
 ################################################################################
 
+
 colwidth <- c(64, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
