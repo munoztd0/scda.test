@@ -73,7 +73,7 @@ tblid_hem <- paste0(tblid, "hem")
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
 ################################################################################
-adlb_complete <- haven::read_sas("../templates_scripts/analysis/adlb.sas7bdat") 
+adlb_complete <- adlb_jnj 
 
 
 ################################################################################
@@ -144,7 +144,7 @@ xlabel_map2 <- xlabel_map |>
 # Process Data:
 ################################################################################
 
-adsl <- haven::read_sas("../templates_scripts/analysis/adsl.sas7bdat") |>
+adsl <- adsl_jnj |>
   filter(.data[[popfl]] == "Y") |>
   mutate(
     !!rlang::sym(trtvar) := factor(
