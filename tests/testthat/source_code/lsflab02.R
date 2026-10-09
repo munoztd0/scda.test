@@ -26,7 +26,7 @@ central_lab <- c("CENTRAL")
 # Process data
 ###############################################################################
 
-addili_raw <- addili_jnj |>
+addili_raw <- addili_jnj
 
 addili <- addili_raw |>
   filter(
@@ -191,10 +191,10 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-# [AUTO-COLWIDTH]
+colwidth <- c(21, 38, 51, 73, 22, 19, 19, 19, 22)
 
 tt_to_tlgrtf( 
-  result,
+  head(result, 100),
   file = fileid,
   orientation = "landscape"
 )

@@ -211,7 +211,7 @@ result1 <- result |>
 colwidth <- c(21, 13, 18, 28, 75, 15, 43, 25, 15, 14, 18)
 
 tt_to_tlgrtf( 
-  result1,
+  head(result, 100),
   file = paste0(fileid),
   orientation = "landscape"
 )
