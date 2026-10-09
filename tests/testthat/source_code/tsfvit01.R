@@ -8,69 +8,47 @@ library(haven)
 # Define script level parameters:
 ################################################################################
 
-tblid <- "TSFLAB01b"
+tblid <- "TSFVIT01"
+fileid <- write_path(opath, tblid)
 tab_titles <- list(title = "Dummy Title",
                      subtitles = NULL,
                      main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
-# Population flag (default=SAFFL).
+# Safety population flag (default=SAFFL).
 popfl <- "SAFFL"
 
 # Actual treatment variable (default=TRT01A).
 trtvar <- "TRT01A"
+# Actual treatment levels (required to order the columns).
+trtlev <- c("Xanomeline Low Dose", "Xanomeline High Dose", "Placebo")
 
 # Control arm name (one of the levels of the treatment variable).
 ctrl_grp <- "Placebo"
 
-# Lab parameters Category of interest on PARCAT1 (name = file suffix).
-param_cat <- c(chm = "CHEMISTRY") #, hem = "HEMATOLOGY")
-
-# Lab sign parameters of interest.
-param_cd <- NULL
-
-# Non-baseline visits of interest.
-nonbl_visits <- c("Cycle 02", "Cycle 04", "Cycle 03")
-
 # Flag to enable comparison between treatment groups (e.g., mean difference vs. control).
 comp_btw_group <- TRUE
 
-# Add Active Study Agent Combined column
-combined_colspan_trt <- TRUE
+# Add Active Study Agent Combined column?
+combined_colspan_trt <- FALSE
 
-if (combined_colspan_trt == TRUE) {
-  # Set up levels and label for the required combined columns
-  add_combo <- add_combo_facet(
-    "Combined",
-    label = "Combined",
-    levels = c("Xanomeline High Dose", "Xanomeline Low Dose")
-  )
+# Vital sign parameters of interest.
+paramcd <- c("SYSBP", "DIABP")
 
-  # choose if any facets need to be removed - e.g remove the combined column for placebo
-  rm_combo_from_placebo <- cond_rm_facets(
-    facets = "Combined",
-    ancestor_pos = NA,
-    value = " ",
-    split = "colspan_trt"
-  )
-
-  mysplit <- make_split_fun(post = list(add_combo, rm_combo_from_placebo))
-}
+# Non-baseline visits of interest.
+nonbl_visits <- c("Cycle 02", "Cycle 03", "Cycle 04")
 
 ################################################################################
 # Process data:
 ################################################################################
 
-adsl <- pharmaverseadamjnj::adsl |>
+adsl <- adsl_jnj |>
   select(USUBJID, all_of(c(popfl, trtvar))) |>
   filter(
     toupper(.data[[popfl]]) == "Y",
     !is.na(.data[[trtvar]])
   ) |>
   mutate(
-    !!rlang::sym(trtvar) := factor(
-      .data[[trtvar]],
-      levels = c("Xanomeline Low Dose", "Xanomeline High Dose", "Placebo")
-    )
+    !!trtvar := ordered(.data[[trtvar]], levels = trtlev),
   ) |>
   create_colspan_var(
     non_active_grp = ctrl_grp,
@@ -80,7 +58,7 @@ adsl <- pharmaverseadamjnj::adsl |>
     trt_var = trtvar
   )
 
-adlb <- pharmaverseadamjnj::adlb |>
+advs <- advs_jnj |>
   select(
     USUBJID,
     all_of(c(popfl, trtvar)),
@@ -90,9 +68,6 @@ adlb <- pharmaverseadamjnj::adlb |>
     PARAMCD,
     PARAM,
     PARAMN,
-    PARCAT1,
-    PARCAT3,
-    PARCAT3N,
     AVAL,
     BASE,
     CHG,
@@ -101,26 +76,23 @@ adlb <- pharmaverseadamjnj::adlb |>
     APOBLFL
   ) |>
   filter(
+    !is.na(USUBJID),
     (.data[[popfl]] == "Y"),
     !is.na(.data[[trtvar]]),
-    if (!is.null(param_cat)) PARCAT1 %in% param_cat else TRUE,
-    if (!is.null(param_cd)) PARAMCD %in% param_cd else TRUE
+    PARAMCD %in% paramcd
   ) |>
   mutate(
-    !!rlang::sym(trtvar) := factor(
-      .data[[trtvar]],
-      levels = c("Xanomeline Low Dose", "Xanomeline High Dose", "Placebo")
-    ),
+    !!trtvar := ordered(.data[[trtvar]], levels = trtlev),
     ABLFL := factor(ifelse(ABLFL == "Y" & !is.na(ABLFL), "Y", "N")),
     APOBLFL := factor(ifelse(APOBLFL == "Y" & !is.na(APOBLFL), "Y", "N")),
-    PARAMCD := ordered(PARAMCD, levels = {
-      # Sort by PARCAT3N then PARAMCD and PARCAT3 not displayed used only for sorting
-      unique(PARAMCD[order(PARCAT3N, PARAM)])
-    }),
-    PARAM := ordered(PARAM, levels = {
-      # Sort by PARCAT3N then PARAM and PARCAT3 not displayed used only for sorting
-      unique(PARAM[order(PARCAT3N, PARAM)])
-    }),
+    PARAMCD = factor(
+      .data$PARAMCD,
+      levels = unique(.data[['PARAMCD']])[order(unique(.data[['PARAMN']]))]
+    ),
+    PARAM = factor(
+      .data$PARAM,
+      levels = unique(.data[['PARAM']])[order(unique(.data[['PARAMN']]))]
+    ),
     AVISIT = factor(
       ifelse(ABLFL == "Y" & !is.na(ABLFL), "Baseline", as.character(AVISIT)),
       levels = unique(.data[['AVISIT']])[order(unique(.data[['AVISITN']]))]
@@ -128,24 +100,25 @@ adlb <- pharmaverseadamjnj::adlb |>
   )
 
 # Reordered nonlbl_visits
-nonbl_visits <- unique(as.character(adlb$AVISIT[adlb$AVISIT %in% nonbl_visits]))
+nonbl_visits <- levels(advs$AVISIT)[levels(advs$AVISIT) %in% nonbl_visits]
 
-adlb <- inner_join(adsl, adlb, by = c("USUBJID", popfl, trtvar))
+advs <- inner_join(adsl, advs, by = c("USUBJID", popfl, trtvar))
 
 # Safety checks on the data.
-adlb_checks_unique <- adlb |>
+
+advs_checks_unique <- advs |>
   filter(ANL02FL == "Y" & (ABLFL == "Y" | APOBLFL == "Y")) |>
-  group_by(USUBJID, PARCAT1, PARAMCD, AVISIT) |>
+  group_by(USUBJID, PARAMCD, AVISIT) |>
   mutate(n_recsub = n()) |>
   filter(n_recsub > 1)
 
-if (nrow(adlb_checks_unique) > 0) {
-  stop(
+if (nrow(advs_checks_unique) > 0) {
+  message(
     "Your input dataset needs extra attention, as some subjects have more than one record per parameter/visit"
   )
 }
 
-adlb_checked <- adlb |>
+advs_checked <- advs |>
   filter(
     toupper(.data[[popfl]]) == "Y",
     toupper(ANL01FL) == "Y",
@@ -156,28 +129,28 @@ adlb_checked <- adlb |>
     flag1 = if_else(toupper(APOBLFL) == "Y" & is.na(BASE), 1L, 0L)
   )
 
-if (nrow(filter(adlb_checked, flag == 1)) > 0) {
+if (nrow(filter(advs_checked, flag == 1)) > 0) {
   message("Pay attention: There are tests with missing AVAL: ")
 }
 
-if (nrow(filter(adlb_checked, flag1 == 1)) > 0) {
-  message("Pay attention: There are postbaseline tests without baseline: those will be removed")
+if (nrow(filter(advs_checked, flag1 == 1)) > 0) {
+  message("Pay attention: There are postbaseline tests without baseline: ")
 }
 
 # Keep only records with non-missing AVAL
-adlb <- filter(adlb, !is.na(AVAL))
+advs <- filter(advs, !is.na(AVAL))
 
 # varying decimal precision ----
 # manual setup example
-prec <- dplyr::tibble(PARAMCD = unique(adlb$PARAMCD), d = 1)
-prec$d[prec$PARAMCD %in% c("ALB", "CA")] <- 2
+prec <- dplyr::tibble(PARAMCD = unique(advs$PARAMCD), d = 1)
+prec$d[prec$PARAMCD %in% c("DIABP")] <- 2
 
 # alternative: use tidytlg make_precision function
 # DTYPE='AVERAGE' records are excluded from decimal precision
-# adlb_avg <- adlb |> filter(!DTYPE=="AVERAGE")
+# advs_avg <- advs |> filter(!DTYPE=="AVERAGE")
 
 # prec2 <- tidytlg:::make_precision_data(
-#   df = adlb_avg,
+#   df = advs_avg,
 #   decimal = 4,
 #   precisionby = "PARAMCD",
 #   precisionon = "AVAL"
@@ -206,22 +179,17 @@ fmt_d_details <- lapply(prec$PARAMCD, FUN = function(x) {
 names(fmt_d_details) <- prec$PARAMCD
 # fmt_d_details
 
-# add precision specific format to adlb input dataset
-adlb <- adlb |>
+# add precision specific format to advs input dataset
+advs <- advs |>
   left_join(prec)
 
 ################################################################################
-# Define layout and build table (loop over categories):
+# Define layout and build table:
 ################################################################################
-
-cat_suffix <- param_cat
-adlb_cat <- filter(adlb, PARCAT1 == param_cat[[1]]) |>
-  filter(ABLFL == "Y" | ANL02FL == "Y" | APOBLFL == "Y")
-fileid <- write_path(opath, paste0(tblid, cat_suffix))
 
 colspan_trt_map <- if (!is.null(ctrl_grp)) {
   create_colspan_map(
-    adlb_cat,
+    advs,
     non_active_grp = ctrl_grp,
     non_active_grp_span_lbl = " ",
     active_grp_span_lbl = "Active Study Agent",
@@ -231,8 +199,30 @@ colspan_trt_map <- if (!is.null(ctrl_grp)) {
 } else {
   tibble(
     colspan_trt = "Active Study Agent",
-    !!trtvar := levels(adlb[[trtvar]])
+    !!trtvar := levels(advs[[trtvar]])
   )
+}
+
+split_combined <- if (combined_colspan_trt) {
+  # Set up levels and label for the required combined columns.
+  add_combo <- add_combo_facet(
+    "Combined",
+    label = "Combined",
+    levels = setdiff(levels(advs[[trtvar]]), ctrl_grp)
+  )
+
+  # Choose if any facets need to be removed,
+  # e.g remove the combined column for placebo.
+  rm_combo_from_placebo <- cond_rm_facets(
+    facets = "Combined",
+    ancestor_pos = NA,
+    value = " ",
+    split = "colspan_trt"
+  )
+
+  make_split_fun(post = list(add_combo, rm_combo_from_placebo))
+} else {
+  NULL
 }
 
 # Common stats for time point / change from baseline to time point.
@@ -271,24 +261,15 @@ lyt <- basic_table(
   colcount_format = "N=xx",
   top_level_section_div = " "
 ) |>
-  append_topleft("Laboratory Test") |>
+  append_topleft("Parameter") |>
   split_cols_by(
     "colspan_trt",
     split_fun = trim_levels_to_map(map = colspan_trt_map)
-  )
-
-if (combined_colspan_trt == TRUE) {
-  lyt <- lyt |>
-    split_cols_by(trtvar, split_fun = mysplit)
-} else {
-  lyt <- lyt |>
-    split_cols_by(trtvar)
-}
-
-lyt <- lyt |>
+  ) |>
+  split_cols_by(trtvar, split_fun = split_combined) |>
   split_rows_by(
     "PARAMCD",
-    split_fun = if (!is.null(param_cd)) keep_split_levels(param_cd) else drop_split_levels,
+    split_fun = keep_split_levels(paramcd),
     labels_var = "PARAM",
     child_labels = "visible"
   ) |>
@@ -307,7 +288,7 @@ lyt <- lyt |>
   ) |>
   split_rows_by(
     "AVISIT",
-    split_fun = if (!is.null(nonbl_visits)) keep_split_levels(nonbl_visits) else drop_split_levels,
+    split_fun = keep_split_levels(nonbl_visits),
     indent_mod = -1,
     section_div = " ",
   ) |>
@@ -387,7 +368,7 @@ if (comp_btw_group) {
     )
 }
 
-result <- build_table(lyt, adlb_cat, alt_counts_df = adsl, round_type = "sas")
+result <- build_table(lyt, advs, alt_counts_df = adsl, round_type = "sas")
 
 # Add an empty line after each "Screening" section.
 # Use `section_div_at_path()` as a workaround for the missing
@@ -395,6 +376,25 @@ result <- build_table(lyt, adlb_cat, alt_counts_df = adsl, round_type = "sas")
 # (Feature request: https://github.com/insightsengineering/rtables/issues/1083)
 # The path below is determined from `rtables::row_paths_summary(result)`.
 section_div_at_path(result, c("PARAMCD", "*", "@content", last(stats))) <- " "
+
+################################################################################
+# Post-Processing:
+# - Adjust Combined (if displayed) columns Ns (When sequence of
+#   treatments is used, one subject receives more than on treatment. Hence,
+#   there are many rows for one unique subjects, while N should represent only
+#   unique subjects).
+################################################################################
+
+if (combined_colspan_trt) {
+  adsl_no_ctrl <- if (is.null(ctrl_grp)) {
+    adaper
+  } else {
+    adsl[adsl[[trtvar]] != ctrl_grp, ]
+  }
+  n_combined <- length(unique(adsl_no_ctrl$USUBJID))
+  colpath_combined <- c("colspan_trt", "Active Study Agent", trtvar, "Combined")
+  facet_colcount(result, colpath_combined) <- n_combined
+}
 
 ################################################################################
 # Add titles and footnotes:
@@ -407,7 +407,6 @@ result <- set_titles(result, tab_titles)
 ################################################################################
 
 
-colwidth <- c(64, 37, 37, 37, 34)
+# [AUTO-COLWIDTH]
 
 tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
-

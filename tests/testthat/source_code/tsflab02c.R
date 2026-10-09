@@ -61,7 +61,8 @@ tblid_hem <- paste0(tblid, "hem")
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
 ################################################################################
-adlb_complete <- adlb_jnj
+adlb_complete <- adlb_jnj 
+
 ################################################################################
 # Process markedly abnormal values from spreadsheet:
 ################################################################################
@@ -348,13 +349,13 @@ build_result_parcat1 <- function(
   ################################################################################
   fileid <- write_path(opath, tbl_id)
 
-  tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
-
   return(result)
 }
 
 ################################################################################
-# Define layout and build table:
+# Apply core function: one RTF per PARCAT1 category
+#  - Chemistry (CHM): sorted by PARCAT1 -> PARCAT3N -> PARAM
+#  - Hematology (HM): sorted by PARCAT1 -> PARCAT3N -> PARAM
 ################################################################################
 
 result <- build_result_parcat1(
@@ -362,12 +363,6 @@ result <- build_result_parcat1(
   tbl_id = tblid_chm
 )
 
-# [AUTO-COLWIDTH]
+colwidth <- c(59, 23, 23, 23, 23, 35, 35)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
-  result,
-  file = fileid,
-  orientation = "landscape",
-  nosplitin = list(cols = c(trtvar, "rrisk_header"))
-)
+tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
