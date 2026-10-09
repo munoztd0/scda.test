@@ -311,21 +311,34 @@ build_result_parcat1 <- function(
   # Set title
   ################################################################################
 
+ 
   return(result)
 }
 
 ################################################################################
-# Define layout and build table:
+# Apply core function: one RTF per PARCAT1 category
+#  - Chemistry (CHM)
+#  - Hematology (HM)
+# Data sorted by PARCAT1 -> PARCAT3N -> PARAM (alphabetical)
+################################################################################
+### note: the same core tblid (TSFLAB06) is used; abbreviation (CHM/HM) is appended via get_tblid
+result_chm <- build_result_parcat1(
+  PARCAT1sel = parcat1_categories[["chm"]],
+  tblid = tblid
+)
+
+result_hem <- build_result_parcat1(
+  PARCAT1sel = parcat1_categories[["hem"]],
+  tblid = tblid
+)
+
+################################################################################
+# Add titles and footnotes:
 ################################################################################
 
-result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
 
-colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
+colwidth <- c(64, 7, 5, 7, 5, 7)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
-  result,
-  file = fileid,
-  orientation = "landscape",
-  nosplitin = list(cols = c(trtvar, "rrisk_header"))
-)
+result <- set_titles(result_hem, tab_titles)
+
+tt_to_tlgrtf(result_hem, file = write_path(opath, tblid_hem), orientation = "landscape")
