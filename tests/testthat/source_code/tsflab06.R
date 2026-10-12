@@ -32,8 +32,6 @@ parcat1_categories <- list(
   hem = "HEMATOLOGY"
 )
 
-tblid_chm <- paste0(tblid, "chm")
-tblid_hem <- paste0(tblid, "hem")
 
 ################################################################################
 # Process Data:

@@ -65,9 +65,6 @@ anl_low_fl <- "ANL04FL"
 ## ANL flag variable for high grade
 anl_high_fl <- "ANL05FL"
 
-# Helper: get titles from suffix-specific tblid, fall back to base tblid
-tblid_chm <- paste0(tblid, "chm")
-tblid_hem <- paste0(tblid, "hem")
 
 
 ################################################################################
@@ -419,10 +416,10 @@ build_result_parcat1 <- function(
 
 result <- build_result_parcat1(
   PARCAT1sel = parcat1_categories[["hem"]],
-  tblid = tblid_chm
+  tblid = tblid
 )
 
-colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
+colwidth <- c(42, 19, 19, 21, 21, 33, 35)
 
 tt_to_tlgrtf(
   colwidths = colwidth,

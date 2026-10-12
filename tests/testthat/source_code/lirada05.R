@@ -28,7 +28,7 @@ tab_titles <- list(title = "Dummy Title",
 # Process data
 ###############################################################################
 
-adishum <- adishum_jnj |>
+adishum <- adishum_jnj
 
 # top level filter
 main_subject_list <- adishum |>
@@ -157,6 +157,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-# [AUTO-COLWIDTH]
+colwidth <- c(39, 38, 25, 21, 59, 60, 29, 14)
 
 tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")

@@ -54,9 +54,6 @@ crit_indices <- c(1, 2)
 ## if the option TRTEMFL needs to be added to the TLF -- ensure the same setting as in tsflab04
 trtemfl <- TRUE
 
-# Helper: get titles from suffix-specific tblid, fall back to base tblid
-tblid_chm <- paste0(tblid, "chm")
-tblid_hem <- paste0(tblid, "hem")
 
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
@@ -353,16 +350,19 @@ build_result_parcat1 <- function(
 }
 
 ################################################################################
-# Apply core function: one RTF per PARCAT1 category
-#  - Chemistry (CHM): sorted by PARCAT1 -> PARCAT3N -> PARAM
-#  - Hematology (HM): sorted by PARCAT1 -> PARCAT3N -> PARAM
+# Define layout and build table:
 ################################################################################
 
 result <- build_result_parcat1(
-  PARCAT1sel = parcat1_categories[["chm"]],
-  tblid = tblid_chm
+  PARCAT1sel = parcat1_categories[["hem"]],
+  tblid = tblid
 )
 
-colwidth <- c(59, 23, 23, 23, 23, 35, 35)
+colwidth <- c(34, 23, 23, 23, 23, 30, 33)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(
+  #colwidths = colwidth,
+  result,
+  file = fileid,
+  orientation = "landscape"
+)

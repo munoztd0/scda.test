@@ -54,9 +54,7 @@ parcat1_categories <- list(
 ad_domain <- "adlb"
 
 selvisit <- c("Screening", "Cycle 02", "Cycle 03", "Cycle 04")
-# Helper: get titles from suffix-specific tblid, fall back to base tblid
-tblid_chm <- paste0(tblid, "chm")
-tblid_hem <- paste0(tblid, "hem")
+
 
 ################################################################################
 # Initial processing of data + check if table is valid for trial:
@@ -428,27 +426,26 @@ build_result_parcat1 <- function(
     ################################################################################
     fileid <- write_path(opath, tblid)
 
-
-# [AUTO-COLWIDTH]
-
-    tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
   }
 
   return(result)
 }
 
+
 ################################################################################
 # Define layout and build table:
 ################################################################################
 
-result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
+result <- build_result_parcat1(
+  PARCAT1sel = parcat1_categories[["hem"]],
+  tblid = tblid
+)
 
-colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
+colwidth <- c(44, 21, 21, 21, 21, 35, 35)
 
 tt_to_tlgrtf(
   colwidths = colwidth,
   result,
   file = fileid,
-  orientation = "landscape",
-  nosplitin = list(cols = c(trtvar, "rrisk_header"))
+  orientation = "landscape"
 )

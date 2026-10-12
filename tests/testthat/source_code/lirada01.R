@@ -43,7 +43,7 @@ tab_titles <- list(title = "Dummy Title",
 ###############################################################################
 
 # Read adishum with population and PARQUAL filters
-adishum <- adishum_jnj |>
+adishum <- adishum_jnj |> 
   filter(
     !!rlang::sym(popfl) == "Y",
     toupper(PARQUAL) == toupper(parqual_value)
@@ -250,6 +250,6 @@ result <- set_titles(result, tab_titles)
 ###############################################################################
 
 
-# [AUTO-COLWIDTH]
+colwidth <- c(21, 63, 59, 23, 27, 13, 18, 23, 30)
 
 tt_to_tlgrtf(head(result, 100), file = fileid, orientation = "landscape")
