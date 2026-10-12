@@ -154,12 +154,11 @@ adeg <- adeg |>
     ),
     # Apply ordered levels to AVALC for consistent display
     AVALC := factor(
-      case_match(
-        toupper(AVALC),
-        "ABNORMAL, CS" ~ "Abnormal, CS",
-        "ABNORMAL, NCS" ~ "Abnormal, NCS",
-        "NORMAL" ~ "Normal",
-        .default = NA_character_
+      dplyr::case_when(
+        toupper(AVALC) == "ABNORMAL, CS" ~ "Abnormal, CS",
+        toupper(AVALC) == "ABNORMAL, NCS" ~ "Abnormal, NCS",
+        toupper(AVALC) == "NORMAL" ~ "Normal",
+        TRUE ~ NA_character_
       ),
       levels = avalc_levels
     )

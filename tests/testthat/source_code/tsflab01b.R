@@ -217,7 +217,7 @@ adlb <- adlb |>
 cat_suffix <- param_cat
 adlb_cat <- filter(adlb, PARCAT1 == param_cat[[1]]) |>
   filter(ABLFL == "Y" | ANL02FL == "Y" | APOBLFL == "Y")
-fileid <- write_path(opath, paste0(tblid, cat_suffix))
+fileid <- write_path(opath, paste0(tblid))
 
 colspan_trt_map <- if (!is.null(ctrl_grp)) {
   create_colspan_map(
@@ -409,5 +409,5 @@ result <- set_titles(result, tab_titles)
 
 colwidth <- c(64, 37, 37, 37, 34)
 
-tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
+x = tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
 

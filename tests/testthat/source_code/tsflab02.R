@@ -410,11 +410,6 @@ build_result_parcat1 <- function(
   ################################################################################
   result <- set_titles(result, tab_titles)
 
-
-# [AUTO-COLWIDTH]
-
-  tt_to_tlgrtf(colwidths = colwidth, result, file = write_path(opath, tblid), orientation = "landscape")
-
   return(result)
 }
 
@@ -422,7 +417,10 @@ build_result_parcat1 <- function(
 # Define layout and build table:
 ################################################################################
 
-result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
+result <- build_result_parcat1(
+  PARCAT1sel = parcat1_categories[["hem"]],
+  tblid = tblid_chm
+)
 
 colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
 
@@ -430,6 +428,5 @@ tt_to_tlgrtf(
   colwidths = colwidth,
   result,
   file = fileid,
-  orientation = "landscape",
-  nosplitin = list(cols = c(trtvar, "rrisk_header"))
+  orientation = "landscape"
 )

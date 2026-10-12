@@ -256,7 +256,7 @@ crit_label_map <- xlabel_map_final |>
 build_result_parcat1 <- function(
   df = adlb_crit,
   PARCAT1sel = NULL,
-  tbl_id,
+  tblid,
   .adsl = adsl,
   map = xlabel_map_final,
   extra_args_rr = .extra_args_rr,
@@ -347,7 +347,7 @@ build_result_parcat1 <- function(
   ################################################################################
   # Convert to tbl file and output table
   ################################################################################
-  fileid <- write_path(opath, tbl_id)
+  fileid <- write_path(opath, tblid)
 
   return(result)
 }
@@ -360,7 +360,7 @@ build_result_parcat1 <- function(
 
 result <- build_result_parcat1(
   PARCAT1sel = parcat1_categories[["chm"]],
-  tbl_id = tblid_chm
+  tblid = tblid_chm
 )
 
 colwidth <- c(59, 23, 23, 23, 23, 35, 35)
