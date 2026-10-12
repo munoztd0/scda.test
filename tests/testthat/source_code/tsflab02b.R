@@ -431,7 +431,7 @@ build_result_parcat1 <- function(
 
 # [AUTO-COLWIDTH]
 
-    tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
+    tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
   }
 
   return(result)
@@ -445,10 +445,10 @@ result <- build_result_parcat1(PARCAT1sel = "General chemistry", tblid = tblid)
 
 colwidth <- c(39, 29, 46, 47, 29, 46, 47, 29, 46, 48, 47, 49)
 
-# tt_to_tlgrtf(
-#   colwidths = colwidth,
-#   result,
-#   file = fileid,
-#   orientation = "landscape",
-#   nosplitin = list(cols = c(trtvar, "rrisk_header"))
-# )
+tt_to_tlgrtf(
+  colwidths = colwidth,
+  result,
+  file = fileid,
+  orientation = "landscape",
+  nosplitin = list(cols = c(trtvar, "rrisk_header"))
+)

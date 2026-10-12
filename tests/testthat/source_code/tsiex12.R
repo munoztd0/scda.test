@@ -370,4 +370,4 @@ if (levels_cols < length(top_left(result))) {
 
 colwidth <- c(64, 21, 21, 21, 21)
 
-tt_to_tlgrtf(result, file = fileid, border_mat = bordmat, orientation = "portrait")
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, border_mat = bordmat, orientation = "portrait")

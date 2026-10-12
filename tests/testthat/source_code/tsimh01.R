@@ -205,4 +205,4 @@ result <- set_titles(result, titles)
 
 colwidth <- c(64, 21, 21, 21, 23)
 
-tt_to_tlgrtf(result, fileid)
+tt_to_tlgrtf(colwidths = colwidth, result, fileid)

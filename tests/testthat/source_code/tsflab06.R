@@ -327,10 +327,6 @@ result_chm <- build_result_parcat1(
   tblid = tblid
 )
 
-result_hem <- build_result_parcat1(
-  PARCAT1sel = parcat1_categories[["hem"]],
-  tblid = tblid
-)
 
 ################################################################################
 # Add titles and footnotes:
@@ -339,6 +335,6 @@ result_hem <- build_result_parcat1(
 
 colwidth <- c(64, 7, 5, 7, 5, 7)
 
-result <- set_titles(result_hem, tab_titles)
+result <- set_titles(result_chm, tab_titles)
 
-tt_to_tlgrtf(result_hem, file = write_path(opath, tblid_hem), orientation = "landscape")
+tt_to_tlgrtf(colwidths = colwidth, result, file = write_path(opath, tblid), orientation = "landscape")

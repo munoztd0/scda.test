@@ -365,4 +365,4 @@ result <- build_result_parcat1(
 
 colwidth <- c(59, 23, 23, 23, 23, 35, 35)
 
-tt_to_tlgrtf(result, file = fileid, orientation = "landscape")
+tt_to_tlgrtf(colwidths = colwidth, result, file = fileid, orientation = "landscape")
