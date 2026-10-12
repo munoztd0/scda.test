@@ -341,10 +341,7 @@ build_result_parcat1 <- function(
 
   result <- set_titles(result, tab_titles)
 
-  ################################################################################
-  # Convert to tbl file and output table
-  ################################################################################
-  fileid <- write_path(opath, tblid)
+  fileid <<- write_path(opath, tblid)
 
   return(result)
 }
@@ -359,6 +356,8 @@ result <- build_result_parcat1(
 )
 
 colwidth <- c(34, 23, 23, 23, 23, 30, 33)
+
+fileid <- write_path(opath, tblid)
 
 tt_to_tlgrtf(
   #colwidths = colwidth,

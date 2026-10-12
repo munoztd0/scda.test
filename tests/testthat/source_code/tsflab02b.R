@@ -159,7 +159,7 @@ obs_mcrit12 <- unique(c(
 ))
 
 adlb00 <- adlb_complete |>
-  filter(PARCAT2 == "Test with FDA abnormality criteria defined") |>
+  filter(!is.na(PARCAT2)) |>
   select(
     USUBJID,
     PARCAT1,
@@ -420,14 +420,6 @@ build_result_parcat1 <- function(
 
   result <- set_titles(result, tab_titles)
 
-  if (save2rtf) {
-    ################################################################################
-    # Convert to tbl file and output table
-    ################################################################################
-    fileid <- write_path(opath, tblid)
-
-  }
-
   return(result)
 }
 
@@ -442,6 +434,8 @@ result <- build_result_parcat1(
 )
 
 colwidth <- c(44, 21, 21, 21, 21, 35, 35)
+
+fileid <- write_path(opath, tblid)
 
 tt_to_tlgrtf(
   colwidths = colwidth,
