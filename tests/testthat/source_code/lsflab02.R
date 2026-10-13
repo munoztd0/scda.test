@@ -151,7 +151,7 @@ lsting <- addili_list |>
     COL7 = if ("ALP" %in% names(addili_list)) ALP else "",
     COL8 = if ("BILI" %in% names(addili_list)) BILI else ""
   ) |>
-  mutate(across(c(COL5, COL6, COL7, COL8), ~ replace_na(., ""))) |>
+  mutate(across(c(COL5, COL6, COL7, COL8), ~ ifelse(is.na(.), "", as.character(.)))) |>
   arrange(COL0, COL1, ADT, ADY)
 
 lsting <- var_relabel(
