@@ -19,7 +19,7 @@ This repository is internal and must be cloned and installed manually from GitHu
 
    The repository can be downloaded directly from the `github.com` site as an archive (see the [GitHub tutorial on cloning to learn more](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository)).
    Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require you to authenticate GitHub. You can authenticate using a key pair or a Personal Access Token (PAT).
-   Please refer to GitHub tutorials on [connecting to GitHub using SSH](https://docs.github.com/en/github/authenticating-to-github) or [creating and using a PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+   Please refer to GitHub tutorials on [connecting to GitHub using SSH](https://docs.github.com/en/authentication) or [creating and using a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
 
    - **Using a PAT**: Input in the Git Bash console, PowerShell, or any Linux shell:
 

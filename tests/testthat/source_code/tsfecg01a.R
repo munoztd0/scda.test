@@ -1,27 +1,3 @@
-################################################################################
-## Original Reporting Effort: Standards
-## Program Name:              tsfecg01
-## R version:                 4.2.1
-## Short Description:         Program to create tsfecg01: Mean Change From Baseline
-##                            for ECG Data Over Time by [Subgroup]
-## Author:                    Johnson & Johnson Innovative Medicine
-## Date:                      30JAN2024
-## Input:                     adsl.RDS, adeg.RDS
-## Output:                    tsfecg01.rtf
-## Remarks:
-##
-## Modification History:
-##  Rev #:
-##  Modified By:
-##  Reporting Effort:
-##  Date:
-##  Description:
-################################################################################
-
-################################################################################
-# Prep Environment
-################################################################################
-
 library(envsetup)
 library(tern)
 library(dplyr)
@@ -34,11 +10,9 @@ library(junco)
 
 tblid <- "TSFECG01a"
 fileid <- write_path(opath, tblid)
-titles <- list(
-  title = "Dummy Title",
-  subtitles = NULL,
-  main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}"
-)
+titles <- list(title = "Dummy Title",
+                     subtitles = NULL,
+                     main_footer = "Dummy Note: On-treatment is defined as ~{optional treatment-emergent}")
 
 popfl <- "SAFFL"
 trtvar <- "TRT01A"
@@ -437,10 +411,10 @@ result <- set_titles(result, titles)
 # Convert to tbl file and output table
 ################################################################################
 
-colwidth <- c(56, 29, 36, 41, 29, 36, 41, 29, 36, 41, 41, 41)
 
-tt_to_tlgrtf(
-  colwidths = colwidth,
+colwidth <- c(56, 29, 38, 41, 29, 36, 41, 29, 36, 37, 41, 41)
+
+tt_to_tlgrtf( 
   result,
   file = fileid,
   nosplitin = list(cols = c(trtvar, "rrisk_header")),
