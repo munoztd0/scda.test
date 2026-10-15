@@ -97,7 +97,7 @@ lsting <- var_relabel(
   # Optional Column: COL3/ATPT
   COL3 = "Time Point",
   COL4 = sprintf(
-    "Matrix %s \nConc. (\u03bcg/mL)",
+    "Matrix %s \nConc. (mcg/mL)",
     stringi::stri_trans_totitle(study_agent)
   )
 )

@@ -130,7 +130,7 @@ lsting <- var_relabel(
   COL3 = "Reason for Discontinuation",
   COL4 = "Last Scheduled Study Treatment",
   COL5 = sprintf(
-    "Matrix %s Conc. (\u03bcg/mL)",
+    "Matrix %s Conc. (mcg/mL)",
     stringi::stri_trans_totitle(study_agent)
   ),
   COL6 = sprintf(

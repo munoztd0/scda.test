@@ -205,7 +205,7 @@ lsting <- var_relabel(
   # Optional Column: COL6/max_sev_flg
   COL6 = "Maximum Severity",
   COL7 = sprintf(
-    "Matrix %s Conc. (\u03bcg/mL)",
+    "Matrix %s Conc. (mcg/mL)",
     stringi::stri_trans_totitle(study_agent)
   ),
   COL8 = sprintf(
