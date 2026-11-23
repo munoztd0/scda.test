@@ -56,7 +56,8 @@ Remotes:
     pharmaverse/pharmaverseadam@main,
     pharmaverse/rlistings@main,
     pharmaverse/rtables@main,
-    pharmaverse/tern@main
+    pharmaverse/tern@main,
+    johnsonandjohnson/junco@538-a_maxlev-zero-count-display
 biocViews:
 Config/Needs/website: insightsengineering/nesttemplate
 Config/roxygen2/version: 8.1.1
